@@ -6,7 +6,7 @@ function AvatarGroup() {
     <div className="flex -space-x-2 overflow-hidden">
       {avatars.map((el, index) => {
         return (
-          <div className="inline-block h-9 w-9" key={el}>
+          <div className="inline-block h-9 w-9" key={index}>
             <Avatar className="h-9 w-9">
               <AvatarImage className="rounded-full ring-2 border-[2px] border-white dark:border-card object-cover" src={el} />
               <AvatarFallback className="bg-soft-grey"></AvatarFallback>
