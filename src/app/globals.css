@@ -41,6 +41,13 @@ body {
     --radius: 0.5rem;
     --soft-grey: 0 0% 88%;
     --light-grey: 0 0% 97%;
+    --text-grey: 0 0% 34%;
+    --charcol: 0 0% 16%;
+    --medium-grey: 0 0% 60%;
+    --neutral-grey: 0 0% 50%;
+    --biege: 37 100% 92%;
+    --dark-purple: 242 91% 8%;
+    --muted-green: 132 44% 41%;
   }
   .dark {
     --background: 0 0% 3.9%;
@@ -69,6 +76,13 @@ body {
     --chart-5: 340 75% 55%;
     --soft-grey: 0 0% 88%;
     --light-grey: 0 0% 97%;
+    --text-grey: 0 0% 34%;
+    --charcol: 0 0% 16%;
+    --medium-grey: 0 0% 60%;
+    --neutral-grey: 0 0% 50%;
+    --biege: 37 100% 92%;
+    --dark-purple: 242 91% 8%;
+    --muted-green: 132 44% 41%;
   }
 }
 
@@ -96,7 +110,7 @@ body {
     align-items: center;
     justify-content: center;
     width: auto !important;
-    gap: 1.25rem !important;
+    /* gap: 1.25rem !important; */
   }
 
   .custom-pagination .swiper-pagination-bullet {
@@ -123,5 +137,34 @@ body {
   .custom-prev-button:hover,
   .custom-next-button:hover {
     color: hsl(var(--primary));
+  }
+
+  .contact-container {
+    position: relative;
+    padding: 0px;
+  }
+
+  .contact-container::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    padding: 2px; /* Border thickness */
+    background: linear-gradient(to right, hsl(48, 100%, 50%), /* Secondary */ hsl(31, 95%, 49%), hsl(11, 89%, 47%));
+    -webkit-mask: linear-gradient(white, white) content-box, linear-gradient(white, white);
+    -webkit-mask-composite: destination-out;
+    mask-composite: exclude;
+    pointer-events: none;
+    z-index: 10;
+    width: 100%;
+    height: 88%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
   }
 }

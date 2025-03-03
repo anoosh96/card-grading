@@ -41,6 +41,13 @@ const config: Config = {
         ring: "hsl(var(--ring))",
         "soft-grey": "hsl(var(--soft-grey))",
         "light-grey": "hsl(var(--light-grey))",
+        "pure-grey": "hsl(var( --text-grey))",
+        charcol: "hsl(var(--charcol))",
+        "medium-grey": "hsl(var(--medium-grey))",
+        "neutral-grey": "hsl(var(--neutral-grey))",
+        biege: "hsl(var(--biege))",
+        "dark-purple": "hsl(var(--dark-purple))",
+        "muted-green": "hsl(var(--muted-green))",
 
         chart: {
           "1": "hsl(var(--chart-1))",

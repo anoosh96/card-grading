@@ -6,9 +6,11 @@ import Footer from "./Footer";
 function Container({
   children,
   isWithBackground = false,
+  isHideContactFormFooter = false,
 }: Readonly<{
   children: React.ReactNode;
   isWithBackground?: boolean;
+  isHideContactFormFooter?: boolean;
 }>) {
   return (
     <>
@@ -27,8 +29,8 @@ function Container({
           </>
         ) : null}
         <Header />
-        <main className="relative flex-grow w-full overflow-hidden mt-16 px-10">{children}</main>
-        <Footer />
+        <main className="relative flex-grow w-full overflow-hidden mt-20">{children}</main>
+        <Footer isHideContactForm={isHideContactFormFooter} />
       </div>
     </>
   );

@@ -1,3 +1,4 @@
+import { ButtonGradient } from "./common/ButtonGradient";
 import { Button } from "./ui/button";
 
 function HeroSection() {
@@ -6,17 +7,18 @@ function HeroSection() {
       <section className="pt-24 relative overflow-hidden">
         <div className="container mx-auto px-4">
           <div className="max-w-3xl mx-auto text-center">
-            <h1 className="text-4xl md:text-5xl font-bold mb-4">
+            <h1 className="text-4xl text-charcol md:text-5xl font-bold mb-4">
               AI-Driven Precision Grading
               <br />
               for Pokémon Cards
             </h1>
-            <p className="text-gray-600 text-lg mb-8">Accurate, fast, and transparent AI card grading—trusted by collectors worldwide.</p>
+            <p className="font-medium text-charcol text-lg mb-8">Accurate, fast, and transparent AI card grading—trusted by collectors worldwide.</p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button size={"lg"} className="h-auto rounded-full bg-custom-gradient py-3 px-8 text-base transition-colors">
+              <ButtonGradient size={"lg"} className="h-auto font-semibold rounded-full py-3 px-8 text-base">
                 Get Started
-              </Button>
-              <Button size={"lg"} className="h-auto bg-soft-grey rounded-full text-black py-3 px-8 text-base hover:bg-soft-grey">
+              </ButtonGradient>
+
+              <Button size={"lg"} className="h-auto font-semibold bg-soft-grey rounded-full text-pure-grey py-3 px-8 text-base hover:bg-soft-grey">
                 View Pricing
               </Button>
             </div>

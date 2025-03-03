@@ -8,11 +8,13 @@ import WhatWeDo from "@/components/WhatWeDoSection";
 export default function Home() {
   return (
     <Container isWithBackground>
-      <HeroSection />
-      <WhatWeDo />
-      <KeyFeaturesSection />
-      <GradedCardsSection />
-      <TestimonialSection />
+      <main className="px-4 md:px-10">
+        <HeroSection />
+        <WhatWeDo />
+        <KeyFeaturesSection />
+        <GradedCardsSection />
+        <TestimonialSection />
+      </main>
     </Container>
   );
 }
