@@ -18,17 +18,17 @@ const features = [
   },
   {
     title: "Affordable Pricing",
-    description: "Lorem ipsum dolor sit amet consectetur. Elit pellentesque eleifend vitae tellus amet nec enim.",
+    description: "Competitive pricing makes grading accessible to all collectors.",
     icon: <Image alt="Mingcute Icon" src={"/icons/affordable-pricing.svg"} width={75} height={75} />,
   },
   {
     title: "Secure and Reliable",
-    description: "Lorem ipsum dolor sit amet consectetur. Elit pellentesque eleifend vitae tellus amet nec enim.",
+    description: "Your cards are handled with the utmost care and returned safely.",
     icon: <Image alt="Mingcute Icon" src={"/icons/secure.svg"} width={75} height={75} />,
   },
   {
     title: "Transparency",
-    description: "Lorem ipsum dolor sit amet consectetur. Elit pellentesque eleifend vitae tellus amet nec enim.",
+    description: "Clear grading criteria with high-quality scans of your graded cards.",
     icon: <Image alt="Mingcute Icon" src={"/icons/transparency.svg"} width={75} height={75} />,
   },
 ];
@@ -36,7 +36,7 @@ const features = [
 const AboutWhyChooseUs = () => {
   return (
     <section className="relative mx-auto  px-4 md:px-10 py-16">
-      <div className="grid grid-cols-1 md:grid-cols-5 gap-y-10 gap-x-0 items-center">
+      <div className="grid grid-cols-1 md:grid-cols-5 gap-y-10 gap-x-1 items-center">
         {/* Left Content */}
         <div className="pl-5 col-span-2 flex flex-col gap-5">
           <div className="relative"><Image className="relative right-10 top-9" src={"/assets/images/rainbow.svg"} width={240} height={182} alt="rainbow"/></div>
@@ -55,7 +55,7 @@ const AboutWhyChooseUs = () => {
             <div className="relative">
             <div
               key={index}
-              className={`relative flex w-full max-w-sm items-start space-x-4 rounded-2xl bg-white pt-4 pb-9 px-5 shadow-xl md:max-w-xs ${
+              className={`relative flex w-full max-w-sm items-start space-x-4 rounded-2xl bg-white pt-4 pb-9 px-5 shadow-[5px_5px_15px_rgba(0,0,0,0.1)] md:max-w-xs ${
                 index === 2 ? "invisible": ""
               } ${ index == 0 ? "top-24" : "" } ${ index == 4 ? "bottom-24" : "" } 
                 ${ index == 3 ? "right-0 md:right-[3%] lg:right-[8%] xl:right-[15%] 2xl:right-[30%]" : ""} `}
