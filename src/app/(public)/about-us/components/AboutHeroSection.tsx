@@ -3,9 +3,9 @@ import Image from "next/image";
 
 function AboutHeroSection() {
   return (
-    <div className="relative flex justify-between flex-col lg:flex-row items-center lg:items-start w-full min-h-[790px] px-10 lg:px-0">
+    <div className="relative flex justify-between flex-col lg:flex-row items-center lg:items-start w-full min-h-[900px] px-10 lg:px-0">
       {/* Background Image */}
-      <div className="absolute inset-0 left-0 h-[90%] -z-10">
+      <div className="absolute inset-0 left-0 h-[100%] -z-10">
         <AboutHeroBg className="w-full h-full" />
       </div>
 
@@ -14,8 +14,7 @@ function AboutHeroSection() {
         <div className="flex flex-col gap-8 max-w-lg">
           <h2 className="text-[2rem] w-3/4 text-charcol font-bold">Revolutionizing Card Grading with AI</h2>
           <p className="text-lg text-charcol text-start">
-            Lorem ipsum dolor sit amet consectetur. Sed enim pellentesque massa sed felis est in orci ultrices. Mauris sagittis aliquet proin tempor.
-            Nunc aliquam gravida.
+             AI’s Greatest Pokémon Card Grading Platform.
           </p>
         </div>
       </div>
@@ -24,7 +23,7 @@ function AboutHeroSection() {
       <div className="relative w-auto mt-12 lg:min-h-[790px] flex justify-center items-start lg:items-center">
         <div className="flex w-auto h-full">
           <Image
-            src="/assets/images/about-hero-section-creative.svg"
+            src="/assets/images/about-hero-card-creative.svg"
             alt="Graded Card"
             width={843}
             height={809}
