@@ -48,6 +48,7 @@ body {
     --biege: 37 100% 92%;
     --dark-purple: 242 91% 8%;
     --muted-green: 132 44% 41%;
+    --light-red: #E3350D;
   }
   .dark {
     --background: 0 0% 3.9%;
@@ -83,6 +84,7 @@ body {
     --biege: 37 100% 92%;
     --dark-purple: 242 91% 8%;
     --muted-green: 132 44% 41%;
+    --light-red: #E3350D;
   }
 }
 
