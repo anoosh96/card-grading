@@ -48,6 +48,7 @@ const config: Config = {
         biege: "hsl(var(--biege))",
         "dark-purple": "hsl(var(--dark-purple))",
         "muted-green": "hsl(var(--muted-green))",
+        "light-red": "var(--light-red)",
 
         chart: {
           "1": "hsl(var(--chart-1))",
@@ -55,7 +56,7 @@ const config: Config = {
           "3": "hsl(var(--chart-3))",
           "4": "hsl(var(--chart-4))",
           "5": "hsl(var(--chart-5))",
-        },
+        }
       },
       borderRadius: {
         lg: "var(--radius)",
