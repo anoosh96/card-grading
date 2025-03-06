@@ -20,3 +20,15 @@ export interface Faq {
 export interface FaqProps {
   faqs: Faq[]
 }
+
+export interface ServiceCardProps {
+  name: string;
+  price: string;
+  features: string[]
+}
+
+export interface AddonProps {
+  icon: string;
+  title: string;
+  desc: string
+}

@@ -10,7 +10,7 @@ type ContactFormProps = {
 };
 export default function Footer({ isHideContactForm = false }: ContactFormProps) {
   return (
-    <footer className="relative flex flex-col justify-between items-start min-h-[320px] w-full bg-[url('/assets/images/bg-footer-section.svg')] bg-cover bg-center text-black py-8 ">
+    <footer className="relative flex flex-col justify-between items-start min-h-[320px] w-full bg-[url('/assets/images/bg-footer-section.svg')] bg-cover bg-center text-black py-8">
       {/* Top Right Decorative Image */}
       <Image
         src="/assets/images/footer-top-right-vector-boxes.svg"
