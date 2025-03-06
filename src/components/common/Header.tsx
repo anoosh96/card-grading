@@ -50,7 +50,7 @@ export default function Header() {
           <Link href="/grading" className={getLinkClass("/#grading")}>
             Grading Process
           </Link>
-          <Link href="/services" className={getLinkClass("/#services")}>
+          <Link href="/services-and-pricing" className={getLinkClass("/#services")}>
             Services & Pricing
           </Link>
           <Link href="/contact-us" className={getLinkClass("/#contact")}>
