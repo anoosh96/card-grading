@@ -10,7 +10,7 @@ function AboutHeroSection() {
       </div>
 
       {/* Left Content (Text) */}
-      <div className="w-1/2 flex items-center justify-center flex-col min-h-[782px]">
+      <div className="w-full lg:w-1/2 flex items-start justify-center flex-col min-h-[782px] pl-24">
         <div className="flex flex-col gap-8 max-w-lg">
           <h2 className="text-[2rem] w-3/4 text-charcol font-bold">Revolutionizing Card Grading with AI</h2>
           <p className="text-lg text-charcol text-start">
