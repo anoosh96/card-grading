@@ -35,7 +35,7 @@ export default function GradingProcess() {
       <div className="mt-48 px-10">
         <h1 className="text-3xl font-bold">Get Your Cards Graded with Ease</h1>
 
-        <div className="grid md:grid-cols-2 xl:grid-cols-4 mt-10 w-full place-items-center">
+        <div className="grid md:grid-cols-2 xl:grid-cols-4 mt-10 w-full place-items-center lg:gap-40">
          {steps()}
         </div>
       </div>

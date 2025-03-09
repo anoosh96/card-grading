@@ -65,9 +65,9 @@ export default function ExploreCardSection() {
 
           {/* dropdowns */}
 
-          <CustomSelect options={cardTypes} selectedOption={cardType} setSelectedOption={setCardType} />
-          <CustomSelect options={grades} selectedOption={grade} setSelectedOption={setGrade} className="" />
-          <CustomSelect options={releaseYears} selectedOption={year} setSelectedOption={setYear} className="" />
+          <CustomSelect options={cardTypes} selectedOption={cardType} setSelectedOption={setCardType} className="relative" />
+          <CustomSelect options={grades} selectedOption={grade} setSelectedOption={setGrade} className="relative"/>
+          <CustomSelect options={releaseYears} selectedOption={year} setSelectedOption={setYear} className="relative" />
         </div>
       </div>
 
