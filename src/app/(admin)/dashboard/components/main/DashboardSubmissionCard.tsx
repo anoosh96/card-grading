@@ -17,7 +17,7 @@ function DashboardSubmissionCard() {
             </div>
           </div>
         </div>
-        <h3 className="font-medium text-xl text-charcol">Total Submissions</h3>
+        <h3 className="font-medium text-xl text-charcol">Total Cards</h3>
       </div>
 
       <SubmissionSources />

@@ -1,5 +1,4 @@
 import { Separator } from "@radix-ui/react-separator";
-import Image from "next/image";
 
 export function SubmissionSources() {
   return (
@@ -14,31 +13,6 @@ export function SubmissionSources() {
           <span className="text-sm text-pure-grey">By Post</span>
           <Separator className="w-[1px] bg-soft-grey h-full" />
           <span className="text-sm text-pure-grey">By Form</span>
-        </div>
-      </div>
-
-      <div className="w-full flex flex-col gap-5 lg:flex-row ">
-        <div className="flex justify-between items-center gap-6 mt-7 xl:mt-4 w-11/12">
-          <div className="space-y-8 w-full md:w-1/2 xl:w-1/3">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <div className="h-4 w-8 rounded-sm bg-primary" />
-              </div>
-              <span className="text-sm">By Post</span>
-              <span className="text-sm">50%</span>
-            </div>
-
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <div className="h-4 w-8 rounded-sm bg-secondary" />
-              </div>
-              <span className="text-sm">By Form</span>
-              <span className="text-sm">50%</span>
-            </div>
-          </div>
-        </div>
-        <div className="flex relative items-start justify-start">
-          <Image src={"/assets/images/chart-progress-creative.svg"} className="w-36 h-32" alt="Pie Chart Progress" width={160} height={130} />
         </div>
       </div>
     </div>
