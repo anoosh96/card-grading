@@ -24,7 +24,7 @@ export default function VerificationCodePage() {
       </div>
       <ButtonGradient className="w-full mt-6 py-6">Log in</ButtonGradient>
       <div className="mt-4 text-lg font-medium text-center">
-        <span>Don't have an account? <Link href={"/sign-up"} className="text-light-red">Sign Up!</Link></span>
+        <span>Did't recieve the code? <Link href={"/sign-up"} className="text-light-red">Resend Code!</Link></span>
       </div>
     </div>
   )
