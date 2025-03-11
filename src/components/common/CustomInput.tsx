@@ -1,4 +1,6 @@
-import React from "react";
+'use client'
+
+import React, { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
@@ -7,6 +9,8 @@ interface CustomInputProps extends React.ComponentProps<"input"> {
   isShowSearchIcon?: boolean;
 }
 const CustomInput = React.forwardRef<HTMLInputElement, CustomInputProps>(({ className, isShowSearchIcon = false, ...props }, ref) => {
+  const [showPassword, setShowPassword] = useState(false)
+
   return (
     <div className="group relative w-full">
       {isShowSearchIcon ? (
@@ -16,6 +20,17 @@ const CustomInput = React.forwardRef<HTMLInputElement, CustomInputProps>(({ clas
           alt="Placeholder Search Icon"
           src={"/icons/search-icon.svg"}
           className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 z-20"
+        />
+      ) : null}
+
+      {props.type == 'password' ? (
+        <Image
+          width={20}
+          height={20}
+          alt="Placeholder Search Icon"
+          src={`/icons/${ !showPassword ? 'hide-password' : 'password'}.svg`}
+          onClick={() => setShowPassword((prev) => !prev)}
+          className="absolute right-4 top-1/2 -translate-y-1/2 h-5 w-5 z-20 cursor-pointer"
         />
       ) : null}
 
@@ -42,6 +57,7 @@ const CustomInput = React.forwardRef<HTMLInputElement, CustomInputProps>(({ clas
           className
         )}
         {...props}
+        type={props.type == 'password' ? showPassword ? 'text' : 'password' : props.type }
       />
     </div>
   );
