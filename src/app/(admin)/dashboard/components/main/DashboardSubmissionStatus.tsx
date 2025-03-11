@@ -17,11 +17,11 @@ type Submission = {
   selected?: boolean;
 };
 
-interface SubmissionStatusSectionProps {
+interface DashboardSubmissionStatusProps {
   isMoreItem?: boolean;
 }
 
-const SubmissionStatusSection: FC<SubmissionStatusSectionProps> = ({
+const DashboardSubmissionStatus: FC<DashboardSubmissionStatusProps> = ({
   isMoreItem = false,
 }) => {
   const dropdownItems = [
@@ -196,4 +196,4 @@ const SubmissionStatusSection: FC<SubmissionStatusSectionProps> = ({
   );
 };
 
-export default SubmissionStatusSection;
+export default DashboardSubmissionStatus;

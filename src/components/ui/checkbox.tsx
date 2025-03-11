@@ -15,7 +15,7 @@ const CustomCheckbox = React.forwardRef<
       `peer h-4 w-4 shrink-0 rounded border shadow
       border-[#B3B3BF] focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring
       disabled:cursor-not-allowed disabled:opacity-50
-      data-[state=checked]:bg-amber-500 data-[state=checked]:border-amber-500`,
+      data-[state=checked]:bg-custom-gradient data-[state=checked]:border-amber-500`,
       className
     )}
     {...props}

@@ -1,10 +1,10 @@
 import React from "react";
-import SubmissionStatusSection from "../components/main/SubmissionStatus";
+import DashboardSubmissionStatus from "../components/main/DashboardSubmissionStatus";
 
 const SubmissionStatus = () => {
   return (
     <>
-      <SubmissionStatusSection />
+      <DashboardSubmissionStatus />
     </>
   );
 };
