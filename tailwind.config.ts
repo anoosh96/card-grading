@@ -49,6 +49,7 @@ const config: Config = {
         "dark-purple": "hsl(var(--dark-purple))",
         "muted-green": "hsl(var(--muted-green))",
         "light-red": "var(--light-red)",
+        "golden-amber": "var(--golden-amber)",
 
         chart: {
           "1": "hsl(var(--chart-1))",

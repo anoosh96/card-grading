@@ -1,11 +1,11 @@
 import React from "react";
-import { DashboardSubmissionTracking } from "../components/main/DashboardSubmissiontracking";
+import SubmissionStatusSection from "../components/main/SubmissionStatus";
 
 const SubmissionStatus = () => {
   return (
-    <div>
-      <DashboardSubmissionTracking />
-    </div>
+    <>
+      <SubmissionStatusSection />
+    </>
   );
 };
 

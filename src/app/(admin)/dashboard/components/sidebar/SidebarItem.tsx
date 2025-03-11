@@ -44,7 +44,7 @@ const SidebarItem: React.FC<SidebarItemProps & { isCollapsed?: boolean }> = ({
       className={`relative group flex overflow-hidden items-center gap-3 px-6 py-4 text-primary group hover:bg-light-grey ${
         isActive
           ? "bg-light-grey text-primary"
-          : "text-[#565656] group-hover:text-primary"
+          : "!text-[#565656] group-hover:text-primary"
       }`}
     >
       <Icon className={`w-6 h-6 group-hover:text-primary`} />
