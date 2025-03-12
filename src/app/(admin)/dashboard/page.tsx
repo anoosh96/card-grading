@@ -5,7 +5,7 @@ import DashboardSubmissionStatus from "./components/main/DashboardSubmissionStat
 
 function DashboardPage() {
   return (
-    <div className="space-y-10">
+    <div className="space-y-5">
       <DashboardSubmissionCard />
       <DashboardSubmissionStatus isMoreItem={true} />
     </div>
