@@ -1,7 +1,5 @@
 import { ButtonGradient } from "@/components/common/ButtonGradient";
-import Container from "@/components/common/Container";
 import CustomInput from "@/components/common/CustomInput";
-import Image from "next/image";
 import Link from "next/link";
 
 

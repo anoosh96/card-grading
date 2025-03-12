@@ -1,6 +1,5 @@
 import Container from "@/components/common/Container";
 import GradingHeroSection from "./components/GradingHeroSection";
-import GradedCardsSection from "@/components/GradedCardsSection";
 import GradingProcess from "./components/GradingProcess";
 import GradingVideoSection from "./components/GradingVideoSection";
 import GradingAffect from "./components/GradingAffect";

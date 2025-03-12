@@ -50,6 +50,7 @@ const config: Config = {
         "muted-green": "hsl(var(--muted-green))",
         "light-red": "var(--light-red)",
         "golden-amber": "var(--golden-amber)",
+        "transparent-red": "var(--transparent-red)",
 
         chart: {
           "1": "hsl(var(--chart-1))",

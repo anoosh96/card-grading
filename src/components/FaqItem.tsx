@@ -2,7 +2,6 @@
 
 import Image from "next/image";
 import { useState } from "react";
-import { FaChevronDown } from "react-icons/fa";
 
 export default function FAQItem ({ question, answer }: { question: string; answer: string }) {
   const [isOpen, setIsOpen] = useState(false);

@@ -73,8 +73,8 @@ export default function ExploreCardSection() {
 
       { filteredCards.length > 0 ?
       <div className="grid md:grid-cols-2 gap-20 mt-10">
-        {filteredCards.map((card) => (
-          <Image src={card.image} width={200} height={100} className="w-full px-10 mb-4" alt="card image" />
+        {filteredCards.map((card, i) => (
+          <Image key={i} src={card.image} width={200} height={100} className="w-full px-10 mb-4" alt="card image" />
         ))}
       </div>
         :

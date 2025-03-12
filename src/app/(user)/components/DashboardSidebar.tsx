@@ -1,0 +1,99 @@
+// "use client";
+// import { dashboardSidebarItems } from "../../lib/utils/constants";
+// import SidebarItem from "./SidebarItem";
+// import { usePathname } from "next/navigation";
+
+// export function DashboardSidebar() {
+//   const pathname = usePathname();
+//   return (
+//     <aside className="w-72 bg-white flex flex-col h-screen fixed">
+//       <div className="p-6">
+//         <h1 className="text-xl font-bold">Logo</h1>
+//       </div>
+
+//       <nav className="flex-1 mt-32">
+//         <div className="space-y-5">
+//           {dashboardSidebarItems.map((item) => (
+//             <SidebarItem key={item.href} {...item} isActive={pathname === item.href} />
+//           ))}
+//         </div>
+//       </nav>
+//     </aside>
+//   );
+// }
+
+"use client";
+
+import { useState, useEffect } from "react";
+import SidebarItem from "./SidebarItem";
+import { usePathname } from "next/navigation";
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"; // ShadCN Drawer
+import { Menu } from "lucide-react"; // Icon for opening drawer
+import { dashboardSidebarItems } from "../lib/utils/constants";
+
+export function DashboardSidebar() {
+  const pathname = usePathname();
+  const [isMobile, setIsMobile] = useState(false);
+  const [isCollapsed, setIsCollapsed] = useState(false);
+
+  // Detect screen width to toggle sidebar states
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth <= 768) {
+        setIsMobile(true);
+      } else if (window.innerWidth <= 1024) {
+        setIsMobile(false);
+        setIsCollapsed(true);
+      } else {
+        setIsMobile(false);
+        setIsCollapsed(false);
+      }
+    };
+
+    handleResize(); // Initial check
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  return (
+    <>
+      {/* Drawer for Mobile Screens */}
+      {isMobile ? (
+        <Sheet>
+          <SheetTrigger className="absolute top-5 left-5 z-50">
+            <Menu className="w-6 h-6 text-primary" />
+          </SheetTrigger>
+          <SheetContent side="left" className="w-72 p-6">
+            <h1 className="text-xl font-bold mb-6">Logo</h1>
+            <nav className="space-y-5">
+              {dashboardSidebarItems.map((item) => (
+                <SidebarItem key={item.href} {...item} isActive={pathname === item.href} />
+              ))}
+            </nav>
+          </SheetContent>
+        </Sheet>
+      ) : (
+        // Sidebar for Desktop & Collapsed Mode
+        <aside className={`bg-white fixed h-screen flex flex-col transition-all ${isCollapsed ? "w-20" : "w-72"}`}>
+          <div className={`p-6 ${isCollapsed ? "px-4" : ""}`}>
+            <h1 className={`text-xl font-bold ${isCollapsed ? "hidden" : "block"}`}>Logo</h1>
+          </div>
+
+          <nav className="flex-1 mt-32 space-y-5">
+            {dashboardSidebarItems.map((item) => (
+              <SidebarItem key={item.href} {...item} isActive={pathname === item.href} isCollapsed={isCollapsed} />
+            ))}
+          </nav>
+
+          {/* Toggle Button for Collapsing Sidebar */}
+          <button
+            onClick={() => setIsCollapsed(!isCollapsed)}
+            className="absolute bottom-5 left-1/2 transform -translate-x-1/2 p-2 bg-light-grey rounded-full"
+          >
+            {isCollapsed ? "➡️" : "⬅️"}
+          </button>
+        </aside>
+      )}
+    </>
+  );
+}

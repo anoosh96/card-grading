@@ -24,7 +24,7 @@ export default function Addons(){
       </div>
 
       <div className="space-y-4 mt-8">
-        { ADDONS.map((addon => (<Addon {...addon} />))) }
+        { ADDONS.map((addon, i) => { return (<Addon key={i} {...addon} />)}) }
       </div>
     </section>
   )

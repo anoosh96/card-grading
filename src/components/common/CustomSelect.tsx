@@ -28,7 +28,7 @@ const CustomSelect: React.FC<CustomDropdownProps> = ({options, setSelectedOption
   }, []);
 
   return (
-    <div className="relative" className={className} ref={dropdownRef}>
+    <div className={`relative ${className}`} ref={dropdownRef}>
       {/* Dropdown Button */}
       <button
         onClick={() => setIsOpen(!isOpen)}

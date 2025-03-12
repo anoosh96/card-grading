@@ -25,7 +25,7 @@ export default function OurServices (){
       <div className="mt-20 flex flex-col md:flex-row items-start">
           <Image src={"/assets/images/style.svg"} width={500} height={700} className="w-[20rem] -mt-32 -ml-[40px] lg:-ml-[42px] xl:-ml-[44px]" alt="style image" />
           <div className="grid lg:grid-cols-2 gap-10 w-full">
-           {SERVICES.map(service => ( <div className="flex justify-center mb-10 lg:mb-0 lg:justify-end"> <ServiceCard {...service}/> </div>) )}
+           {SERVICES.map((service, index) => { return ( <div key={index} className="flex justify-center mb-10 lg:mb-0 lg:justify-end"> <ServiceCard {...service}/> </div>)}) }
           </div>
       </div>
     </section>

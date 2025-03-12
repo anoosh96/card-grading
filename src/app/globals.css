@@ -49,6 +49,7 @@ body {
     --dark-purple: 242 91% 8%;
     --muted-green: 132 44% 41%;
     --light-red: #E3350D;
+    --transparent-red: #FEE2E2;
   }
   .dark {
     --background: 0 0% 3.9%;
@@ -86,6 +87,7 @@ body {
     --muted-green: 132 44% 41%;
     --light-red: #E3350D;
     --golden-amber: #E4A321
+    --transparent-red: #FEE2E2;
   }
 }
 

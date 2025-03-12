@@ -1,6 +1,3 @@
-import { ButtonGradient } from "@/components/common/ButtonGradient";
-import CustomInput from "@/components/common/CustomInput";
-import { Link } from "lucide-react";
 import Image from "next/image";
 import React from "react";
 

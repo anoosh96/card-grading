@@ -1,8 +1,8 @@
 'use client'
 
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef } from "react";
 import ReactPlayer from "react-player";
-import { FaPlay, FaPause, FaExpand } from "react-icons/fa";
+import { FaPlay, FaPause } from "react-icons/fa";
 
 interface VideoPlayerProps {
   url: string;
@@ -11,25 +11,25 @@ interface VideoPlayerProps {
 const VideoPlayer: React.FC<VideoPlayerProps> = ({ url }) => {
   const playerRef = useRef<ReactPlayer | null>(null);
   const [playing, setPlaying] = useState(false);
-  const [progress, setProgress] = useState(0);
-  const [duration, setDuration] = useState(0);
-  const [currentTime, setCurrentTime] = useState(0);
+  // const [progress, setProgress] = useState(0);
+  // const [duration, setDuration] = useState(0);
+  // const [currentTime, setCurrentTime] = useState(0);
 
   // Toggle Play/Pause
   const togglePlay = () => setPlaying(!playing);
 
   // Update Progress Bar
-  const handleProgress = (state: { playedSeconds: number; played: number }) => {
-    setCurrentTime(state.playedSeconds);
-    setProgress(state.played * 100);
-  };
+  // const handleProgress = (state: { playedSeconds: number; played: number }) => {
+  //   setCurrentTime(state.playedSeconds);
+  //   setProgress(state.played * 100);
+  // };
 
   // Format time (MM:SS)
-  const formatTime = (seconds: number) => {
-    const mins = Math.floor(seconds / 60);
-    const secs = Math.floor(seconds % 60);
-    return `${String(mins).padStart(2, "0")}:${String(secs).padStart(2, "0")}`;
-  };
+  // const formatTime = (seconds: number) => {
+  //   const mins = Math.floor(seconds / 60);
+  //   const secs = Math.floor(seconds % 60);
+  //   return `${String(mins).padStart(2, "0")}:${String(secs).padStart(2, "0")}`;
+  // };
 
   return (
     <div className="relative w-full mx-auto rounded-lg overflow-hidden shadow-lg">
@@ -41,8 +41,8 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ url }) => {
         controls={true}
         width="100%"
         height="100%"
-        onProgress={handleProgress}
-        onDuration={(d) => setDuration(d)}
+        // onProgress={handleProgress}
+        // onDuration={(d) => setDuration(d)}
       />
 
       {/* Play/Pause Button */}

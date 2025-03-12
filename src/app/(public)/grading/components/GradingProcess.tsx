@@ -26,7 +26,7 @@ const STEPS = [
 export default function GradingProcess() {
 
   const steps = () => {
-    return STEPS.map((step) => (<StepCard {...step} />) )
+    return STEPS.map((step, i) => (<StepCard key={i} {...step} />) )
   }
 
   return (

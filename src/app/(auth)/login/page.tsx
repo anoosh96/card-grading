@@ -1,7 +1,5 @@
 import { ButtonGradient } from "@/components/common/ButtonGradient";
-import Container from "@/components/common/Container";
 import CustomInput from "@/components/common/CustomInput";
-import Image from "next/image";
 import Link from "next/link";
 
 
@@ -28,7 +26,7 @@ export default function LoginPage() {
       </div>
       <ButtonGradient className="w-full mt-6 py-6">Log in</ButtonGradient>
       <div className="mt-4 text-lg font-medium text-center">
-        <span>Don't have an account? <Link href={"/sign-up"} className="text-light-red">Sign Up!</Link></span>
+        <span>Don&#39;t have an account? <Link href={"/sign-up"} className="text-light-red">Sign Up!</Link></span>
       </div>
     </div>
   )

@@ -30,7 +30,7 @@ const FAQS = [
 export default function GradingFaqSection() {
   return(
     <section className="mt-14 p-10">
-      <h2 className="text-3xl font-bold">FAQ's</h2>
+      <h2 className="text-3xl font-bold">FAQ&#39;s</h2>
       <p className="mt-2">Answers to Your Most Common Questions</p>
 
       <Faqs faqs={FAQS} />

@@ -1,6 +1,4 @@
 import Image from "next/image";
-import { FaQuestionCircle } from "react-icons/fa";
-
 
 const PricingTableItems = [
   {

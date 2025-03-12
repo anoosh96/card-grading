@@ -52,7 +52,7 @@ const AboutWhyChooseUs = () => {
           {/* <div className="absolute inset-0 bg-gradient-to-t from-white to-transparent"></div> */}
 
           {features.map((feature, index) => (
-            <div className="relative">
+            <div className="relative" key={index}>
             <div
               key={index}
               className={`relative flex w-full max-w-sm items-start space-x-4 rounded-2xl bg-white pt-4 pb-9 px-5 shadow-[5px_5px_15px_rgba(0,0,0,0.1)] md:max-w-xs ${
