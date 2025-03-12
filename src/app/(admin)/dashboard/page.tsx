@@ -1,11 +1,13 @@
+"use client";
+
 import DashboardSubmissionCard from "./components/main/DashboardSubmissionCard";
-import { DashboardSubmissionTracking } from "./components/main/DashboardSubmissiontracking";
+import DashboardSubmissionStatus from "./components/main/DashboardSubmissionStatus";
 
 function DashboardPage() {
   return (
-    <div className="space-y-10">
+    <div className="space-y-5">
       <DashboardSubmissionCard />
-      <DashboardSubmissionTracking />
+      <DashboardSubmissionStatus isMoreItem={true} />
     </div>
   );
 }

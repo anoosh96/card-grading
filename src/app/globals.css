@@ -85,6 +85,7 @@ body {
     --dark-purple: 242 91% 8%;
     --muted-green: 132 44% 41%;
     --light-red: #E3350D;
+    --golden-amber: #E4A321
   }
 }
 
@@ -97,7 +98,42 @@ body {
     border-image: linear-gradient(to right, hsl(48, 100%, 50%), hsl(31, 95%, 49%), hsl(11, 89%, 47%));
     border-image-slice: 1;
   }
+
+  .flex-center {
+    @apply flex justify-center items-center;
+  }
+
+  .flex-between {
+    @apply flex justify-between items-center;
+  }
+
+  .heading-primary {
+    @apply text-2xl sm:text-3xl md:text-[32px];
+  }
+
+  .heading-medium {
+    @apply text-[20px];
+  }
+
+  /* Heading Secondary - slightly smaller size */
+  .heading-secondary {
+    @apply text-base;
+  }
+
+  /* Heading Tertiary - smaller font for tertiary headings */
+  .heading-tertiary {
+    @apply text-sm;
+  }
+
+  .section-heading {
+    @apply text-[12px];
+  }
+
+  .text-description {
+    @apply text-xs;
+  }
 }
+
 @layer base {
   * {
     @apply border-border;

@@ -4,11 +4,25 @@ import DashboardGradedCardIcon from "@/components/svgs/DashboardGradedIcon";
 import DashboardSubtrackingIcon from "@/components/svgs/DashboardSubTrackingIcon";
 import DashboardProfileIcon from "@/components/svgs/DashboardProfileIcon";
 import DashboardLogoutIcon from "@/components/svgs/DashboardLogoutIcon";
+import DashboardSubmissionStatusIcon from "@/components/svgs/DashboardSubmissionStatusIcon";
 
 export const dashboardSidebarItems: SidebarItemProps[] = [
   { href: "/dashboard", label: "Dashboard", Icon: DashboardSidebarIcon },
-  { href: "/dashboard/graded-cards", label: "Graded Cards", Icon: DashboardGradedCardIcon },
-  { href: "/dashboard/submission-tracking", label: "Submission Tracking", Icon: DashboardSubtrackingIcon },
+  {
+    href: "/dashboard/submission-status",
+    label: "Submission Status",
+    Icon: DashboardSubmissionStatusIcon,
+  },
+  {
+    href: "/dashboard/grading-review",
+    label: "Grading Review",
+    Icon: DashboardGradedCardIcon,
+  },
+  {
+    href: "/dashboard/order-history",
+    label: "Order History",
+    Icon: DashboardSubtrackingIcon,
+  },
   { href: "/dashboard/profile", label: "Profile", Icon: DashboardProfileIcon },
   { href: "/#logout", label: "Logout", Icon: DashboardLogoutIcon },
 ];

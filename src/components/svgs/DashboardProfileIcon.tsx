@@ -1,9 +1,15 @@
 import { SvgIconProps } from "@/types";
 import * as React from "react";
 const DashboardProfileIcon = (props: SvgIconProps) => (
-  <svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} fill="none" {...props}>
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width={24}
+    height={24}
+    fill="none"
+    {...props}
+  >
     <path
-      stroke="#565656"
+      stroke="currentColor"
       strokeLinecap="round"
       strokeLinejoin="round"
       strokeWidth={1.5}
@@ -11,7 +17,7 @@ const DashboardProfileIcon = (props: SvgIconProps) => (
       className={`${props.className}`}
     />
     <path
-      stroke="#565656"
+      stroke="currentColor"
       strokeLinecap="round"
       strokeLinejoin="round"
       strokeWidth={1.5}

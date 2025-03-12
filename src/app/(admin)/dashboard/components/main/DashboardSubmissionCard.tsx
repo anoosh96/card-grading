@@ -7,7 +7,7 @@ function DashboardSubmissionCard() {
     <div className="flex items-stretch flex-col lg:flex-row gap-5">
       <div className="bg-white w-full lg:w-2/5 rounded-[1.25rem] p-7 shadow-sm">
         <div className="flex flex-col items-start  gap-6 mb-4">
-          <div className="bg-primary p-3 rounded-lg">
+          <div className="bg-[#E4A321] p-3 rounded-lg">
             <DashboardTotalCardsIcon className="h-6 w-6 text-primary" />
           </div>
           <div>
@@ -17,7 +17,7 @@ function DashboardSubmissionCard() {
             </div>
           </div>
         </div>
-        <h3 className="font-medium text-xl text-charcol">Total Submissions</h3>
+        <h3 className="font-medium text-xl text-charcol">Total Cards</h3>
       </div>
 
       <SubmissionSources />

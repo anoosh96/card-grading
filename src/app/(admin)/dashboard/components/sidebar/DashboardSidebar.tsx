@@ -67,21 +67,40 @@ export function DashboardSidebar() {
             <h1 className="text-xl font-bold mb-6">Logo</h1>
             <nav className="space-y-5">
               {dashboardSidebarItems.map((item) => (
-                <SidebarItem key={item.href} {...item} isActive={pathname === item.href} />
+                <SidebarItem
+                  key={item.href}
+                  {...item}
+                  isActive={pathname === item.href}
+                />
               ))}
             </nav>
           </SheetContent>
         </Sheet>
       ) : (
         // Sidebar for Desktop & Collapsed Mode
-        <aside className={`bg-white fixed h-screen flex flex-col transition-all ${isCollapsed ? "w-20" : "w-72"}`}>
+        <aside
+          className={`bg-white fixed h-screen flex flex-col transition-all ${
+            isCollapsed ? "w-20" : "w-72"
+          }`}
+        >
           <div className={`p-6 ${isCollapsed ? "px-4" : ""}`}>
-            <h1 className={`text-xl font-bold ${isCollapsed ? "hidden" : "block"}`}>Logo</h1>
+            <h1
+              className={`text-xl font-bold ${
+                isCollapsed ? "hidden" : "block"
+              }`}
+            >
+              Logo
+            </h1>
           </div>
 
-          <nav className="flex-1 mt-32 space-y-5">
+          <nav className="flex-1 flex flex-col justify-center space-y-2">
             {dashboardSidebarItems.map((item) => (
-              <SidebarItem key={item.href} {...item} isActive={pathname === item.href} isCollapsed={isCollapsed} />
+              <SidebarItem
+                key={item.href}
+                {...item}
+                isActive={pathname === item.href}
+                isCollapsed={isCollapsed}
+              />
             ))}
           </nav>
 
