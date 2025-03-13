@@ -2,7 +2,11 @@ import type { Config } from "tailwindcss";
 
 const config: Config = {
   darkMode: ["class"],
-  content: ["./src/pages/**/*.{js,ts,jsx,tsx,mdx}", "./src/components/**/*.{js,ts,jsx,tsx,mdx}", "./src/app/**/*.{js,ts,jsx,tsx,mdx}"],
+  content: [
+    "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
+    "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
+    "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
+  ],
   theme: {
     extend: {
       colors: {
@@ -51,6 +55,8 @@ const config: Config = {
         "light-red": "var(--light-red)",
         "golden-amber": "var(--golden-amber)",
         "transparent-red": "var(--transparent-red)",
+        "light-grey-50": "var(--light-grey-50)",
+        "light-grey-100": "var(--light-grey-100)",
 
         chart: {
           "1": "hsl(var(--chart-1))",
@@ -58,12 +64,12 @@ const config: Config = {
           "3": "hsl(var(--chart-3))",
           "4": "hsl(var(--chart-4))",
           "5": "hsl(var(--chart-5))",
-        }
+        },
       },
       borderRadius: {
         lg: "var(--radius)",
         md: "calc(var(--radius) - 2px)",
-        sm: "calc(var(--radius) - 4px)",
+        sm: "calc(var(--radius) - 12px)",
       },
     },
   },
