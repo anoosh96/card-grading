@@ -1,27 +1,3 @@
-// "use client";
-// import { dashboardSidebarItems } from "../../lib/utils/constants";
-// import SidebarItem from "./SidebarItem";
-// import { usePathname } from "next/navigation";
-
-// export function DashboardSidebar() {
-//   const pathname = usePathname();
-//   return (
-//     <aside className="w-72 bg-white flex flex-col h-screen fixed">
-//       <div className="p-6">
-//         <h1 className="text-xl font-bold">Logo</h1>
-//       </div>
-
-//       <nav className="flex-1 mt-32">
-//         <div className="space-y-5">
-//           {dashboardSidebarItems.map((item) => (
-//             <SidebarItem key={item.href} {...item} isActive={pathname === item.href} />
-//           ))}
-//         </div>
-//       </nav>
-//     </aside>
-//   );
-// }
-
 "use client";
 
 import { useState, useEffect } from "react";
@@ -98,19 +74,22 @@ export function DashboardSidebar() {
               <SidebarItem
                 key={item.href}
                 {...item}
-                isActive={pathname === item.href}
+                isActive={
+                  pathname === item.href ||
+                  (item.href !== "/dashboard" && pathname.startsWith(item.href))
+                }
                 isCollapsed={isCollapsed}
               />
             ))}
           </nav>
 
-          {/* Toggle Button for Collapsing Sidebar */}
+          {/* Toggle Button for Collapsing Sidebar
           <button
             onClick={() => setIsCollapsed(!isCollapsed)}
             className="absolute bottom-5 left-1/2 transform -translate-x-1/2 p-2 bg-light-grey rounded-full"
           >
             {isCollapsed ? "➡️" : "⬅️"}
-          </button>
+          </button> */}
         </aside>
       )}
     </>
