@@ -6,6 +6,7 @@ import { CustomCheckbox } from "@/components/ui/checkbox";
 import CalendarIcon from "@/components/svgs/dashboard/CalendarIcon";
 import CustomDropdown from "@/components/common/CustomDropDown/CustomDropDown";
 import Link from "@/components/common/CustomLink/CustomLink";
+import { useRouter } from "next/navigation";
 
 // Define the submission data type
 type Submission = {
@@ -24,11 +25,12 @@ interface DashboardSubmissionStatusProps {
 const DashboardSubmissionStatus: FC<DashboardSubmissionStatusProps> = ({
   isMoreItem = false,
 }) => {
+  const router = useRouter();
   const dropdownItems = [
     {
       label: "View Detail",
       icon: <Eye className="h-4 w-4" />,
-      onClick: () => console.log("View Detail Open"),
+      onClick: () => router.push("/dashboard/submission-status/1"),
     },
     {
       label: "Delete",
