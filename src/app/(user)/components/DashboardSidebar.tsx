@@ -36,6 +36,16 @@ export function DashboardSidebar() {
   const [isMobile, setIsMobile] = useState(false);
   const [isCollapsed, setIsCollapsed] = useState(false);
 
+  const matchNestedPaths = (currentpath: string) => {
+    const parts = pathname.split('/')
+    const currentParts = currentpath.split('/')
+    if (parts.length > 3){
+      return parts[2] == currentParts[2]
+    }
+      
+    return pathname == currentpath
+  }
+
   // Detect screen width to toggle sidebar states
   useEffect(() => {
     const handleResize = () => {
@@ -81,7 +91,7 @@ export function DashboardSidebar() {
 
           <nav className="flex-1 mt-32 space-y-5">
             {dashboardSidebarItems.map((item) => (
-              <SidebarItem key={item.href} {...item} isActive={pathname === item.href} isCollapsed={isCollapsed} />
+              <SidebarItem key={item.href} {...item} isActive={matchNestedPaths(item.href)} isCollapsed={isCollapsed} />
             ))}
           </nav>
 
