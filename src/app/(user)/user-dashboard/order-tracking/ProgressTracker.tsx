@@ -1,5 +1,6 @@
 import Image from "next/image";
 import { FaInfoCircle } from "react-icons/fa";
+import SmallProgressBar from "../../components/SmallProgressBar";
 
 
 export default function ProgressTracker() {
@@ -19,9 +20,7 @@ export default function ProgressTracker() {
               <div className="text-xl leading-none">80%</div>
               <div className="text-pure-grey leading-none">Grading</div>
             </div>
-            <div className="w-full h-2 rounded-lg bg-soft-grey">
-              <div className="bg-custom-gradient h-2 w-2/3 rounded-lg"></div>
-            </div>
+            <SmallProgressBar progress={50} />
           </div>
         </div>
         <div className="mt-8 pl-4 space-y-6">

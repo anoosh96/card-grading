@@ -32,3 +32,18 @@ export interface AddonProps {
   title: string;
   desc: string
 }
+
+export interface Card {
+  cardName: string;
+  year: string;
+  category: string;
+  condition: string;
+  serviceType: string;
+  frontImage?: string;
+  backImage?: string;
+}
+
+export interface FormStepProps {
+  handleNext: () => void
+  handlePrevious?: () => void
+}

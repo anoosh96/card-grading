@@ -2,8 +2,13 @@
 
 import { useState } from "react";
 import { Check } from "lucide-react";
+import { cn } from "@/lib/utils";
 
-export default function CustomCheckbox() {
+interface CustomCheckboxProps {
+  className?: string
+}
+
+export default function CustomCheckbox({ className }: CustomCheckboxProps) {
   const [isChecked, setIsChecked] = useState(false);
 
   const handleClick = () => {
@@ -11,7 +16,7 @@ export default function CustomCheckbox() {
   };
 
   return (
-    <div className="flex items-center my-1 gap-2 bg-black text-pure-white">
+    <div className={cn("flex items-center my-1 gap-2 bg-black text-pure-white", className)}>
       <button
         onClick={handleClick}
         className="relative flex h-4 w-4 items-center justify-center border border-secondary-grey bg-primary-grey"

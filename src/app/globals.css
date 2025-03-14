@@ -100,6 +100,11 @@ body {
   .bg-custom-gradient {
     background-image: linear-gradient(to right, hsl(48, 100%, 50%), /* Secondary */ hsl(31, 95%, 49%), hsl(11, 89%, 47%) /* Primary */);
   }
+
+  .bg-custom-gradient-2 {
+    background: linear-gradient(to right, #f6a04d, #E3350D)
+  }
+
   .border-custom-gradient {
     border: 1px solid transparent; /* Set transparent border */
     border-image: linear-gradient(to right, hsl(48, 100%, 50%), hsl(31, 95%, 49%), hsl(11, 89%, 47%));
