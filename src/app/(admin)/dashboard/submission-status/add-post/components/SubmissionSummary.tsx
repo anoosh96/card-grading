@@ -56,9 +56,9 @@ const SubmissionSummary = ({
     <div
       className={`w-full bg-light-grey rounded-md shadow-sm overflow-hidden ${classNames}`}
     >
-      <div className="px-6 py-4">
+      <div className="p-4">
         <div className="flex justify-between items-center mb-4">
-          <h2 className="text-xl font-semibold text-gray-900">{title}</h2>
+          <h2 className="text-2xl font-semibold text-gray-900">{title}</h2>
 
           {isEditable && (
             <div className="flex space-x-2">
@@ -101,11 +101,11 @@ const SubmissionSummary = ({
             <div key={key}>
               {/* Insert Divider Before Submission Date */}
               {key === "submissionDate" && (
-                <div className="border-t border-gray-200 my-4"></div>
+                <div className="border-t border-gray-200 my-2"></div>
               )}
 
               <div
-                className={`grid grid-cols-2 py-2 ${
+                className={`grid grid-cols-2 py-1 ${
                   key === "submissionDate" || key === "status"
                     ? "text-[18px] font-medium"
                     : ""

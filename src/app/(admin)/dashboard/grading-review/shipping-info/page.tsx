@@ -37,14 +37,12 @@ const ShippingInfo = () => {
         </p>
       </div>
 
-      <form onSubmit={handleSubmit} className="space-y-6 text-black heading-tertiary">
+      <form
+        onSubmit={handleSubmit}
+        className="space-y-6 text-black heading-tertiary"
+      >
         <div className="flex w-full flex-col mb-6">
-          <label
-            htmlFor="name"
-            className="block font-medium mb-1"
-          >
-            Full Name
-          </label>
+          <label className="block font-medium mb-1">Full Name</label>
 
           <CustomInput
             id="name"
@@ -56,12 +54,7 @@ const ShippingInfo = () => {
         </div>
 
         <div className="w-full flex-col">
-          <label
-            htmlFor="shippingAddress"
-            className="block font-medium mb-1"
-          >
-            Shipping Address
-          </label>
+          <label className="block font-medium mb-1">Shipping Address</label>
           <CustomInput
             id="shippingAddress"
             placeholder="Enter Shipping Address"
@@ -73,12 +66,7 @@ const ShippingInfo = () => {
         </div>
 
         <div className="w-full flex-col">
-          <label
-            htmlFor="shippingAddress"
-            className="block font-medium mb-1"
-          >
-            Phone Number
-          </label>
+          <label className="block font-medium mb-1">Phone Number</label>
           <CustomInput
             id="shippingAddress"
             placeholder="eg +92 000000000"

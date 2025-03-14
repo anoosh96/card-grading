@@ -37,8 +37,8 @@ const CardDetailedView = () => {
 
       <div>
         <CardImages
-          frontImage="/assets/images/mike-trout.png"
-          backImage="/assets/images/mike-trout.png"
+          frontImage="/assets/images/mike-trout.svg"
+          backImage="/assets/images/mike-trout.svg"
         />
       </div>
 
