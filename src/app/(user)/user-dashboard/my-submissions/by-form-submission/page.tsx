@@ -4,6 +4,7 @@ import { useState } from "react"
 import CardDetails from "./components/CardDetails"
 import ProgressBar from "@/app/(user)/components/ProgressBar"
 import Subscription from "./components/Subscription"
+import Tracking from "./components/Tracking"
 
 
 export default function ByFormSubmissionPage() {
@@ -25,6 +26,7 @@ export default function ByFormSubmissionPage() {
 
       { step == 1 &&  <CardDetails handleNext={handleNext}/> }
       { step == 2 &&  <Subscription handleNext={handleNext} handlePrevious={handlePrevious}/> }
+      { step == 3 &&  <Tracking handleNext={handleNext} handlePrevious={handlePrevious}/> }
 
     </section>
   )

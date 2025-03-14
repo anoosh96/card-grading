@@ -9,7 +9,7 @@ function getOrdinalSuffix(day: number): string {
 }
 
 
-export const dateFormat = (datetime : string) => {
+export const dateFormat = (datetime: string) => {
   const date = new Date(datetime);
 
   const day = date.getUTCDate();
@@ -20,4 +20,8 @@ export const dateFormat = (datetime : string) => {
 
   
   return formatted
+}
+
+export const capitalize = (str: string) => {
+  return str.charAt(0).toUpperCase() + str.slice(1);
 }

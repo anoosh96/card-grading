@@ -3,7 +3,6 @@ import { Button } from "@/components/ui/button";
 import { FormStepProps } from "@/types";
 import SubmissionSummary from "../../SubmissionSummary";
 import SubscriptionBox from "../../SubscriptionBox";
-import { Checkbox } from "@radix-ui/react-checkbox";
 import CustomCheckbox from "@/components/common/CustomCheckbox";
 
 const summaryFields = {
@@ -15,7 +14,8 @@ const summaryFields = {
 
 const subscriptionData = {
   status: 'active',
-  renewalDate: '',
+  type: 'premium',
+  renewalDate: '2025-03-06',
   totalCards: 20,
   cardsUsed: 14
 }
@@ -30,7 +30,7 @@ export default function Subscription({ handleNext, handlePrevious }: FormStepPro
 
 
       <SubmissionSummary fields={summaryFields} className="mt-6" />
-      <SubscriptionBox className="mt-6" />
+      <SubscriptionBox className="mt-6" data={subscriptionData} />
 
       <CustomCheckbox className="bg-white mt-4" />
 
@@ -43,7 +43,7 @@ export default function Subscription({ handleNext, handlePrevious }: FormStepPro
         >
           Back
         </Button>
-        <ButtonGradient size={"lg"} className="py-3 px-14 h-auto" type="submit">
+        <ButtonGradient size={"lg"} className="py-3 px-14 h-auto" type="submit" onClick={handleNext}>
           Next
         </ButtonGradient>
       </div>
