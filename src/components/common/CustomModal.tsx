@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { FiX, FiTrash2 } from "react-icons/fi";
 
 interface ModalProps {
@@ -7,9 +8,12 @@ interface ModalProps {
   onConfirm: () => void;
   onCancel: () => void;
   cn?: string;
+  icon_url?: string
+  yes_btn_text?: string
+  no_btn_text?: string
 }
 
-const CustomModal: React.FC<ModalProps> = ({ isOpen, title, message, onConfirm, onCancel, cn }) => {
+const CustomModal: React.FC<ModalProps> = ({ isOpen, title, message, onConfirm, onCancel, cn, icon_url, yes_btn_text = 'Delete', no_btn_text = 'Cancel' }) => {
   if (!isOpen) return null;
 
   return (
@@ -23,7 +27,7 @@ const CustomModal: React.FC<ModalProps> = ({ isOpen, title, message, onConfirm, 
         {/* Icon */}
         <div className="flex justify-center mb-4">
           <div className="bg-red-100 p-3 rounded-full">
-            <FiTrash2 size={30} className="text-red-500" />
+            { icon_url ? (<Image src={icon_url} width={30} height={30} alt="icon" />) : <FiTrash2 size={30} className="text-red-500" />}
           </div>
         </div>
 
@@ -37,13 +41,13 @@ const CustomModal: React.FC<ModalProps> = ({ isOpen, title, message, onConfirm, 
             onClick={onCancel}
             className="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition"
           >
-            Cancel
+            { no_btn_text }
           </button>
           <button
             onClick={onConfirm}
             className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition"
           >
-            Delete
+            { yes_btn_text }
           </button>
         </div>
       </div>

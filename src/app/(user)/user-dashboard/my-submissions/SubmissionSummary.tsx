@@ -10,7 +10,9 @@ export default function SubmissionSummary({fields, className} : SubmissionSummar
     'cardName': 'Card Name',
     'category': 'Category',
     'year': 'Year of Release',
-    'condition': 'Condition'
+    'condition': 'Condition',
+    'submissionType': 'Submission Type',
+    'shippingStatus': 'Shipping Status'
   }
 
   return(

@@ -26,24 +26,33 @@
 
 import { useState, useEffect } from "react";
 import SidebarItem from "./SidebarItem";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"; // ShadCN Drawer
 import { Menu } from "lucide-react"; // Icon for opening drawer
 import { dashboardSidebarItems } from "../lib/utils/constants";
+import CustomModal from "@/components/common/CustomModal";
 
 export function DashboardSidebar() {
   const pathname = usePathname();
   const [isMobile, setIsMobile] = useState(false);
   const [isCollapsed, setIsCollapsed] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const router = useRouter()
 
   const matchNestedPaths = (currentpath: string) => {
     const parts = pathname.split('/')
     const currentParts = currentpath.split('/')
-    if (parts.length > 3){
+    if (parts.length > 3) {
       return parts[2] == currentParts[2]
     }
-      
+
     return pathname == currentpath
+  }
+
+  const handleLogout = (e: any) => {
+    e.preventDefault()
+    console.log('asdfsfa')
+    setIsModalOpen(true)
   }
 
   // Detect screen width to toggle sidebar states
@@ -77,7 +86,10 @@ export function DashboardSidebar() {
             <h1 className="text-xl font-bold mb-6">Logo</h1>
             <nav className="space-y-5">
               {dashboardSidebarItems.map((item) => (
-                <SidebarItem key={item.href} {...item} isActive={pathname === item.href} />
+                item.label == 'Logout' ?
+                   <SidebarItem key={item.href} {...item} isActive={pathname === item.href} clickHandler={handleLogout} />
+                  :
+                   <SidebarItem key={item.href} {...item} isActive={pathname === item.href} />
               ))}
             </nav>
           </SheetContent>
@@ -90,9 +102,12 @@ export function DashboardSidebar() {
           </div>
 
           <nav className="flex-1 mt-32 space-y-5">
-            {dashboardSidebarItems.map((item) => (
-              <SidebarItem key={item.href} {...item} isActive={matchNestedPaths(item.href)} isCollapsed={isCollapsed} />
-            ))}
+             {dashboardSidebarItems.map((item) => (
+                item.label == 'Logout' ?
+                   <SidebarItem key={item.href} {...item} isActive={pathname === item.href} clickHandler={handleLogout} />
+                  :
+                   <SidebarItem key={item.href} {...item} isActive={pathname === item.href} />
+              ))}
           </nav>
 
           {/* Toggle Button for Collapsing Sidebar */}
@@ -104,6 +119,22 @@ export function DashboardSidebar() {
           </button>
         </aside>
       )}
+
+      <CustomModal
+        isOpen={isModalOpen}
+        title="Are you sure you want to Logout?"
+        icon_url="/icons/logout.svg"
+        message=""
+        onConfirm={() => {
+          //console.log("Order Deleted!");
+          router.push('/')
+          setIsModalOpen(false);
+        }}
+        onCancel={() => setIsModalOpen(false)}
+        cn="!p-20 !rounded-2xl"
+        yes_btn_text="Logout"
+        no_btn_text="Cancel"
+      />
     </>
   );
 }

@@ -6,16 +6,16 @@ interface StepProgressBarProps {
   currentStep: number; // 1-based index (1 = Card Details, 2 = Subscription, 3 = Tracking)
   className?: string;
   isSubmitted?: boolean;
+  steps: string[]
 }
 
-const steps = ['Card Details', 'Subscription', 'Tracking'];
 const widths: {[key: number]: string} = {
   1: 'w-0',
   2: 'w-1/2',
   3: 'w-full'
 } 
 
-const StepProgressBar: React.FC<StepProgressBarProps> = ({ currentStep, className = '', isSubmitted = false }) => {
+const StepProgressBar: React.FC<StepProgressBarProps> = ({ currentStep, className = '', isSubmitted = false, steps }) => {
 
   const getLoadingWidth = () => {
     return widths[currentStep]

@@ -12,5 +12,5 @@ export const dashboardSidebarItems: SidebarItemProps[] = [
   { href: "/user-dashboard/submission-status", label: "Submission Status", Icon: DashboardSubtrackingIcon },
   { href: "/user-dashboard/subscription", label: "Subscription", Icon: DashboardSubscriptionIcon },
   { href: "/user-dashboard/profile", label: "Profile", Icon: DashboardProfileIcon },
-  { href: "/#logout", label: "Logout", Icon: DashboardLogoutIcon },
+  { href: "", label: "Logout", Icon: DashboardLogoutIcon, isBtn: true },
 ];

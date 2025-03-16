@@ -1,8 +1,12 @@
-import React from "react";
+'use client'
+
+import React, { useState } from "react";
 import { DashboardSidebar } from "./components/DashboardSidebar";
 import { DashboardHeader } from "./components/DashboardHeader";
+import CustomModal from "@/components/common/CustomModal";
+import { useRouter } from "next/navigation";
 
-export default function DashboardLayout({ children }: { children: React.ReactNode }) {
+export default function DashboardLayout({ children }: { children: React.ReactNode }) {  
   return (
     <div className="min-h-screen flex">
       <DashboardSidebar />

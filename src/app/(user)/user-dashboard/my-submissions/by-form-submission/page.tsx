@@ -6,6 +6,8 @@ import ProgressBar from "@/app/(user)/components/ProgressBar"
 import Subscription from "./components/Subscription"
 import Tracking from "./components/Tracking"
 
+const steps = ['Card Details', 'Subscription', 'Tracking'];
+
 
 export default function ByFormSubmissionPage() {
   const [step, setStep] = useState(1)
@@ -21,7 +23,7 @@ export default function ByFormSubmissionPage() {
   return (
     <section className="p-7 bg-white">
       <div className="mb-20">
-        <ProgressBar currentStep={step} />
+        <ProgressBar currentStep={step} steps={steps} />
       </div>
 
       { step == 1 &&  <CardDetails handleNext={handleNext}/> }

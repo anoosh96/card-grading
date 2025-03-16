@@ -41,9 +41,30 @@ export interface Card {
   serviceType: string;
   frontImage?: string;
   backImage?: string;
+  fullName?: string;
+  shippingAddress?: string;
+  phoneNumber?: string;
 }
 
 export interface FormStepProps {
   handleNext: () => void
   handlePrevious?: () => void
+}
+
+export interface Subscription {
+  status: string
+  type: string
+  renewalDate: string,
+  totalCards: number,
+  cardsUsed: number
+}
+
+export interface UserProfile {
+  name: string;
+  email: string;
+  shippingAddress: string;
+  phoneNumber: string;
+  password?: string;
+  confirmPassword?: string;
+  paymentMethod?: string;
 }
