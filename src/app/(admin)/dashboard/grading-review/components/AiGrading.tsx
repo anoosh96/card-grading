@@ -36,7 +36,7 @@ const AiGrading: FC<AiGradingProps> = ({ className }) => {
         <div className="flex justify-between items-center">
           <span className="text-sm text-gray-600">Modify Grade Manually</span>
 
-          <div>
+          <div className="max-w-[7rem] w-full">
             <DashboardCustomSelect
               placeholder="Grade"
               options={cardGrades}

@@ -13,7 +13,7 @@ export const defaultSelectTheme: SelectTheme = {
     border: "border-gray-200",
   },
   item: {
-    hover: "hover:bg-black",
+    hover: "hover:bg-light-grey",
     focus: "focus:bg-gray-100",
     text: "!text-black",
   },
