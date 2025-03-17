@@ -7,6 +7,7 @@ import { Card, FormStepProps } from "@/types";
 import { Button } from "@/components/ui/button";
 import { ButtonGradient } from "@/components/common/ButtonGradient";
 import { useRouter } from "next/navigation";
+import CustomModal from "@/components/common/CustomModal";
 
 const cardTypes: string[] = ["Card Type", "Pokémon", "Spiderman", "Sports", "One Piece"];
 const conditions: string[] = ["Mint", "Near Mint", "Good", "Excellant", "Fair"];
@@ -16,6 +17,8 @@ const services: string[] = ["Service 1", "Service 2"];
 export default function CardDetails({ handleNext, handlePrevious }: FormStepProps) {
   const [frontImg, setFrontImg] = useState<{ url: string; alt: string } | undefined>(undefined);
   const [backImg, setBackImg] = useState<{ url: string; alt: string } | undefined>(undefined);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
   const router = useRouter()
 
 
@@ -23,7 +26,7 @@ export default function CardDetails({ handleNext, handlePrevious }: FormStepProp
     cardName: "",
     category: "Card Type",
     year: "",
-    condition: "",
+    condition: "Mint",
     serviceType: "Premium",
   })
 
@@ -39,7 +42,8 @@ export default function CardDetails({ handleNext, handlePrevious }: FormStepProp
   const handleSubmit = (e: any) => {
     e.preventDefault()
     console.log("Form Data:", cardDetails);
-    handleNext()
+    setIsModalOpen(true)
+    //handleNext()
   };
 
   const handleUploadImage = (type: "front" | "back", file: File) => {
@@ -132,13 +136,14 @@ export default function CardDetails({ handleNext, handlePrevious }: FormStepProp
             <div className="flex gap-6 mt-8">
               <Button
                 size={"lg"}
+                type="button"
                 className="h-auto font-semibold bg-soft-grey rounded-full text-pure-grey py-3 px-14 text-base hover:bg-soft-grey"
                 onClick={() => router.back() }
               >
                 Back
               </Button>
               <ButtonGradient size={"lg"} className="py-3 px-14 h-auto" type="submit">
-                Next
+                Submit
               </ButtonGradient>
             </div>
 
@@ -147,6 +152,25 @@ export default function CardDetails({ handleNext, handlePrevious }: FormStepProp
 
 
       </div>
+
+      <CustomModal
+        isOpen={isModalOpen}
+        title="Your Card has been Submitted for Grading"
+        icon_url="/icons/success.svg"
+        message="Your Tracking Number: #987654321"
+        onConfirm={() => {
+          //console.log("Order Deleted!");
+          handleNext()
+          setIsModalOpen(false);
+        }}
+        onCancel={() => setIsModalOpen(false)}
+        cn="!p-16 !rounded-2xl"
+        yes_btn_text="Track"
+        no_btn_text="Cancel"
+        icon_bg="bg-transparent"
+        icon_h={60}
+        icon_w={60}
+      />
     </div>
   )
 }

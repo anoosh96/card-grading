@@ -11,9 +11,13 @@ interface ModalProps {
   icon_url?: string
   yes_btn_text?: string
   no_btn_text?: string
+  icon_bg?: string
+  icon_w?: number
+  icon_h?: number
 }
 
-const CustomModal: React.FC<ModalProps> = ({ isOpen, title, message, onConfirm, onCancel, cn, icon_url, yes_btn_text = 'Delete', no_btn_text = 'Cancel' }) => {
+const CustomModal: React.FC<ModalProps> = ({ isOpen, title, message, onConfirm, onCancel, cn, icon_url,
+   yes_btn_text = 'Delete', no_btn_text = 'Cancel', icon_bg = 'bg-red-100', icon_h = 30, icon_w = 30 }) => {
   if (!isOpen) return null;
 
   return (
@@ -26,8 +30,8 @@ const CustomModal: React.FC<ModalProps> = ({ isOpen, title, message, onConfirm, 
 
         {/* Icon */}
         <div className="flex justify-center mb-4">
-          <div className="bg-red-100 p-3 rounded-full">
-            { icon_url ? (<Image src={icon_url} width={30} height={30} alt="icon" />) : <FiTrash2 size={30} className="text-red-500" />}
+          <div className={`${icon_bg} p-3 rounded-full`}>
+            { icon_url ? (<Image src={icon_url} width={icon_w} height={icon_h} alt="icon" />) : <FiTrash2 size={30} className="text-red-500" />}
           </div>
         </div>
 
