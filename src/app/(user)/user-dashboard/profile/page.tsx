@@ -148,7 +148,7 @@ export default function ProfilePage() {
 
             <div className="col-span-full">
               <label className="block font-semibold mb-2">Condition (Your Estimate)</label>
-              <CustomSelect options={['Credit/Debit Card', 'PayPal']} selectedOption={userDetails.paymentMethod || ''} borderColor="border-transparent" bg="bg-white"
+              <CustomSelect options={['Credit/Debit Card', 'PayPal']} optionIcons={['/icons/credit-card.svg', '/icons/logos_paypal.svg']} selectedOption={userDetails.paymentMethod || ''} borderColor="border-transparent" bg="bg-white"
                 setSelectedOption={(value) => handleChange({ target: { name: 'paymentMethod', value: value } })} className="relative" />
             </div>
 

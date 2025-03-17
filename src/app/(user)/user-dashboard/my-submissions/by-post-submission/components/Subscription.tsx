@@ -45,8 +45,8 @@ export default function Subscription({ handleNext, handlePrevious }: FormStepPro
         >
           Back
         </Button>
-        <ButtonGradient size={"lg"} className="py-3 px-14 h-auto" type="submit" onClick={handleNext}>
-          Next
+        <ButtonGradient size={"lg"} className="py-3 px-14 h-auto" type="submit">
+          Done
         </ButtonGradient>
       </div>
     </section>

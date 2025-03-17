@@ -1,8 +1,10 @@
+import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import { FaCheck, FaChevronDown } from "react-icons/fa";
 
 interface CustomDropdownProps {
   options: string[];
+  optionIcons?: string[] 
   setSelectedOption: React.Dispatch<React.SetStateAction<string>>;
   selectedOption: string;
   className?: string;
@@ -17,6 +19,7 @@ const CustomSelect: React.FC<CustomDropdownProps> = ({
   className,
   borderColor = "border-red-500",
   bg = "bg-white",
+  optionIcons = []
 }: CustomDropdownProps) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [shouldFlip, setShouldFlip] = useState<boolean>(false);
@@ -92,9 +95,10 @@ const CustomSelect: React.FC<CustomDropdownProps> = ({
                 setSelectedOption(option);
                 setIsOpen(false);
               }}
-              className={`cursor-pointer px-4 py-2 flex items-center hover:bg-gray-100 ${index == options.length - 1 ? 'rounded-b-lg': index == 0 ? 'rounded-t-lg': ''}`}
+              className={`cursor-pointer px-4 py-2 flex gap-2 items-center hover:bg-gray-100 ${index == options.length - 1 ? 'rounded-b-lg': index == 0 ? 'rounded-t-lg': ''}`}
             >
-              {selectedOption === option && <FaCheck className="mr-2 text-red-500" />}
+              {selectedOption === option && <FaCheck className="text-red-500" />}
+              { optionIcons[index] && <Image src={optionIcons[index]} width={30} height={30} alt="credit card" /> }
               {option}
             </div>
           ))}
