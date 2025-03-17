@@ -1,6 +1,6 @@
 "use client";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useLayoutEffect, useState } from "react";
 import { ButtonGradient } from "./ButtonGradient";
 import { FaBars, FaTimes } from "react-icons/fa";
@@ -9,6 +9,7 @@ export default function Header() {
   const pathname = usePathname();
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  const router = useRouter()
 
   // Detect scroll position to change background color
   useLayoutEffect(() => {
@@ -67,7 +68,7 @@ export default function Header() {
           </Link>
         </div>
         <div className="flex">
-          <ButtonGradient>Start Submission</ButtonGradient>
+          <ButtonGradient onClick={() => router.push('/login')}>Start Submission</ButtonGradient>
         </div>
       </div>
 
