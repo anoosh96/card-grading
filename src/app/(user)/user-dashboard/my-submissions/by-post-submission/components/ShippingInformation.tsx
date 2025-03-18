@@ -3,7 +3,7 @@ import CustomInput from "@/components/common/CustomInput";
 import CustomSelect from "@/components/common/CustomSelect";
 import { Button } from "@/components/ui/button";
 import { Card, FormStepProps } from "@/types";
-import { useState } from "react";
+import { SetStateAction, useState } from "react";
 
 const cardTypes: string[] = ["Card Type", "Pokémon", "Spiderman", "Sports", "One Piece"];
 const conditions: string[] = ["Mint", "Near Mint", "Good", "Excellant", "Fair"];
@@ -20,7 +20,12 @@ export default function ShippingInformation({handleNext, handlePrevious}: FormSt
     phoneNumber: ""
   })
 
-  const handleChange = (e: any) => {
+  const handleChange = (e: {
+      target: {
+        name: string;
+        value: string | number | boolean | SetStateAction<string>;
+      };
+    }) => {
     const { name, value } = e.target
     console.log(e)
 
@@ -29,7 +34,7 @@ export default function ShippingInformation({handleNext, handlePrevious}: FormSt
 
 
 
-  const handleSubmit = (e: any) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     console.log("Form Data:", cardDetails);
     //handleNext()

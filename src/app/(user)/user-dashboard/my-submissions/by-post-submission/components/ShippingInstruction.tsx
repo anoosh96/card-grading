@@ -27,8 +27,8 @@ export default function ShippingInstruction({ handleNext }: FormStepProps) {
       <div className="bg-light-grey rounded-lg p-7 mt-8">
         <h2 className="text-4xl font-bold">Shipping Instructions:</h2>
         <div className="mt-4 space-y-6 p-7">
-          {instructions.map((instruction) => (
-            <div className="flex gap-4">
+          {instructions.map((instruction, index) => (
+            <div className="flex gap-4" key={index}>
               <Image src={"/icons/double-star.svg"} width={20} height={20} alt="list icon image" />
               <span className="block text-neutral-grey">{instruction}</span>
             </div>
@@ -36,7 +36,7 @@ export default function ShippingInstruction({ handleNext }: FormStepProps) {
         </div>
         <div className="bg-transparent-red p-8 flex items-center text-light-red">
           <FaInfoCircle className="text-2xl bg-transparent" />
-          <p className="text-xl ml-6 font-regular">Once received, you'll get a tracking number to monitor progress.</p>
+          <p className="text-xl ml-6 font-regular">Once received, you&#39;ll get a tracking number to monitor progress.</p>
         </div>
         <CustomCheckbox text="I confirm that I have read and will follow the shipping instructions" className="bg-transparent mt-4" size="md" />
       </div>

@@ -6,9 +6,8 @@ import CustomSelect from "@/components/common/CustomSelect";
 import { Button } from "@/components/ui/button";
 import { UserProfile } from "@/types";
 import Image from "next/image";
-import { useCallback, useState } from "react";
+import { SetStateAction, useCallback, useState } from "react";
 import { useDropzone } from "react-dropzone";
-import { FaCamera } from "react-icons/fa";
 
 
 
@@ -42,7 +41,12 @@ export default function ProfilePage() {
     }
   });
 
-  const handleChange = (e: any) => {
+  const handleChange = (e: {
+      target: {
+        name: string;
+        value: string | number | boolean | SetStateAction<string>;
+      };
+    }) => {
     const { name, value } = e.target
     console.log(e)
 

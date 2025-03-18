@@ -22,7 +22,7 @@ const StepProgressBar: React.FC<StepProgressBarProps> = ({ currentStep, classNam
   }
 
   return (
-    <div className={`relative h-2 bg-transparent-red rounded-2xl w-full`}>
+    <div className={`relative h-2 bg-transparent-red rounded-2xl w-full ${className}`}>
       <div className={`absolute h-2 top-0 transition-all duration-300 bg-light-red ${getLoadingWidth()}`}></div>
       <div className={`absolute -top-5 left-0 right-0 w-full flex justify-between`}>
         {
