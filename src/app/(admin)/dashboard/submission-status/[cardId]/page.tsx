@@ -58,7 +58,7 @@ const CardDetailedView = () => {
           Reject Submissions
         </Button>
         <ButtonGradient
-          onClick={() => router.push(`/dashboard/submission-status/1`)}
+          onClick={() => router.push(`/dashboard/grading-review`)}
           className="max-w-[8rem] w-full"
         >
           Start Grading
