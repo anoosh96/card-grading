@@ -4,5 +4,5 @@ export interface SidebarItemProps {
   Icon: React.FC<React.SVGProps<SVGSVGElement>>;
   isActive?: boolean;
   isBtn?: boolean;
-  clickHandler?: (e: any) => void
+  clickHandler?: (e: React.MouseEvent<HTMLElement>) => void
 }

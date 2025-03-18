@@ -13,7 +13,7 @@ export default function OrderDetailsPage() {
 
   const router = useRouter()
 
-  const [data, setData] = useState<SubmissionData>({
+  const [data] = useState<SubmissionData>({
       name: "Henrietta Bogisich",
       email: "bogisich@gmail.com",
       orderId: "01",

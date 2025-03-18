@@ -23,7 +23,7 @@ const subscriptionData = {
 }
 
 
-export default function Subscription({ handleNext, handlePrevious }: FormStepProps) {
+export default function Subscription({ handlePrevious }: FormStepProps) {
 
   return (
     <section className="bg-white p-7">

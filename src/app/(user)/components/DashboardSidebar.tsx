@@ -49,7 +49,7 @@ export function DashboardSidebar() {
     return pathname == currentpath
   }
 
-  const handleLogout = (e: any) => {
+  const handleLogout = (e: React.MouseEvent<HTMLElement>) => {
     e.preventDefault()
     console.log('asdfsfa')
     setIsModalOpen(true)
@@ -87,9 +87,9 @@ export function DashboardSidebar() {
             <nav className="space-y-5">
               {dashboardSidebarItems.map((item) => (
                 item.label == 'Logout' ?
-                   <SidebarItem key={item.href} {...item} isActive={pathname === item.href} clickHandler={handleLogout} />
+                   <SidebarItem key={item.href} {...item} isActive={matchNestedPaths(item.href)} clickHandler={handleLogout} />
                   :
-                   <SidebarItem key={item.href} {...item} isActive={pathname === item.href} />
+                   <SidebarItem key={item.href} {...item} isActive={matchNestedPaths(item.href)} />
               ))}
             </nav>
           </SheetContent>
@@ -104,9 +104,9 @@ export function DashboardSidebar() {
           <nav className="flex-1 mt-32 space-y-5">
              {dashboardSidebarItems.map((item) => (
                 item.label == 'Logout' ?
-                   <SidebarItem key={item.href} {...item} isActive={pathname === item.href} clickHandler={handleLogout} />
+                   <SidebarItem key={item.href} {...item} isActive={matchNestedPaths(item.href)} clickHandler={handleLogout} />
                   :
-                   <SidebarItem key={item.href} {...item} isActive={pathname === item.href} />
+                   <SidebarItem key={item.href} {...item} isActive={matchNestedPaths(item.href)} />
               ))}
           </nav>
 

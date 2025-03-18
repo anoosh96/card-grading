@@ -6,7 +6,7 @@ import { FormStepProps } from "@/types";
 import ProgressTracker from "../../../order-tracking/ProgressTracker";
 
 
-export default function Tracking({ handleNext, handlePrevious }: FormStepProps) {
+export default function Tracking({ handlePrevious }: FormStepProps) {
 
   return (
     <section className="p-7 bg-white">

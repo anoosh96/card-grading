@@ -1,5 +1,5 @@
 import ImageEditor from "@/components/common/ImagePicker/ImageEditor";
-import { useState } from "react";
+import { SetStateAction, useState } from "react";
 
 import CustomInput from "@/components/common/CustomInput";
 import CustomSelect from "@/components/common/CustomSelect";
@@ -14,7 +14,7 @@ const conditions: string[] = ["Mint", "Near Mint", "Good", "Excellant", "Fair"];
 const services: string[] = ["Service 1", "Service 2"];
 
 
-export default function CardDetails({ handleNext, handlePrevious }: FormStepProps) {
+export default function CardDetails({ handleNext }: FormStepProps) {
   const [frontImg, setFrontImg] = useState<{ url: string; alt: string } | undefined>(undefined);
   const [backImg, setBackImg] = useState<{ url: string; alt: string } | undefined>(undefined);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -30,7 +30,12 @@ export default function CardDetails({ handleNext, handlePrevious }: FormStepProp
     serviceType: "Premium",
   })
 
-  const handleChange = (e: any) => {
+  const handleChange = (e: {
+    target: {
+      name: string;
+      value: string | number | boolean | SetStateAction<string>;
+    };
+  }) => {
     const { name, value } = e.target
     console.log(e)
 
@@ -39,7 +44,7 @@ export default function CardDetails({ handleNext, handlePrevious }: FormStepProp
 
 
 
-  const handleSubmit = (e: any) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     console.log("Form Data:", cardDetails);
     setIsModalOpen(true)
@@ -70,7 +75,7 @@ export default function CardDetails({ handleNext, handlePrevious }: FormStepProp
   return (
     <div>
       <h1 className="text-4xl font-bold">Enter Your Card Details</h1>
-      <p className="text-medium-grey mt-2">Provide information about the card you're submitting</p>
+      <p className="text-medium-grey mt-2">Provide information about the card you&#39;re submitting</p>
 
       <div className="overflow-hidden mt-8">
         <h3 className="heading-tertiary mb-2">Card Images</h3>
@@ -138,7 +143,7 @@ export default function CardDetails({ handleNext, handlePrevious }: FormStepProp
                 size={"lg"}
                 type="button"
                 className="h-auto font-semibold bg-soft-grey rounded-full text-pure-grey py-3 px-14 text-base hover:bg-soft-grey"
-                onClick={() => router.back() }
+                onClick={() => router.back()}
               >
                 Back
               </Button>
