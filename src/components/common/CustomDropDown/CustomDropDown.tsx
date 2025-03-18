@@ -48,7 +48,7 @@ export default function CustomDropdown({
       {/* Dropdown menu */}
       {isOpen && (
         <div
-          className={`absolute text-description font-medium w-auto bg-white rounded-md shadow-lg border border-gray-200 z-50 ${dropdownClassName}`}
+          className={`absolute text-description font-medium w-auto bg-white rounded-sm shadow-lg border border-gray-200 z-50 ${dropdownClassName}`}
         >
           {items.map((item, index) => (
             <button

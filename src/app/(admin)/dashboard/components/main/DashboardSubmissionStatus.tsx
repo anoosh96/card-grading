@@ -26,18 +26,7 @@ const DashboardSubmissionStatus: FC<DashboardSubmissionStatusProps> = ({
   isMoreItem = false,
 }) => {
   const router = useRouter();
-  const dropdownItems = [
-    {
-      label: "View Detail",
-      icon: <Eye className="h-4 w-4" />,
-      onClick: () => router.push("/dashboard/submission-status/1"),
-    },
-    {
-      label: "Delete",
-      icon: <Trash2 className="h-4 w-4" />,
-      onClick: () => console.log("Item Deleted"),
-    },
-  ];
+
   // Sample data based on the image
   const [submissions, setSubmissions] = useState<Submission[]>([
     {
@@ -144,16 +133,16 @@ const DashboardSubmissionStatus: FC<DashboardSubmissionStatusProps> = ({
 
       <div className="overflow-x-auto">
         <table className="w-full">
-          <thead className="bg-gray-50 text-sm text-gray-500">
+          <thead className="text-sm font-medium text-left">
             <tr>
               <th className="w-10 p-3">
                 <CustomCheckbox />
               </th>
-              <th className="p-3 text-left font-medium">Order Id</th>
-              <th className="p-3 text-left font-medium">Date & Time</th>
-              <th className="p-3 text-left font-medium">Action</th>
-              <th className="p-3 text-left font-medium">Submission Source</th>
-              <th className="p-3 text-left font-medium">Card Status</th>
+              <th className="p-3">Order Id</th>
+              <th className="p-3">Date & Time</th>
+              <th className="p-3">Action</th>
+              <th className="p-3">Submission Source</th>
+              <th className="p-3">Card Status</th>
               <th className="w-10 p-3"></th>
             </tr>
           </thead>
@@ -162,7 +151,9 @@ const DashboardSubmissionStatus: FC<DashboardSubmissionStatusProps> = ({
               <tr
                 key={submission.id}
                 className={
-                  submission.selected ? "bg-amber-50" : "hover:bg-gray-50"
+                  submission.selected
+                    ? "bg-light-grey"
+                    : "hover:bg-light-grey-50"
                 }
               >
                 <td className="p-3">
@@ -181,9 +172,39 @@ const DashboardSubmissionStatus: FC<DashboardSubmissionStatusProps> = ({
                 <td className="p-3">{submission.action}</td>
                 <td className="p-3">{submission.source}</td>
                 <td className="p-3">{getStatusBadge(submission.status)}</td>
-                <td className="p-3">
+                {/* <td className="p-3">
                   <CustomDropdown
                     items={dropdownItems}
+                    dropdownClassName="right-2"
+                  >
+                    <MoreHorizontal className="h-4 w-4" />
+                  </CustomDropdown>
+                </td> */}
+                <td className="p-3">
+                  <CustomDropdown
+                    items={[
+                      {
+                        label: "View Detail",
+                        icon: <Eye className="h-4 w-4" />,
+                        onClick: () => {
+                          if (submission.source === "By Post") {
+                            router.push(
+                              `/dashboard/submission-status/add-post`
+                            );
+                          } else if (submission.source === "By Form") {
+                            router.push(
+                              `/dashboard/submission-status/${submission.id}`
+                            );
+                          }
+                        },
+                      },
+                      {
+                        label: "Delete",
+                        icon: <Trash2 className="h-4 w-4" />,
+                        onClick: () =>
+                          console.log(`Item ${submission.id} Deleted`),
+                      },
+                    ]}
                     dropdownClassName="right-2"
                   >
                     <MoreHorizontal className="h-4 w-4" />
