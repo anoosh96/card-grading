@@ -3,7 +3,7 @@ export interface SvgIconProps extends React.SVGProps<SVGSVGElement> {
   height?: string | number;
   className?: string;
   hover?: boolean;
-  setHover?: React.Dispatch<React.SetStateAction<boolean>>
+  setHover?: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export interface StepCardProps {
@@ -18,19 +18,19 @@ export interface Faq {
 }
 
 export interface FaqProps {
-  faqs: Faq[]
+  faqs: Faq[];
 }
 
 export interface ServiceCardProps {
   name: string;
   price: string;
-  features: string[]
+  features: string[];
 }
 
 export interface AddonProps {
   icon: string;
   title: string;
-  desc: string
+  desc: string;
 }
 
 export interface Card {
@@ -47,16 +47,16 @@ export interface Card {
 }
 
 export interface FormStepProps {
-  handleNext: () => void
-  handlePrevious?: () => void
+  handleNext: () => void;
+  handlePrevious?: () => void;
 }
 
 export interface Subscription {
-  status: string
-  type: string
-  renewalDate: string,
-  totalCards: number,
-  cardsUsed: number
+  status: string;
+  type: string;
+  renewalDate: string;
+  totalCards: number;
+  cardsUsed: number;
 }
 
 export interface UserProfile {
@@ -67,4 +67,9 @@ export interface UserProfile {
   password?: string;
   confirmPassword?: string;
   paymentMethod?: string;
+}
+
+export interface DialogProps {
+  isOpen: boolean;
+  onClose: () => void;
 }
