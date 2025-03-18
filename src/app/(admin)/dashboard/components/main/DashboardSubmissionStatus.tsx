@@ -7,6 +7,7 @@ import CalendarIcon from "@/components/svgs/dashboard/CalendarIcon";
 import CustomDropdown from "@/components/common/CustomDropDown/CustomDropDown";
 import Link from "@/components/common/CustomLink/CustomLink";
 import { useRouter } from "next/navigation";
+import DeleteModal from "@/modals/DeleteModal";
 
 // Define the submission data type
 type Submission = {
@@ -25,6 +26,7 @@ interface DashboardSubmissionStatusProps {
 const DashboardSubmissionStatus: FC<DashboardSubmissionStatusProps> = ({
   isMoreItem = false,
 }) => {
+  const [isDeleteModal, setIsDeleteModal] = useState(false);
   const router = useRouter();
 
   // Sample data based on the image
@@ -201,8 +203,7 @@ const DashboardSubmissionStatus: FC<DashboardSubmissionStatusProps> = ({
                       {
                         label: "Delete",
                         icon: <Trash2 className="h-4 w-4" />,
-                        onClick: () =>
-                          console.log(`Item ${submission.id} Deleted`),
+                        onClick: () => setIsDeleteModal(true),
                       },
                     ]}
                     dropdownClassName="right-2"
@@ -215,6 +216,13 @@ const DashboardSubmissionStatus: FC<DashboardSubmissionStatusProps> = ({
           </tbody>
         </table>
       </div>
+
+      <DeleteModal
+        isOpen={isDeleteModal}
+        onClose={() => setIsDeleteModal(false)}
+        message="Are you sure you want to logout?"
+        handleLogout={() => console.log("on Logout")}
+      />
     </div>
   );
 };

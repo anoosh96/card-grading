@@ -124,7 +124,7 @@ const SubmissionSummary = ({
                       type="text"
                       value={value}
                       onChange={(e) => handleChange(key, e.target.value)}
-                      className="border border-gray-300 rounded px-2 py-1 w-full"
+                      className="border border-gray-300 bg-white rounded px-2 py-1 w-full"
                     />
                   )
                 ) : (
