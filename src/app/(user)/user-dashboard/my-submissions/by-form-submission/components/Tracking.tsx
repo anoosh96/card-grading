@@ -3,14 +3,14 @@
 import { Button } from "@/components/ui/button";
 import { ButtonGradient } from "@/components/common/ButtonGradient";
 import { FormStepProps } from "@/types";
-import ProgressTracker from "../../../order-tracking/ProgressTracker";
+import ProgressTracker from "../../../submission-status/order-tracking/ProgressTracker";
 
 
 export default function Tracking({ handlePrevious }: FormStepProps) {
 
   return (
-    <section className="p-7 bg-white">
-      <h1 className="text-4xl font-bold">Track Your Submission</h1>
+    <section className="bg-white">
+      <h1 className="heading-primary font-bold">Track Your Submission</h1>
       <p className="mt-4 mb-10">Monitor the progress of your card grading</p>
 
       <ProgressTracker />

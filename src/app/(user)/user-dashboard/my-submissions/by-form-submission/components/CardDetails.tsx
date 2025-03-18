@@ -7,7 +7,6 @@ import { Card, FormStepProps } from "@/types";
 import { Button } from "@/components/ui/button";
 import { ButtonGradient } from "@/components/common/ButtonGradient";
 import { useRouter } from "next/navigation";
-import CustomModal from "@/components/common/CustomModal";
 
 const cardTypes: string[] = ["Card Type", "Pokémon", "Spiderman", "Sports", "One Piece"];
 const conditions: string[] = ["Mint", "Near Mint", "Good", "Excellant", "Fair"];
@@ -17,7 +16,6 @@ const services: string[] = ["Service 1", "Service 2"];
 export default function CardDetails({ handleNext }: FormStepProps) {
   const [frontImg, setFrontImg] = useState<{ url: string; alt: string } | undefined>(undefined);
   const [backImg, setBackImg] = useState<{ url: string; alt: string } | undefined>(undefined);
-  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const router = useRouter()
 
@@ -47,8 +45,7 @@ export default function CardDetails({ handleNext }: FormStepProps) {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     console.log("Form Data:", cardDetails);
-    setIsModalOpen(true)
-    //handleNext()
+    handleNext()
   };
 
   const handleUploadImage = (type: "front" | "back", file: File) => {
@@ -74,7 +71,7 @@ export default function CardDetails({ handleNext }: FormStepProps) {
 
   return (
     <div>
-      <h1 className="text-4xl font-bold">Enter Your Card Details</h1>
+      <h1 className="heading-primary font-bold">Enter Your Card Details</h1>
       <p className="text-medium-grey mt-2">Provide information about the card you&#39;re submitting</p>
 
       <div className="overflow-hidden mt-8">
@@ -148,7 +145,7 @@ export default function CardDetails({ handleNext }: FormStepProps) {
                 Back
               </Button>
               <ButtonGradient size={"lg"} className="py-3 px-14 h-auto" type="submit">
-                Submit
+                Next
               </ButtonGradient>
             </div>
 
@@ -157,25 +154,6 @@ export default function CardDetails({ handleNext }: FormStepProps) {
 
 
       </div>
-
-      <CustomModal
-        isOpen={isModalOpen}
-        title="Your Card has been Submitted for Grading"
-        icon_url="/icons/success.svg"
-        message="Your Tracking Number: #987654321"
-        onConfirm={() => {
-          //console.log("Order Deleted!");
-          handleNext()
-          setIsModalOpen(false);
-        }}
-        onCancel={() => setIsModalOpen(false)}
-        cn="!p-16 !rounded-2xl"
-        yes_btn_text="Track"
-        no_btn_text="Cancel"
-        icon_bg="bg-transparent"
-        icon_h={60}
-        icon_w={60}
-      />
     </div>
   )
 }

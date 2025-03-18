@@ -4,6 +4,8 @@ import { FormStepProps } from "@/types";
 import SubmissionSummary from "../../SubmissionSummary";
 import SubscriptionBox from "../../SubscriptionBox";
 import CustomCheckbox from "@/components/common/CustomCheckbox";
+import { useState } from "react";
+import CustomModal from "@/components/common/CustomModal";
 
 const summaryFields = {
   cardName: 'Charizard Holo',
@@ -23,9 +25,17 @@ const subscriptionData = {
 
 export default function Subscription({ handleNext, handlePrevious }: FormStepProps) {
 
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const handleSubmit = () => {
+    //console.log("Form Data:", cardDetails);
+    setIsModalOpen(true)
+    //handleNext()
+  };
+
   return (
-    <section className="bg-white p-7">
-      <h1 className="text-4xl font-bold">Review & Make Payment</h1>
+    <section className="bg-white">
+      <h1 className="heading-primary font-bold">Review & Make Payment</h1>
       <p className="text-neutral-grey mt-4">Review your submission and complete payment</p>
 
 
@@ -43,10 +53,29 @@ export default function Subscription({ handleNext, handlePrevious }: FormStepPro
         >
           Back
         </Button>
-        <ButtonGradient size={"lg"} className="py-3 px-14 h-auto" type="submit" onClick={handleNext}>
-          Next
+        <ButtonGradient size={"lg"} className="py-3 px-14 h-auto" type="submit" onClick={handleSubmit}>
+          Submit
         </ButtonGradient>
       </div>
+
+      <CustomModal
+        isOpen={isModalOpen}
+        title="Your Card has been Submitted for Grading"
+        icon_url="/icons/success.svg"
+        message="Your Tracking Number: #987654321"
+        onConfirm={() => {
+          //console.log("Order Deleted!");
+          handleNext()
+          setIsModalOpen(false);
+        }}
+        onCancel={() => setIsModalOpen(false)}
+        cn="!p-16 !rounded-2xl"
+        yes_btn_text="Track"
+        no_btn_text="Cancel"
+        icon_bg="bg-transparent"
+        icon_h={60}
+        icon_w={60}
+      />
     </section>
   )
 }

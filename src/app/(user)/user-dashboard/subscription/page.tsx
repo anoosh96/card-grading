@@ -13,7 +13,7 @@ const subscriptionData = {
 export default function SubscriptionPage() {
   return (
     <section className="bg-white rounded-lg p-7">
-      <h1 className="text-4xl font-bold">Manage Your Subscription</h1>
+      <h1 className="heading-primary font-bold">Manage Your Subscription</h1>
       <p className="text-neutral-grey mt-4">Choose a plan that suits your needs and upgrade anytime.</p>
 
       <h2 className="text-2xl my-8 font-semibold">Current Subscription Details</h2>

@@ -21,11 +21,11 @@ export default function ShippingInstruction({ handleNext }: FormStepProps) {
 
   return (
     <div>
-      <h1 className="text-4xl font-bold">Ship Your Card Securely</h1>
+      <h1 className="heading-primary font-bold">Ship Your Card Securely</h1>
       <p className="text-neutral-grey mt-4">Follow these instructions to safely ship your card</p>
 
       <div className="bg-light-grey rounded-lg p-7 mt-8">
-        <h2 className="text-4xl font-bold">Shipping Instructions:</h2>
+        <h2 className="heading-primary font-bold">Shipping Instructions:</h2>
         <div className="mt-4 space-y-6 p-7">
           {instructions.map((instruction, index) => (
             <div className="flex gap-4" key={index}>

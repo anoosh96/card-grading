@@ -26,8 +26,8 @@ const subscriptionData = {
 export default function Subscription({ handlePrevious }: FormStepProps) {
 
   return (
-    <section className="bg-white p-7">
-      <h1 className="text-4xl font-bold">Review & Make Payment</h1>
+    <section className="bg-white">
+      <h1 className="heading-primary font-bold">Review & Make Payment</h1>
       <p className="text-neutral-grey mt-4">Review your submission and complete payment</p>
 
 
@@ -46,7 +46,7 @@ export default function Subscription({ handlePrevious }: FormStepProps) {
           Back
         </Button>
         <ButtonGradient size={"lg"} className="py-3 px-14 h-auto" type="submit">
-          Done
+          Submit
         </ButtonGradient>
       </div>
     </section>

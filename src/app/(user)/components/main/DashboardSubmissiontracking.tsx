@@ -73,12 +73,12 @@ export function DashboardSubmissionTracking({ showViewAll = false}: SubmissionTr
     {
       label: "View Detail",
       icon: <Eye className="h-4 w-4" />,
-      onClick: () => router.push('/user-dashboard/order-details'),
+      onClick: () => router.push('/user-dashboard/submission-status/order-details'),
     },
     {
       label: "View Tracking",
       icon: <TrackIcon className="h-4 w-4" />,
-      onClick: () => router.push('/user-dashboard/order-tracking')
+      onClick: () => router.push('/user-dashboard//submission-status/order-tracking')
     },
     {
       label: "Delete",
@@ -105,7 +105,7 @@ export function DashboardSubmissionTracking({ showViewAll = false}: SubmissionTr
               <th className="text-left py-3 pl-16 pr-4">
                 <div className="flex text-dark-purple text-sm items-center gap-1">
                   Track No
-                  <Image src={"/icons/arrow_down.svg"} alt="Arrow Down Icon" width={6} height={5} />
+                  {/* <Image src={"/icons/arrow_down.svg"} alt="Arrow Down Icon" width={6} height={5} /> */}
                 </div>
               </th>
               <th className="text-left py-3 pl-16 pr-4">
@@ -116,19 +116,19 @@ export function DashboardSubmissionTracking({ showViewAll = false}: SubmissionTr
               <th className="text-left py-3 px-4">
                 <div className="flex text-dark-purple text-sm items-center gap-1">
                   Card Name
-                  <Image src={"/icons/arrow_down.svg"} alt="Arrow Down Icon" width={6} height={5} />
+                  {/* <Image src={"/icons/arrow_down.svg"} alt="Arrow Down Icon" width={6} height={5} /> */}
                 </div>
               </th>
               <th className="text-left py-3 px-4">
                 <div className="flex text-dark-purple text-sm items-center gap-1">
                   Submission Source
-                  <Image src={"/icons/arrow_down.svg"} alt="Arrow Down Icon" width={6} height={5} />
+                  {/* <Image src={"/icons/arrow_down.svg"} alt="Arrow Down Icon" width={6} height={5} /> */}
                 </div>
               </th>
               <th className="text-left py-3 pl-4 pr-16">
                 <div className="flex text-dark-purple text-sm items-center gap-1">
                   Card Status
-                  <Image src={"/icons/arrow_down.svg"} alt="Arrow Down Icon" width={6} height={5} />
+                  {/* <Image src={"/icons/arrow_down.svg"} alt="Arrow Down Icon" width={6} height={5} /> */}
                 </div>
               </th>
             </tr>

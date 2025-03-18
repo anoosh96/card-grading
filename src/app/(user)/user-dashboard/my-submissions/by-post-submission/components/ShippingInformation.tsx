@@ -13,7 +13,7 @@ export default function ShippingInformation({handleNext, handlePrevious}: FormSt
     cardName: "",
     category: "Card Type",
     year: "",
-    condition: "",
+    condition: "Excellent",
     serviceType: "Premium",
     fullName: "",
     shippingAddress: "",
@@ -42,7 +42,7 @@ export default function ShippingInformation({handleNext, handlePrevious}: FormSt
 
   return (
     <div>
-      <h1 className="text-4xl font-bold" >Shipping Information</h1>
+      <h1 className="heading-primary font-bold" >Shipping Information</h1>
       <p className="text-neutral-grey mt-4">Enter your shipping details</p>
 
       <form className="w-full" onSubmit={handleSubmit}>

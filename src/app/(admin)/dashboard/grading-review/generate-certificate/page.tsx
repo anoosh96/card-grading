@@ -1,6 +1,6 @@
 "use client";
 
-import CardImages from "@/app/(user)/user-dashboard/order-details/CardImages";
+import CardImages from "@/app/(user)/user-dashboard/submission-status/order-details/CardImages";
 import React, { useState } from "react";
 import { GenerateCertificateSummary } from "./components/generate-certificate-summary";
 import { Button } from "@/components/ui/button";

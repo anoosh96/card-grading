@@ -11,8 +11,8 @@ export default function OrderTracking() {
 
   return (
     <section className="p-7 bg-white">
-      <h1 className="text-4xl font-bold">Order Tracking</h1>
-      <p className="mt-4 mb-16">Monitor the progress of your card grading</p>
+      <h1 className="heading-primary font-bold">Order Tracking</h1>
+      <p className="mt-4 mb-10">Monitor the progress of your card grading</p>
 
       <ProgressTracker />
 

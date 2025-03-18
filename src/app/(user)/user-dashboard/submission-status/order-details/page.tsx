@@ -27,7 +27,7 @@ export default function OrderDetailsPage() {
 
   return (
     <section className="bg-white p-7">
-      <h1 className="text-4xl font-bold mb-10">Order Details</h1>
+      <h1 className="heading-primary font-bold mb-10">Order Details</h1>
 
       <CardImages
         frontImage="/assets/images/mike-trout.svg"

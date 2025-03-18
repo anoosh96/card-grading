@@ -51,19 +51,19 @@ export default function Header() {
           <Link href="/" className={getLinkClass("/")}>
             Home
           </Link>
-          <Link href="/about-us" className={getLinkClass("/#about-us")}>
+          <Link href="/about-us" className={getLinkClass("/about-us")}>
             About Us
           </Link>
-          <Link href="/grading" className={getLinkClass("/#grading")}>
+          <Link href="/grading" className={getLinkClass("/grading")}>
             Grading Process
           </Link>
-          <Link href="/services-and-pricing" className={getLinkClass("/#services")}>
+          <Link href="/services-and-pricing" className={getLinkClass("/services")}>
             Services & Pricing
           </Link>
-          <Link href="/portfolio" className={getLinkClass("/#portfolio")}>
+          <Link href="/portfolio" className={getLinkClass("/portfolio")}>
             Portfolio
           </Link>
-          <Link href="/contact-us" className={getLinkClass("/#contact")}>
+          <Link href="/contact-us" className={getLinkClass("/contact")}>
             Contact Us
           </Link>
         </div>

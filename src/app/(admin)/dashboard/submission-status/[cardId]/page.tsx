@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import SubmissionSummary from "../add-post/components/SubmissionSummary";
 import { SubmissionData } from "../add-post/add-post-types";
-import CardImages from "@/app/(user)/user-dashboard/order-details/CardImages";
+import CardImages from "@/app/(user)/user-dashboard/submission-status/order-details/CardImages";
 import { ButtonGradient } from "@/components/common/ButtonGradient";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";

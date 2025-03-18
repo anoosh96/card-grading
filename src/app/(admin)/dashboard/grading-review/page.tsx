@@ -1,6 +1,6 @@
 "use client";
 
-import CardImages from "@/app/(user)/user-dashboard/order-details/CardImages";
+import CardImages from "@/app/(user)/user-dashboard/submission-status/order-details/CardImages";
 import { ChevronDown } from "lucide-react";
 import React, { useState } from "react";
 import SubmissionSummary from "../submission-status/add-post/components/SubmissionSummary";

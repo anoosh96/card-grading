@@ -18,7 +18,7 @@ export default function MySubmissionPage() {
   
   return (
     <section className="bg-white p-7">
-       <h1 className="text-4xl font-bold">Submit Your Cards for Grading</h1>
+       <h1 className="heading-primary font-bold">Submit Your Cards for Grading</h1>
        <p className="text-medium-grey mt-2">Get Your Card Professionally Evaluated and Certified</p>
 
        <div className="mt-8 space-y-8">

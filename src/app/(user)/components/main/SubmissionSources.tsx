@@ -5,7 +5,7 @@ export function SubmissionSources() {
   return (
     <div className="bg-white w-full rounded-[1.25rem] p-6 shadow-sm">
       <div className="flex flex-col items-start justify-between mb-3">
-        <h3 className="font-medium text-xl">Submission Sources</h3>
+        <h3 className="font-semibold text-xl">Submission Sources</h3>
         <Separator className="w-full h-[1px] bg-soft-grey mt-3" />
       </div>
 
