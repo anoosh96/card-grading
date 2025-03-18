@@ -6,8 +6,10 @@ import { GenerateCertificateSummary } from "./components/generate-certificate-su
 import { Button } from "@/components/ui/button";
 import { ButtonGradient } from "@/components/common/ButtonGradient";
 import { CertificationDetails } from "./components/certification-detail";
+import ConfirmationModal from "@/modals/ConfirmationModal";
 
 const GenerateCertificate = () => {
+  const [isConfirmDoc, setIsConfirmDoc] = useState(false);
   const [certificationData, setCertificationData] = useState({
     certifiedBy: "",
     adminName: "Admin Name",
@@ -70,8 +72,22 @@ const GenerateCertificate = () => {
         >
           Download PDF
         </Button>
-        <ButtonGradient type="submit">Confirm & Notify User</ButtonGradient>
+        <ButtonGradient onClick={() => setIsConfirmDoc(true)}>
+          Confirm & Notify User
+        </ButtonGradient>
       </div>
+
+      <ConfirmationModal
+        isOpen={isConfirmDoc}
+        title="Your Card is Submit for Grading"
+        message="Your Tracking Number:"
+        trackNo={987654321}
+        onConfirm={() => {
+          setIsConfirmDoc(false);
+        }}
+        onClose={() => setIsConfirmDoc(false)}
+        cn="!p-8"
+      />
     </div>
   );
 };
