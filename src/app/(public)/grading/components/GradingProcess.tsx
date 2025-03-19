@@ -37,7 +37,7 @@ export default function GradingProcess() {
   return (
     <div className="h-[150rem] md:h-[84rem] xl:h-[64rem] bg-[url('/assets/images/subtract.svg')] p-20 w-full bg-cover">
       
-      <div className="mt-48 px-10">
+      <div className="mt-48 lg:px-10">
         <h1 className="text-3xl font-bold">Get Your Cards Graded with Ease</h1>
 
         <div className="grid md:grid-cols-3 lg:grid-cols-5 mt-10 w-full place-items-center lg:gap-x-40 lg:gap-y-20">

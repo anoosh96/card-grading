@@ -13,7 +13,7 @@ export default function FAQItem ({ question, answer }: { question: string; answe
         className="flex justify-between items-center cursor-pointer"
         onClick={() => setIsOpen(!isOpen)}
       >
-        <h3 className="text-lg font-semibold">{question}</h3>
+        <h3 className="lg:text-lg font-semibold">{question}</h3>
         <Image src={`${ isOpen ? '/icons/arrow-up.svg' : '/icons/arrow-down-2.svg'}`} 
           width={30} height={30} alt="faq open icon" />
       </div>
