@@ -10,7 +10,7 @@ function ContactForm() {
       <h1 className="text-[2rem] font-bold mb-5">Contact Us</h1>
       <p className="text-lg font-medium mb-10">Any questions or remarks? Just write us a message.</p>
 
-      <div className="relative bg-white rounded-lg shadow-xl overflow-hidden">
+      <div className="relative bg-white rounded-lg shadow-[0_0_40px_rgba(0,0,0,0.045)] overflow-hidden">
         {/* <div className="absolute inset-0 bg-white opacity-50" /> */}
 
         <div className="relative flex flex-col md:flex-row w-full p-4 md:p-[0.625rem]">
