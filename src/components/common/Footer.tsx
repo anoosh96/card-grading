@@ -89,7 +89,7 @@ export default function Footer({ isHideContactForm = false }: ContactFormProps) 
           ) : null}
           <div className="w-full h-[1px] bg-soft-grey mb-3" />
           <div className="text-center z-50 lg:text-center text-sm">
-            &copy; Copyright <Link href="#">Terms & Conditions</Link> - AI-Powered Pokémon Card Grading | Fast, Accurate & Transparent.
+            &copy; Copyright <Link href="/term-and-policy">Terms & Conditions</Link> - AI-Powered Pokémon Card Grading | Fast, Accurate & Transparent.
           </div>
         </div>
       </div>
