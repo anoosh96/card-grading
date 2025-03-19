@@ -7,7 +7,7 @@ export default function PortfolioHeroSection() {
       <div className="grid lg:grid-cols-2 p-10 gap-3">
         <div className="flex flex-col justify-center h-[46rem] pl-10">
           <div className="space-y-4 -mt-20">
-             <h1 className="text-4xl font-bold text-charcol">Graded Cards Showcase</h1>
+             <h1 className="heading-primary font-bold text-charcol">Graded Cards Showcase</h1>
              <p>Explore our collection of professionally graded cards from Pokemon, <br /> Yu-Gi-Oh, and Sports cards</p>
           </div>
         </div>

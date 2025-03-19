@@ -47,7 +47,7 @@ export default function ExploreCardSection() {
 
   return (
     <section className="p-10 mt-52">
-      <h1 className="text-4xl font-bold text-charcol">Explore Graded Cards</h1>
+      <h1 className="heading-primary font-bold text-charcol">Explore Graded Cards</h1>
 
       <div>
         <div className="grid grid-cols-2 lg:grid-cols-4 items-center justify-between gap-4 p-4 mt-10">

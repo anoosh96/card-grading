@@ -6,7 +6,7 @@ export default function ServiceCard({ name, price, features }: ServiceCardProps)
   return (
     <div className="flex flex-col items-center w-[20rem] lg:w-[30rem]">
       <div className="bg-custom-gradient text-white text-center py-12 px-6 w-3/4 rounded-2xl rounded-b-none shadow-md">
-        <h2 className="text-2xl font-semibold">{name}</h2>
+        <h2 className="heading-primary font-semibold">{name}</h2>
         <p className="mt-2 text-xl font-bold">${price} <span className="text-sm font-normal">per card</span></p>
       </div>
       <div className="relative flex flex-col justify-between items-center bg-light-grey rounded-2xl shadow-lg px-6 w-full mx-auto h-[32rem] lg:h-[28rem] pt-16 pb-12 z-2">

@@ -19,7 +19,7 @@ const SERVICES = [
 export default function OurServices (){
   return(
     <section className="p-10 pr-10 lg:pr-40 mt-4">
-      <h1 className="text-charcol text-4xl font-bold" >Our Grading Services & Pricing</h1>
+      <h1 className="text-charcol font-bold heading-primary" >Our Grading Services & Pricing</h1>
       <p className="text-charcol mt-2">Select from our affordable grading services with quick turnaround times and premium accuracy.</p>   
     
       <div className="mt-20 flex flex-col md:flex-row items-start">

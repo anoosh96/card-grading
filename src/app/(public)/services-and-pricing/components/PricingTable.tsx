@@ -47,7 +47,7 @@ export default function PricingTable() {
 
   return (
     <section className="p-10 lg:pr-40">
-      <h2 className="text-charcol text-4xl font-bold">Pricing Table</h2>
+      <h2 className="text-charcol heading-primary font-bold">Pricing Table</h2>
 
       <div className="p-4">
         <table className="w-full border-collapse">

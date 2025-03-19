@@ -20,7 +20,7 @@ export default function Addons(){
     <section className="p-10 lg:pr-40">
       <div className="flex items-cetner gap-4">
         <Image  src={"/icons/checkbox.svg"} width={30} height={30} alt="checbox filled icon" />
-        <h2 className="text-charcol text-4xl font-bold">Addons</h2>
+        <h2 className="text-charcol heading-primary font-bold">Addons</h2>
       </div>
 
       <div className="space-y-4 mt-8">

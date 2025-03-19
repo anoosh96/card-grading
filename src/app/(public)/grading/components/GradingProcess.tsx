@@ -18,6 +18,11 @@ const STEPS = [
   },
   {
     image: '/assets/images/step-4.svg',
+    title: 'Quality Check',
+    desc: 'Ensure top-notch quality with a detailed grading report.'
+  },
+  {
+    image: '/assets/images/step-5.svg',
     title: 'Receive Report',
     desc: 'Get a detailed grading report and an optional certification for authenticity.'
   }
@@ -35,7 +40,7 @@ export default function GradingProcess() {
       <div className="mt-48 px-10">
         <h1 className="text-3xl font-bold">Get Your Cards Graded with Ease</h1>
 
-        <div className="grid md:grid-cols-2 xl:grid-cols-4 mt-10 w-full place-items-center lg:gap-40">
+        <div className="grid md:grid-cols-3 lg:grid-cols-5 mt-10 w-full place-items-center lg:gap-x-40 lg:gap-y-20">
          {steps()}
         </div>
       </div>
