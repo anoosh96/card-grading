@@ -63,7 +63,7 @@ export default function Header() {
           <Link href="/portfolio" className={getLinkClass("/portfolio")}>
             Portfolio
           </Link>
-          <Link href="/contact-us" className={getLinkClass("/contact")}>
+          <Link href="/contact-us" className={getLinkClass("/contact-us")}>
             Contact Us
           </Link>
         </div>

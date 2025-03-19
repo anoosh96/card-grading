@@ -74,7 +74,7 @@ const TestimonialSection = () => {
   const swiperRef = useRef<SwiperType | null>(null);
   return (
     <section className=" py-16">
-      <h2 className="text-3xl font-bold text-start mb-36 md:mb-10">What Our Clients Say About Us</h2>
+      <h2 className="heading-primary font-bold text-start mb-36 md:mb-10">What Our Clients Say About Us</h2>
 
       <div className="relative w-full">
         <Image
