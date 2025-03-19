@@ -49,14 +49,14 @@ export default function PricingTable() {
     <section className="p-10 lg:pr-40">
       <h2 className="text-charcol heading-primary font-bold">Pricing Table</h2>
 
-      <div className="p-4">
+      <div className="lg:p-4">
         <table className="w-full border-collapse">
           {/* Table Header */}
           <thead>
             <tr className="text-left">
               <th className="p-2"></th>
-              <th className="p-2 text-lg font-medium text-center text-xl"><div className="mb-2">Standard</div><div className="text-medium-grey mb-8">$X</div></th>
-              <th className="p-2 text-lg font-medium text-center text-xl"><div className="mb-2">Premium</div><div className="text-medium-grey mb-8">$X</div></th>
+              <th className="p-2 font-medium text-center lg:text-xl"><div className="mb-2">Standard</div><div className="text-medium-grey mb-8">$X</div></th>
+              <th className="p-2 font-medium text-center lg:text-xl"><div className="mb-2">Premium</div><div className="text-medium-grey mb-8">$X</div></th>
             </tr>
           </thead>
 
@@ -75,8 +75,8 @@ export default function PricingTable() {
                     }
                     <span className=""><Image src={"/icons/question.svg"} width={15} height={15} alt="info icon" /></span>
                   </td>
-                  <td className="px-4 py-5 text-center">{getPricing(item.pricing.standard)}</td>
-                  <td className="px-4 py-5 text-center">{ getPricing(item.pricing.premium) }</td>
+                  <td className="px-4 py-5 text-center text-sm lg:text-base">{getPricing(item.pricing.standard)}</td>
+                  <td className="px-4 py-5 text-center text-sm lg:text-base">{ getPricing(item.pricing.premium) }</td>
                 </tr>
               )
             })}
