@@ -3,6 +3,7 @@
 import { ButtonGradient } from "@/components/common/ButtonGradient";
 import CustomInput from "@/components/common/CustomInput";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useRef } from "react";
 
 
@@ -10,6 +11,7 @@ export default function VerificationCodePage() {
   // const codeRef = useRef<HTMLDivElement>(null)
 
   const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
+  const router = useRouter()
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>, index: number) => {
     if (e.target.value && index < inputRefs.current.length - 1) {
@@ -40,7 +42,7 @@ export default function VerificationCodePage() {
           ))}
         </div>
       </div>
-      <ButtonGradient className="w-full mt-6 py-6">Submit</ButtonGradient>
+      <ButtonGradient className="w-full mt-6 py-6" onClick={() => router.push('/reset-password')} >Submit</ButtonGradient>
       <div className="mt-4 font-medium text-center">
         <span>Did&#39;t recieve the code? <Link href={"/sign-up"} className="text-light-red">Resend Code!</Link></span>
       </div>

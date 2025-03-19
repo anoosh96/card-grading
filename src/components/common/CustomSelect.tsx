@@ -2,7 +2,6 @@ import Image from "next/image";
 import { useEffect, useRef, useState, useLayoutEffect } from "react";
 import { FaCheck, FaChevronDown } from "react-icons/fa";
 import { createPortal } from "react-dom";
-import { debounce } from "lodash"; // Install lodash: npm install lodash
 
 interface CustomDropdownProps {
   options: string[];
@@ -24,36 +23,54 @@ const CustomSelect: React.FC<CustomDropdownProps> = ({
   optionIcons = [],
 }: CustomDropdownProps) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
-  // const [shouldFlip, setShouldFlip] = useState<boolean>(false);
   const [dropdownPosition, setDropdownPosition] = useState<{
     top: number;
     left: number;
     width: number;
+    flip: boolean;
   } | null>(null);
 
   const dropdownRef = useRef<HTMLDivElement>(null);
   const buttonRef = useRef<HTMLButtonElement>(null);
 
-  // Function to check and set dropdown position
   const updateDropdownPosition = () => {
     if (buttonRef.current) {
       const rect = buttonRef.current.getBoundingClientRect();
-      const dropdownHeight = dropdownRef.current?.scrollHeight || 0;
+      const dropdownHeight = dropdownRef.current?.scrollHeight || 200; // Assume height if not available
       const spaceBelow = window.innerHeight - rect.bottom;
       const spaceAbove = rect.top;
 
       const flip = spaceBelow < dropdownHeight && spaceAbove > dropdownHeight;
 
-      // setShouldFlip(flip);
       setDropdownPosition({
-        top: flip ? rect.top - dropdownHeight - 5 : rect.bottom + 5,
-        left: rect.left,
+        top: window.scrollY + (flip ? rect.top - dropdownHeight - 5 : rect.bottom + 5),
+        left: window.scrollX + rect.left,
         width: rect.width,
+        flip,
       });
     }
   };
 
-  // Close dropdown when clicking outside
+  useLayoutEffect(() => {
+    if (isOpen) {
+      updateDropdownPosition();
+    }
+  }, [isOpen]);
+
+  useEffect(() => {
+    if (isOpen) {
+      const handleScroll = () => requestAnimationFrame(updateDropdownPosition);
+
+      window.addEventListener("scroll", handleScroll, { passive: true });
+      window.addEventListener("resize", updateDropdownPosition);
+
+      return () => {
+        window.removeEventListener("scroll", handleScroll);
+        window.removeEventListener("resize", updateDropdownPosition);
+      };
+    }
+  }, [isOpen]);
+
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (
@@ -71,28 +88,6 @@ const CustomSelect: React.FC<CustomDropdownProps> = ({
     };
   }, []);
 
-  // Check dropdown position BEFORE rendering
-  useLayoutEffect(() => {
-    if (isOpen) {
-      updateDropdownPosition();
-    }
-  }, [isOpen]);
-
-  // Attach event listeners for scrolling & resizing
-  useEffect(() => {
-    if (isOpen) {
-      const debouncedUpdate = debounce(updateDropdownPosition, 100);
-      window.addEventListener("resize", debouncedUpdate);
-      window.addEventListener("scroll", debouncedUpdate);
-
-      return () => {
-        window.removeEventListener("resize", debouncedUpdate);
-        window.removeEventListener("scroll", debouncedUpdate);
-        debouncedUpdate.cancel();
-      };
-    }
-  }, [isOpen]);
-
   return (
     <>
       <div className={`relative ${className}`}>
@@ -107,21 +102,21 @@ const CustomSelect: React.FC<CustomDropdownProps> = ({
         >
           {selectedOption}
           <FaChevronDown
-            className={`transition-transform ${isOpen ? "rotate-180" : ""}`}
+            className={`transition-transform ${isOpen && dropdownPosition?.flip ? "rotate-180" : ""}`}
           />
         </button>
       </div>
 
-      {/* Render dropdown using Portal to avoid overflow issues */}
+      {/* Render dropdown using Portal */}
       {isOpen &&
         dropdownPosition &&
         createPortal(
           <div
             ref={dropdownRef}
-            className={`fixed ${bg} border border-gray-300 rounded-lg shadow-lg z-[9999] transition-all`}
+            className={`absolute ${bg} border border-gray-300 rounded-lg shadow-lg z-[9999] transition-all`}
             style={{
-              top: dropdownPosition.top,
-              left: dropdownPosition.left,
+              top: `${dropdownPosition.top}px`,
+              left: `${dropdownPosition.left}px`,
               width: dropdownPosition.width,
             }}
           >
@@ -155,7 +150,7 @@ const CustomSelect: React.FC<CustomDropdownProps> = ({
               </div>
             ))}
           </div>,
-          document.body // Render outside the parent element
+          document.body
         )}
     </>
   );

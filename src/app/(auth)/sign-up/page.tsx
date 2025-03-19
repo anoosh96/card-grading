@@ -1,9 +1,15 @@
+'use client'
+
 import { ButtonGradient } from "@/components/common/ButtonGradient";
 import CustomInput from "@/components/common/CustomInput";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 
 export default function SignupPage() {
+
+  const router = useRouter()
+
   return (
     <div className="mt-4">
       <h1 className="text-xl md:text-3xl font-semibold text-pure-grey mb-10">Create Account</h1>
@@ -36,7 +42,7 @@ export default function SignupPage() {
           Forgot Password ?
         </ Link>
       </div> */}
-      <ButtonGradient className="w-full mt-6 py-6">Create Account</ButtonGradient>
+      <ButtonGradient className="w-full mt-6 py-6" onClick={() => router.push('login')}>Create Account</ButtonGradient>
       <div className="mt-4 font-medium text-center">
         <span>Already have an account? <Link href={"/login"} className="text-light-red">Log in Here!</Link></span>
       </div>
