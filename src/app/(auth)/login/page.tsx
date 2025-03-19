@@ -1,9 +1,14 @@
+'use client'
+
 import { ButtonGradient } from "@/components/common/ButtonGradient";
 import CustomInput from "@/components/common/CustomInput";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 
 export default function LoginPage() {
+  const router = useRouter()
+
   return (
     <div className="mt-4">
       <h1 className="text-3xl font-semibold text-pure-grey mb-10">Welcome Back!</h1>
@@ -24,7 +29,7 @@ export default function LoginPage() {
           Forgot Password ?
         </ Link>
       </div>
-      <ButtonGradient className="w-full mt-6 py-6">Log in</ButtonGradient>
+      <ButtonGradient className="w-full mt-6 py-6" onClick={() => router.push('/user-dashboard') }>Log in</ButtonGradient>
       <div className="mt-4 font-medium text-center">
         <span>Don&#39;t have an account? <Link href={"/sign-up"} className="text-light-red">Sign Up!</Link></span>
       </div>
