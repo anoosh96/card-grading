@@ -7,7 +7,8 @@ import CalendarIcon from "@/components/svgs/dashboard/CalendarIcon";
 import CustomDropdown from "@/components/common/CustomDropDown/CustomDropDown";
 import Link from "@/components/common/CustomLink/CustomLink";
 import { useRouter } from "next/navigation";
-import DeleteModal from "@/modals/DeleteModal";
+// import DeleteModal from "@/modals/DeleteModal";
+import CustomModal from "@/components/common/CustomModal";
 
 // Define the submission data type
 type Submission = {
@@ -217,11 +218,23 @@ const DashboardSubmissionStatus: FC<DashboardSubmissionStatusProps> = ({
         </table>
       </div>
 
-      <DeleteModal
+      {/* <DeleteModal
         isOpen={isDeleteModal}
         onClose={() => setIsDeleteModal(false)}
-        message="Are you sure you want to logout?"
-        handleLogout={() => console.log("on Logout")}
+        message="Are you sure you want to delete this order?"
+        handleDelete={() => console.log("on Delete")}
+      /> */}
+
+      <CustomModal
+        isOpen={isDeleteModal}
+        title="Are you sure you want to delete this order?"
+        message="This action cannot be undone."
+        onConfirm={() => {
+          console.log("Order Deleted!");
+          setIsDeleteModal(false);
+        }}
+        onCancel={() => setIsDeleteModal(false)}
+        cn="!p-20 !rounded-2xl"
       />
     </div>
   );

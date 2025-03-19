@@ -7,14 +7,14 @@ import { FiX } from "react-icons/fi";
 
 interface DeleteModalProps extends DialogProps {
   classNames?: string;
-  handleLogout: () => void;
+  handleDelete: () => void;
   message?: string;
 }
 
 const DeleteModal: FC<DeleteModalProps> = ({
   isOpen,
   onClose,
-  handleLogout,
+  handleDelete,
   classNames,
   message = "Are you sure you want to logout?",
 }) => {
@@ -68,9 +68,9 @@ const DeleteModal: FC<DeleteModalProps> = ({
             <Button
               variant="destructive"
               className="rounded-full text-base bg-light-red max-w-[8rem] w-full hover:bg-[#E3350D]"
-              onClick={handleLogout}
+              onClick={handleDelete}
             >
-              Logout
+              Delete
             </Button>
           </div>
         </div>
