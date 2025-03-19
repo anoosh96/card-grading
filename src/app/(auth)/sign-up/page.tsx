@@ -36,7 +36,7 @@ export default function SignupPage() {
           Forgot Password ?
         </ Link>
       </div> */}
-      <ButtonGradient className="w-full mt-6 py-6">Log in</ButtonGradient>
+      <ButtonGradient className="w-full mt-6 py-6">Create Account</ButtonGradient>
       <div className="mt-4 font-medium text-center">
         <span>Already have an account? <Link href={"/login"} className="text-light-red">Log in Here!</Link></span>
       </div>
