@@ -73,3 +73,37 @@ export interface DialogProps {
   isOpen: boolean;
   onClose: () => void;
 }
+
+
+export interface User {
+  id: string;
+  email: string;
+  emailVerified: boolean;
+  fullName: string | null;
+  shippingAddress: string | null;
+  phoneNumber: string | null;
+  paymentMethod: string | null;
+  createdAt: string; // Date string (ISO 8601 format)
+  updatedAt: string; // Date string (ISO 8601 format)
+}
+
+export interface SignUpResponse {
+  user: User
+  token: string
+}
+
+export interface LoginResponse extends SignUpResponse {}
+
+export interface APIError {
+  path: string[];
+  message: string;
+}
+
+export interface ApiResponse<T = any> {
+  message: string;
+  data: T;
+}
+
+export interface VerifyCodeResponse {
+  message: string;
+}

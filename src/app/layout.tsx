@@ -2,6 +2,9 @@ import type { Metadata } from "next";
 import { ThemeProvider } from "@/providers/theme-provider";
 import "./globals.css";
 import { Lato } from "next/font/google";
+import { ReactQueryProvider } from "@/providers/ReactQueryProvider";
+import { SnackbarProvider } from 'notistack'
+import ClientProvider from "@/providers/ClientProvider";
 
 const lato = Lato({ weight: ["100", "300", "400", "700", "900"], subsets: ["latin"] });
 
@@ -21,9 +24,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={lato.className}>
-        <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
-          {children}
-        </ThemeProvider>
+        <ClientProvider>{children}</ClientProvider>
       </body>
     </html>
   );
