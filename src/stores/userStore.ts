@@ -11,6 +11,7 @@ interface UserStore {
   clearUser: () => void;
 }
 
+
 // Combine devtools and persist middleware correctly
 export const useUserStore = create<UserStore>()(
   persist(
@@ -21,7 +22,7 @@ export const useUserStore = create<UserStore>()(
         token: null,
         setUser: (user) => set({ user, isAuthenticated: true }),
         setToken: (token) => set({ token }),
-        clearUser: () => set({ user: null, isAuthenticated: false, token: null }),
+        clearUser: () => set({ user: null, isAuthenticated: false, token: null })
       }),
       {
         name: 'UserStore', // Name of the store in Redux DevTools

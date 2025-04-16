@@ -2,13 +2,26 @@ import Image from "next/image";
 import { FaInfoCircle } from "react-icons/fa";
 import SmallProgressBar from "../../../components/SmallProgressBar";
 
+interface TrackingProps {
+  trackingNumber: string;
+  overallProgress: number;
+  estimatedCompletion: string;
+  submissionStatus: string;
+}
 
-export default function ProgressTracker() {
+export default function ProgressTracker({ trackingNumber, overallProgress, estimatedCompletion, submissionStatus }: TrackingProps) {
+
+  const statusMap: Record<string, number> = {
+    SUBMISSION_RECEIVED: 1,
+    GRADING_IN_PROGRESS: 2,
+    GRADING_COMPLETE: 3
+  };
+
   return(
     <div className="p-7 space-y-6 bg-light-grey rounded-xl shadow-mg">
       <div className="flex items-start">
         <h2 className="text-3xl">Tracking Number</h2>
-        <div className="text-light-red bg-transparent-red p-2 ml-40">#123456789</div>
+        <div className="text-light-red bg-transparent-red p-2 ml-40">#{trackingNumber}</div>
       </div>
       <p className="text-lg">Overall Progress</p>
 
@@ -17,15 +30,15 @@ export default function ProgressTracker() {
           <Image src={"/icons/tickmark.svg"} alt="tick image" width={55} height={55}/>
           <div className="w-full">
             <div className="flex gap-4 items-center mb-2">
-              <div className="text-xl leading-none">80%</div>
+              <div className="text-xl leading-none">{overallProgress}%</div>
               <div className="text-pure-grey leading-none">Grading</div>
             </div>
-            <SmallProgressBar progress={80} />
+            <SmallProgressBar progress={overallProgress} />
           </div>
         </div>
         <div className="mt-8 pl-4 space-y-6">
           <div className="flex items-center gap-8">
-              <div className="flex items-center justify-center rounded-full w-8 h-6 sm:h-8 bg-light-red text-white text-sm">
+              <div className={`flex items-center justify-center rounded-full w-8 h-6 sm:h-8 ${statusMap[submissionStatus] >= 1 ? 'bg-light-red': 'bg-soft-grey'} text-white text-sm`}>
                 <span>1</span>
               </div>
               <div>
@@ -34,7 +47,7 @@ export default function ProgressTracker() {
               </div>
           </div>
           <div className="flex items-center gap-8">
-              <div className="flex items-center justify-center rounded-full w-8 h-6 sm:h-8 bg-light-red text-white">
+              <div className={`flex items-center justify-center rounded-full w-8 h-6 sm:h-8 ${statusMap[submissionStatus] >= 2 ? 'bg-light-red text-white': 'bg-soft-grey text-black'}`}>
                 <span>2</span>
               </div>
               <div>
@@ -43,7 +56,7 @@ export default function ProgressTracker() {
               </div>
           </div>
           <div className="flex items-center gap-8">
-              <div className="flex items-center justify-center rounded-full w-8 h-6 sm:h-8 bg-soft-grey text-black">
+              <div className={`flex items-center justify-center rounded-full w-8 h-6 sm:h-8 ${statusMap[submissionStatus] >= 3 ? 'bg-light-red text-white': 'bg-soft-grey text-black'}`}>
                 <span>3</span>
               </div>
               <div>
@@ -53,7 +66,7 @@ export default function ProgressTracker() {
           </div>
           <div className="bg-transparent-red p-8 flex items-center text-light-red">
              <FaInfoCircle className="text-2xl bg-transparent" />
-             <p className="text-2xl ml-6 font-regular">Estimated completion: <span className="font-light">5-7 Days</span></p>
+             <p className="text-2xl ml-6 font-regular">Estimated completion: <span className="font-light">{estimatedCompletion}</span></p>
           </div>
         </div>
       </div>    

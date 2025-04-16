@@ -51,12 +51,23 @@ export interface FormStepProps {
   handlePrevious?: () => void;
 }
 
+export interface Service {
+  id: string;
+  name: string;
+  pricePerCard: number;
+  renewalPeriod: string;
+  features: string[];
+}
+
 export interface Subscription {
   status: string;
   type: string;
   renewalDate: string;
   totalCards: number;
+  cardLimit: number;
   cardsUsed: number;
+  serviceId?: string;
+  service?: Service;
 }
 
 export interface UserProfile {
@@ -85,6 +96,7 @@ export interface User {
   paymentMethod: string | null;
   createdAt: string; // Date string (ISO 8601 format)
   updatedAt: string; // Date string (ISO 8601 format)
+  subscription?: Subscription
 }
 
 export interface SignUpResponse {

@@ -1,16 +1,18 @@
 'use client'
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import CardDetails from "./components/CardDetails"
 import ProgressBar from "@/app/(user)/components/ProgressBar"
 import Subscription from "./components/Subscription"
 import Tracking from "./components/Tracking"
+import { useSubmissionStore } from "@/stores/submissionStore"
 
 const steps = ['Card Details', 'Subscription', 'Tracking'];
 
 
 export default function ByFormSubmissionPage() {
-  const [step, setStep] = useState(1)
+  const { submission, setSubmission } = useSubmissionStore()
+  const [step, setStep] = useState(submission.step)
 
   const handleNext = () => {
     setStep(prev => prev + 1)
@@ -19,6 +21,10 @@ export default function ByFormSubmissionPage() {
   const handlePrevious = () => {
     setStep(prev => prev - 1)
   }
+
+  useEffect(() => {
+    setSubmission({ step })
+  }, [step])
 
   return (
     <section className="p-7 bg-white">

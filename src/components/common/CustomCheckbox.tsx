@@ -1,26 +1,31 @@
 "use client";
 
-import { useState } from "react";
 import { Check } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 interface CustomCheckboxProps {
-  className?: string
-  text?: string
-  size?: 'lg' | 'md' |'sm'
+  className?: string;
+  text?: string;
+  size?: 'lg' | 'md' | 'sm';
+  checked: boolean;
+  onChange: (checked: boolean) => void;
 }
 
-export default function CustomCheckbox({ className, text =  'I agree to the Terms and Conditions.', size = 'sm' }: CustomCheckboxProps) {
-  const [isChecked, setIsChecked] = useState(false);
-
+export default function CustomCheckbox({
+  className,
+  text = 'I agree to the Terms and Conditions.',
+  size = 'sm',
+  checked,
+  onChange
+}: CustomCheckboxProps) {
   const sizeMap = {
-    'sm': {dimensions : 'h-4 w-4', text: 'heading-tertiary'},
-    'md': {dimensions : 'h-6 w-6', text: 'text-lg' },
-    'lg': {dimensions : 'h-8 w-8', text: 'text-xl' }
-  }
+    'sm': { dimensions: 'h-4 w-4', text: 'heading-tertiary' },
+    'md': { dimensions: 'h-6 w-6', text: 'text-lg' },
+    'lg': { dimensions: 'h-8 w-8', text: 'text-xl' }
+  };
 
   const handleClick = () => {
-    setIsChecked(!isChecked);
+    onChange(!checked);
   };
 
   return (
@@ -28,10 +33,10 @@ export default function CustomCheckbox({ className, text =  'I agree to the Term
       <button
         onClick={handleClick}
         className={`relative flex ${sizeMap[size]['dimensions']} items-center justify-center border border-secondary-grey bg-primary-grey`}
-        aria-checked={isChecked}
+        aria-checked={checked}
         role="checkbox"
       >
-        {isChecked && (
+        {checked && (
           <Check className="h-4 w-4 text-secondary-grey" strokeWidth={4} />
         )}
       </button>

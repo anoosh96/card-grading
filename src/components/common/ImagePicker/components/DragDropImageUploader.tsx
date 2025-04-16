@@ -93,7 +93,7 @@ const DragDropImageUploader: FC<DragDropImageUploaderProps> = ({
           {placeholder},<br /> or click to select
         </p>
 
-        <ButtonGradient className="rounded-full">Select image</ButtonGradient>
+        <ButtonGradient type="button" className="rounded-full">Select image</ButtonGradient>
         <p className="heading-tertiary text-red-500 mt-2">{error}</p>
       </div>
     </div>

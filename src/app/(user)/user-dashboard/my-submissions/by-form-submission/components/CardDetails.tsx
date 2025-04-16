@@ -1,140 +1,253 @@
-import ImageEditor from "@/components/common/ImagePicker/ImageEditor";
-import { SetStateAction, useState } from "react";
+"use client";
 
+import ImageEditor from "@/components/common/ImagePicker/ImageEditor";
 import CustomInput from "@/components/common/CustomInput";
 import CustomSelect from "@/components/common/CustomSelect";
-import { Card, FormStepProps } from "@/types";
 import { Button } from "@/components/ui/button";
 import { ButtonGradient } from "@/components/common/ButtonGradient";
 import { useRouter } from "next/navigation";
-
-const cardTypes: string[] = ["Card Type", "Pokémon", "Spiderman", "Sports", "One Piece"];
-const conditions: string[] = ["Mint", "Near Mint", "Good", "Excellant", "Fair"];
-const services: string[] = ["Service 1", "Service 2"];
-
+import { useEnums } from "@/hooks/useEnums";
+import { useSubmissionStore } from "@/stores/submissionStore";
+import { FormStepProps } from "@/types";
+import { useEffect, useMemo } from "react";
+import { useFormState } from "@/hooks/useFormState";
 
 export default function CardDetails({ handleNext }: FormStepProps) {
-  const [frontImg, setFrontImg] = useState<{ url: string; alt: string } | undefined>(undefined);
-  const [backImg, setBackImg] = useState<{ url: string; alt: string } | undefined>(undefined);
+  const { data: enums } = useEnums();
+  const { submission, setSubmission } = useSubmissionStore();
+  const router = useRouter();
 
-  const router = useRouter()
+  const {
+    values,
+    errors,
+    handleChange,
+    setValue,
+    setError,
+    resetForm,
+  } = useFormState({
+    cardName: submission.cardName,
+    category: submission.category,
+    cardType: submission.cardType,
+    yearOfRelease: submission.yearOfRelease,
+    conditionEstimate: submission.conditionEstimate,
+    serviceType: submission.serviceType,
+    frontImage: submission.frontImage,
+    backImage: submission.backImage,
+    submissionSource: "BY_FORM",
+  });
 
+  useEffect(() => {
+    Object.entries(submission).forEach(([key, value]) => {
+      setValue(key as keyof typeof values, value);
+    });
+  }, [submission]);
 
-  const [cardDetails, setCardDetails] = useState<Card>({
-    cardName: "",
-    category: "Card Type",
-    year: "",
-    condition: "Mint",
-    serviceType: "Premium",
-  })
+  const handleUploadImage = (type: "frontImage" | "backImage", file: File) => {
+    setValue(type, file);
+    setSubmission({ [type]: file });
+  };
 
-  const handleChange = (e: {
-    target: {
-      name: string;
-      value: string | number | boolean | SetStateAction<string>;
-    };
-  }) => {
-    const { name, value } = e.target
-    console.log(e)
+  const handleRemoveImage = (type: "frontImage" | "backImage") => {
+    setValue(type, null);
+    setSubmission({ [type]: null });
+  };
 
-    setCardDetails((prev) => ({ ...prev, [name]: value }))
-  }
+  const handleSelectChange = (field: keyof typeof values, selected: string) => {
+    setValue(field, selected);
+    setSubmission({ [field]: selected });
+  };
 
+  const validateForm = () => {
+    let isValid = true;
 
+    if (!values.cardName) {
+      setError("cardName", "Card name is required.");
+      isValid = false;
+    }
+
+    if (!values.category) {
+      setError("category", "Category is required.");
+      isValid = false;
+    }
+
+    if (!values.yearOfRelease) {
+      setError("yearOfRelease", "Year of release is required.");
+      isValid = false;
+    }
+
+    if (!values.conditionEstimate) {
+      setError("conditionEstimate", "Condition estimate is required.");
+      isValid = false;
+    }
+
+    if (!values.serviceType) {
+      setError("serviceType", "Service type is required.");
+      isValid = false;
+    }
+
+    if (!values.frontImage) {
+      setError("frontImage", "Front image is required.");
+      isValid = false;
+    }
+
+    if (!values.backImage) {
+      setError("backImage", "Back image is required.");
+      isValid = false;
+    }
+
+    return isValid;
+  };
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
-    console.log("Form Data:", cardDetails);
-    handleNext()
+    e.preventDefault();
+
+    if (!validateForm()) return;
+
+    setSubmission({ ["submissionSource"]: "BY_FORM" });
+
+    console.log("Stored Submission Data:", submission);
+    handleNext();
   };
 
-  const handleUploadImage = (type: "front" | "back", file: File) => {
-    const uploadedImage = {
-      url: URL.createObjectURL(file),
-      alt: file.name,
-    };
+  // Memoized preview URLs
+  const frontImagePreview = useMemo(() => {
+    if (!values.frontImage) return undefined;
+    return URL.createObjectURL(values.frontImage);
+  }, [values.frontImage]);
 
-    if (type === "front") {
-      setFrontImg(uploadedImage);
-    } else {
-      setBackImg(uploadedImage);
-    }
-  };
-
-  const handleRemoveImage = (type: "front" | "back") => {
-    if (type === "front") {
-      setFrontImg(undefined);
-    } else {
-      setBackImg(undefined);
-    }
-  };
+  const backImagePreview = useMemo(() => {
+    if (!values.backImage) return undefined;
+    return URL.createObjectURL(values.backImage);
+  }, [values.backImage]);
 
   return (
     <div>
       <h1 className="heading-primary font-bold">Enter Your Card Details</h1>
-      <p className="text-medium-grey mt-2">Provide information about the card you&#39;re submitting</p>
+      <p className="text-medium-grey mt-2">
+        Provide information about the card you&#39;re submitting
+      </p>
 
       <div className="overflow-hidden mt-8">
         <h3 className="heading-tertiary mb-2">Card Images</h3>
         <form className="w-full" onSubmit={handleSubmit}>
           <div className="flex-between gap-4">
             <ImageEditor
-              image={frontImg}
+              image={
+                frontImagePreview
+                  ? { url: frontImagePreview, alt: "Front" }
+                  : undefined
+              }
               placeholder="Drag and drop your card front image here"
-              onAddImage={(file) => handleUploadImage("front", file[0])}
-              onDeleteImage={() => handleRemoveImage("front")}
+              onAddImage={(file) => handleUploadImage("frontImage", file[0])}
+              onDeleteImage={() => handleRemoveImage("frontImage")}
             />
+            {errors.frontImage && (
+              <p className="text-red-500 mt-1 text-sm">{errors.frontImage}</p>
+            )}
 
-            {/* Back Image */}
             <ImageEditor
-              image={backImg}
+              image={
+                backImagePreview
+                  ? { url: backImagePreview, alt: "Back" }
+                  : undefined
+              }
               placeholder="Drag and drop your card back image here"
-              onAddImage={(file) => handleUploadImage("back", file[0])}
-              onDeleteImage={() => handleRemoveImage("back")}
+              onAddImage={(file) => handleUploadImage("backImage", file[0])}
+              onDeleteImage={() => handleRemoveImage("backImage")}
             />
+            {errors.backImage && (
+              <p className="text-red-500 mt-1 text-sm">{errors.backImage}</p>
+            )}
           </div>
 
           <div className="mt-8 p-2 space-y-4">
-
-            {/* Card Name */}
             <div>
               <label className="block font-semibold mb-2">Card Name</label>
-              <CustomInput id="cardName" name="cardName" placeholder="Enter Card Name" className="w-full p-6"
-                value={cardDetails.cardName}
-                onChange={handleChange}
+              <CustomInput
+                id="cardName"
+                name="cardName"
+                placeholder="Enter Card Name"
+                className="w-full p-6"
+                value={values.cardName}
+                onChange={(e) => {
+                  handleChange(e);
+                  setSubmission({ cardName: e.target.value });
+                }}
               />
+              {errors.cardName && (
+                <p className="text-red-500 mt-1 text-sm">{errors.cardName}</p>
+              )}
             </div>
 
-            {/* Category */}
             <div>
               <label className="block font-semibold mb-2">Category</label>
-              <CustomSelect options={cardTypes} selectedOption={cardDetails.category} borderColor="border-transparent" bg="bg-light-grey"
-                setSelectedOption={(value) => handleChange({ target: { name: 'category', value: value } })} className="relative" />
+              <CustomSelect
+                options={enums?.cardTypes}
+                selectedOption={values.category || "Select Category"}
+                borderColor="border-transparent"
+                bg="bg-light-grey"
+                setSelectedOption={(value) =>
+                  handleSelectChange("category", value as string)
+                }
+                className="relative"
+              />
+              {errors.category && (
+                <p className="text-red-500 mt-1 text-sm">{errors.category}</p>
+              )}
             </div>
 
-            {/* Year of Release */}
             <div>
               <label className="block font-semibold mb-2">Year of Release</label>
-              <CustomInput id="year" name="year" placeholder="Year of Release" className="w-full p-6"
-                value={cardDetails.year} onChange={handleChange}
+              <CustomInput
+                id="yearOfRelease"
+                name="yearOfRelease"
+                placeholder="Year of Release"
+                className="w-full p-6"
+                value={values.yearOfRelease as number}
+                onChange={(e) => {
+                  handleChange(e);
+                  setSubmission({ yearOfRelease: Number(e.target.value) });
+                }}
               />
+              {errors.yearOfRelease && (
+                <p className="text-red-500 mt-1 text-sm">{errors.yearOfRelease}</p>
+              )}
             </div>
 
-            {/* Condition */}
             <div>
               <label className="block font-semibold mb-2">Condition (Your Estimate)</label>
-              <CustomSelect options={conditions} selectedOption={cardDetails.condition} borderColor="border-transparent" bg="bg-light-grey"
-                setSelectedOption={(value) => handleChange({ target: { name: 'condition', value: value } })} className="relative" />
+              <CustomSelect
+                options={enums?.conditionEstimates}
+                selectedOption={values.conditionEstimate || "Select Condition"}
+                borderColor="border-transparent"
+                bg="bg-light-grey"
+                setSelectedOption={(value) =>
+                  handleSelectChange("conditionEstimate", value as string)
+                }
+                className="relative"
+              />
+              {errors.conditionEstimate && (
+                <p className="text-red-500 mt-1 text-sm">{errors.conditionEstimate}</p>
+              )}
             </div>
 
-            {/* Service Type (Disabled Field) */}
             <div>
               <label className="block font-semibold mb-2">Service Type</label>
-              <CustomSelect options={services} selectedOption={cardDetails.serviceType} borderColor="border-transparent" bg="bg-light-grey"
-                setSelectedOption={(value) => handleChange({ target: { name: 'serviceType', value: value } })} className="relative" />
+              <CustomSelect
+                options={enums?.serviceTypes}
+                selectedOption={values.serviceType || "Select Service"}
+                borderColor="border-transparent"
+                bg="bg-light-grey"
+                setSelectedOption={(value) =>
+                  handleSelectChange("serviceType", value as string)
+                }
+                className="relative"
+              />
+              {errors.serviceType && (
+                <p className="text-red-500 mt-1 text-sm">{errors.serviceType}</p>
+              )}
             </div>
 
-            {/* Buttons */}
             <div className="flex gap-6 mt-8">
               <Button
                 size={"lg"}
@@ -144,16 +257,17 @@ export default function CardDetails({ handleNext }: FormStepProps) {
               >
                 Back
               </Button>
-              <ButtonGradient size={"lg"} className="py-3 px-14 h-auto" type="submit">
+              <ButtonGradient
+                size={"lg"}
+                className="py-3 px-14 h-auto"
+                type="submit"
+              >
                 Next
               </ButtonGradient>
             </div>
-
           </div>
         </form>
-
-
       </div>
     </div>
-  )
+  );
 }

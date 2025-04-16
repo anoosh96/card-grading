@@ -1,16 +1,27 @@
+'use client'
+
 import { Button } from "@/components/ui/button"
 import SubscriptionBox from "../my-submissions/SubscriptionBox"
 import { ButtonGradient } from "@/components/common/ButtonGradient"
+import { useUserStore } from "@/stores/userStore";
 
-const subscriptionData = {
-  status: 'active',
-  type: 'premium',
-  renewalDate: '2025-03-06',
-  totalCards: 20,
-  cardsUsed: 14
-}
 
 export default function SubscriptionPage() {
+  const { user } = useUserStore();
+
+  console.log(user)
+
+  const subscriptionData = user?.subscription
+    ? {
+      status: user.subscription.status,
+      renewalDate: user.subscription.renewalDate,
+      totalCards: user.subscription.cardLimit,
+      cardsUsed: user.subscription.cardsUsed,
+      type: user.subscription.service?.name as string,
+      cardLimit: user.subscription.cardLimit
+    }
+    : null;
+
   return (
     <section className="bg-white rounded-lg p-7">
       <h1 className="heading-primary font-bold">Manage Your Subscription</h1>
@@ -18,7 +29,11 @@ export default function SubscriptionPage() {
 
       <h2 className="text-2xl my-8 font-semibold">Current Subscription Details</h2>
 
-      <SubscriptionBox data={subscriptionData}/>
+      {subscriptionData ? (
+        <SubscriptionBox className="mt-6" data={subscriptionData} />
+      ) : (
+        <p className="mt-6 text-neutral-grey">No subscription information available.</p>
+      )}
 
       {/* Buttons */}
       <div className="flex gap-6 mt-8">
