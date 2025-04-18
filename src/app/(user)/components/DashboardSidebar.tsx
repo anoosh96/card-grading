@@ -34,7 +34,7 @@ export function DashboardSidebar() {
 
   const confirmLogout = async () => {
     try {
-      await logoutMutateAsync();
+      logoutMutateAsync();
       setIsModalOpen(false);
       router.push('/');
     } catch (error) {

@@ -1,7 +1,12 @@
 import { Separator } from "@radix-ui/react-separator";
 import Image from "next/image";
 
-export function SubmissionSources() {
+interface SubmissionSourcesProps {
+  byFormPercentage: number;
+  byPostPercentage: number;
+}
+
+export function SubmissionSources({ byFormPercentage, byPostPercentage }: SubmissionSourcesProps) {
   return (
     <div className="bg-white w-full rounded-[1.25rem] p-6 shadow-sm">
       <div className="flex flex-col items-start justify-between mb-3">
@@ -25,7 +30,7 @@ export function SubmissionSources() {
                 <div className="h-4 w-8 rounded-sm bg-primary" />
               </div>
               <span className="text-sm">By Post</span>
-              <span className="text-sm">50%</span>
+              <span className="text-sm">{byPostPercentage}%</span>
             </div>
 
             <div className="flex items-center justify-between">
@@ -33,7 +38,7 @@ export function SubmissionSources() {
                 <div className="h-4 w-8 rounded-sm bg-secondary" />
               </div>
               <span className="text-sm">By Form</span>
-              <span className="text-sm">50%</span>
+              <span className="text-sm">{byFormPercentage}%</span>
             </div>
           </div>
         </div>

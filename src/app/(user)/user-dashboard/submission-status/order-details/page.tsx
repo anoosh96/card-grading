@@ -3,40 +3,61 @@
 import { Button } from "@/components/ui/button";
 import CardImages from "./CardImages";
 import { ButtonGradient } from "@/components/common/ButtonGradient";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import SubmissionSummary from "@/app/(admin)/dashboard/submission-status/add-post/components/SubmissionSummary";
+import { useSubmissionById } from "@/hooks/useSubmissionById";
 import { SubmissionData } from "@/app/(admin)/dashboard/submission-status/add-post/add-post-types";
-import { useState } from "react";
-
+import { useUserStore } from "@/stores/userStore";
+import { formatSubmissionStatus } from "@/app/(user)/lib/utils/helpers";
 
 export default function OrderDetailsPage() {
+  const router = useRouter();
+  const params = useSearchParams();
+  const submissionId = params.get('id') as string;
+  const { user } = useUserStore()
 
-  const router = useRouter()
+  const { data, isLoading, isError } = useSubmissionById(submissionId);
 
-  const [data] = useState<SubmissionData>({
-      name: "Henrietta Bogisich",
-      email: "bogisich@gmail.com",
-      orderId: "01",
-      cardName: "Charizard Holo",
-      category: "Pokemon",
-      yearOfRelease: "1999",
-      condition: "Good",
-      submissionDate: "2/27/2025",
-      status: "Pending",
-    });
+  if (!submissionId) {
+    return <div className="p-5 text-red-500">Missing submission ID.</div>;
+  }
+
+  if (isLoading) {
+    return <div className="p-5">Loading order details…</div>;
+  }
+
+  if (isError || !data?.data) {
+    return <div className="p-5 text-red-500">Failed to load order details.</div>;
+  }
+
+  const submission = data.data;
+
+  // Map API data to your SubmissionSummary's expected type
+  const submissionSummaryData: SubmissionData = {
+    name: user?.fullName as string,
+    email: user?.email as string,
+    orderId: submission.trackingNumber,
+    cardName: submission.card.cardName,
+    category: submission.card.category,
+    yearOfRelease: submission.card.yearOfRelease,
+    condition: submission.card.conditionEstimate,
+    submissionDate: submission.dateTime,
+    status: formatSubmissionStatus(submission.submissionStatus),
+  };
 
   return (
     <section className="bg-white p-7">
       <h1 className="heading-primary font-bold mb-10">Order Details</h1>
 
       <CardImages
-        frontImage="/assets/images/mike-trout.svg"
-        backImage="/assets/images/mike-trout.svg" />
+        frontImage={submission.card.frontImage}
+        backImage={submission.card.backImage}
+      />
 
       <SubmissionSummary
         title="Submission Summary"
-        data={data}
-        onSubmit={(e) => (console.log(e))}
+        data={submissionSummaryData}
+        onSubmit={(e) => console.log(e)}
         classNames="mt-4"
       />
 
@@ -53,5 +74,5 @@ export default function OrderDetailsPage() {
         </ButtonGradient>
       </div>
     </section>
-  )
+  );
 }

@@ -25,3 +25,18 @@ export const dateFormat = (datetime: string) => {
 export const capitalize = (str: string) => {
   return str.charAt(0).toUpperCase() + str.slice(1);
 }
+
+export const formatSubmissionStatus = (status: string) => {
+  switch (status) {
+    case 'SUBMISSION_PENDING':
+      return 'Submission Pending';
+    case 'SUBMISSION_RECEIVED':
+      return 'Submission Received';
+    case 'GRADING_IN_PROGRESS':
+      return 'Grading In Progress';
+    case 'GRADING_COMPLETE':
+      return 'Grading Complete';
+    default:
+      return 'Unknown Status';
+  }
+};

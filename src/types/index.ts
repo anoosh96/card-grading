@@ -97,6 +97,7 @@ export interface User {
   createdAt: string; // Date string (ISO 8601 format)
   updatedAt: string; // Date string (ISO 8601 format)
   subscription?: Subscription
+  profileImageUrl?: string
 }
 
 export interface SignUpResponse {

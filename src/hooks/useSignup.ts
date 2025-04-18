@@ -13,18 +13,15 @@ interface SignUpInput {
 
 const signUpUser = async (data: SignUpInput): Promise<SignUpResponse> => {
   const res = await axiosClient.post('/api/auth/signup', data);  // Send API request to /signup
-  return res.data;
+  return res.data.data;
 };
 
 // Custom hook to handle sign-up mutation
 export const useSignUp = () => {
-  const { setUser, setToken } = useUserStore();  // Zustand hook to set user
 
   return useMutation({
     mutationFn: signUpUser,
     onSuccess: (data) => {
-      setUser(data.user);  // Store user data in Zustand after sign-up
-      setToken(data.token);
       showToast('Sign-up successful!', { variant: 'success' });  // Success snackbar
     },
   });

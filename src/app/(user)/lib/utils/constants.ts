@@ -14,3 +14,11 @@ export const dashboardSidebarItems: SidebarItemProps[] = [
   { href: "/user-dashboard/profile", label: "Profile", Icon: DashboardProfileIcon },
   { href: "", label: "Logout", Icon: DashboardLogoutIcon, isBtn: true },
 ];
+
+
+export const submissionStatus = {
+  SUBMISSION_PENDING: 'SUBMISSION_PENDING',
+  SUBMISSION_RECEIVED: 'SUBMISSION_RECEIVED',
+  GRADING_IN_PROGRESS: 'GRADING_IN_PROGRESS',
+  GRADING_COMPLETE: 'GRADING_COMPLETE'
+}

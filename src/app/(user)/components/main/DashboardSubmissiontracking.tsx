@@ -1,192 +1,182 @@
 'use client'
 
 import Image from "next/image";
-import { dateFormat } from "../../lib/utils/helpers";
+import { dateFormat, formatSubmissionStatus } from "@/app/(user)/lib/utils/helpers";
 import { useState } from "react";
 import CustomModal from "@/components/common/CustomModal";
 import { Eye, MoreHorizontal, Trash2 } from "lucide-react";
 import CustomDropdown from "@/components/common/CustomDropDown/CustomDropDown";
-import Link from "next/link";
 import TrackIcon from "@/components/svgs/dashboard/TrackIcon";
 import { useRouter } from "next/navigation";
-
-const submissions = [
-  {
-    id: "876363",
-    date: "2025-03-06T14:30:00.000Z",
-    name: "Sports Card",
-    source: "By Post",
-    image: "/assets/images/graded-section-card-2.svg",
-    status: "completed",
-  },
-  {
-    id: "876364",
-    date: "2025-03-06T14:30:00.000Z",
-    name: "Comics",
-    source: "By Post",
-    image: "/assets/images/graded-section-card-2.svg",
-    status: "pending",
-  },
-  {
-    id: "876621",
-    name: "EAU DE",
-    date: "2025-03-06T14:30:00.000Z",
-    source: "By Form",
-    image: "/assets/images/graded-section-card-2.svg",
-    status: "grading",
-  },
-  {
-    id: "876369",
-    name: "Comics",
-    date: "2025-03-06T14:30:00.000Z",
-    source: "By Form",
-    image: "/assets/images/graded-section-card-2.svg",
-    status: "pending",
-  },
-  {
-    id: "876601",
-    name: "EAU DE",
-    date: "2025-03-06T14:30:00.000Z",
-    source: "By Form",
-    image: "/assets/images/graded-section-card-2.svg",
-    status: "grading",
-  },
-  {
-    id: "876368",
-    name: "Sports Card",
-    date: "2025-03-06T14:30:00.000Z",
-    source: "By Form",
-    image: "/assets/images/graded-section-card-2.svg",
-    status: "completed",
-  },
-];
+import { useSubmissions } from "@/hooks/useSubmissions";
+import { submissionStatus } from "../../lib/utils/constants";
+import { useDeleteSubmission } from "@/hooks/useDeleteSubmission";
 
 interface SubmissionTrackingProps {
-  showViewAll?: boolean
+  showViewAll?: boolean;
 }
 
-export function DashboardSubmissionTracking({ showViewAll = false}: SubmissionTrackingProps) {
+export function DashboardSubmissionTracking({ showViewAll = false }: SubmissionTrackingProps) {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const router = useRouter()
+  const [limit] = useState<number>(8);
+  const [page, setPage] = useState<number>(1);
+  const [selectedSubmissionId, setSelectedSubmissionId] = useState<string | null>(null);
 
-  const dropdownItems = [
+  const router = useRouter();
+  const { data, isLoading, isError } = useSubmissions(limit, page);
+  const deleteMutation = useDeleteSubmission();
+
+  const handleViewAll = () => {
+    router.push('/user-dashboard/submission-status');
+  };
+
+  const handleDeleteClick = (submissionId: string) => {
+    setSelectedSubmissionId(submissionId);
+    setIsModalOpen(true);
+  };
+
+  const handleConfirmDelete = async () => {
+    if (selectedSubmissionId) {
+      await deleteMutation.mutateAsync(selectedSubmissionId);
+      setIsModalOpen(false);
+      setSelectedSubmissionId(null);
+    }
+  };
+
+  const dropdownItems = (submissionId: string) => [
     {
       label: "View Detail",
       icon: <Eye className="h-4 w-4" />,
-      onClick: () => router.push('/user-dashboard/submission-status/order-details'),
+      onClick: () => router.push(`/user-dashboard/submission-status/order-details?id=${submissionId}`),
     },
     {
       label: "View Tracking",
       icon: <TrackIcon className="h-4 w-4" />,
-      onClick: () => router.push('/user-dashboard//submission-status/order-tracking')
+      onClick: () => router.push(`/user-dashboard/submission-status/order-tracking?id=${submissionId}`),
     },
     {
       label: "Delete",
       icon: <Trash2 className="h-4 w-4" />,
-      onClick: () => setIsModalOpen(true),
+      onClick: () => handleDeleteClick(submissionId),
     },
   ];
 
+  if (isLoading) return <div className="p-5">Loading submissions…</div>;
+  if (isError) return <div className="p-5 text-red-500">Failed to load submissions.</div>;
+
+  const submissions = data?.data?.submissions || [];
+  const meta = data?.data?.meta;
+  const totalPages = meta?.totalPages || 1;
+  const currentPage = meta?.currentPage || 1;
+
   return (
-    <div className="bg-white rounded-lg shadow-sm bg-white">
+    <div className="bg-white rounded-lg shadow-sm">
       <div className="flex items-center p-5 justify-between mb-4">
         <div className="flex flex-col gap-1">
           <h3 className="font-bold text-[2rem] text-charcol">Order Status</h3>
           <p className="text-sm text-pure-grey">Real-time updates on grading status</p>
         </div>
-        { showViewAll && <Link href={"/user-dashboard/submission-status"} className="text-primary underline font-medium text-sm">View all &gt;</Link> }
+        {showViewAll && (
+          <button onClick={handleViewAll} className="text-primary underline font-medium text-sm">
+            View all &gt;
+          </button>
+        )}
       </div>
 
-      {/* Add max-w-full to ensure it works inside flex containers */}
       <div className="w-full overflow-x-auto md:max-w-full">
         <table className="w-full min-w-[600px] md:min-w-[800px] lg:min-w-full">
           <thead>
             <tr className="border-b px-16">
-              <th className="text-left py-3 pl-16 pr-4">
-                <div className="flex text-dark-purple text-sm items-center gap-1">
-                  Track No
-                  {/* <Image src={"/icons/arrow_down.svg"} alt="Arrow Down Icon" width={6} height={5} /> */}
-                </div>
-              </th>
-              <th className="text-left py-3 pl-16 pr-4">
-                <div className="flex text-dark-purple text-sm items-center gap-1">
-                  Date and Time
-                </div>
-              </th>
-              <th className="text-left py-3 px-4">
-                <div className="flex text-dark-purple text-sm items-center gap-1">
-                  Card Name
-                  {/* <Image src={"/icons/arrow_down.svg"} alt="Arrow Down Icon" width={6} height={5} /> */}
-                </div>
-              </th>
-              <th className="text-left py-3 px-4">
-                <div className="flex text-dark-purple text-sm items-center gap-1">
-                  Submission Source
-                  {/* <Image src={"/icons/arrow_down.svg"} alt="Arrow Down Icon" width={6} height={5} /> */}
-                </div>
-              </th>
-              <th className="text-left py-3 pl-4 pr-16">
-                <div className="flex text-dark-purple text-sm items-center gap-1">
-                  Card Status
-                  {/* <Image src={"/icons/arrow_down.svg"} alt="Arrow Down Icon" width={6} height={5} /> */}
-                </div>
-              </th>
+              <th className="text-left py-3 pl-16 pr-4">Track No</th>
+              <th className="text-left py-3 pl-16 pr-4">Date and Time</th>
+              <th className="text-left py-3 px-4">Card Name</th>
+              <th className="text-left py-3 px-4">Submission Source</th>
+              <th className="text-left py-3 pl-4 pr-16">Card Status</th>
+              <th></th>
             </tr>
           </thead>
           <tbody>
-            {submissions.map((submission) => (
+            {submissions.map((submission: any) => (
               <tr key={submission.id} className="border-b last:border-0">
-                <td className="py-3 pl-16 pr-4">#{submission.id}</td>
+                <td className="py-3 pl-16 pr-4">#{submission.trackingNumber}</td>
                 <td className="py-3 pl-16 pr-4">
                   <div className="flex gap-2">
                     <Image src={"/icons/calendar.svg"} alt="Calendar Icon" width={15} height={15} />
-                    <div>
-                      {dateFormat(submission.date)}
-                    </div>
+                    <div>{dateFormat(submission.dateTime)}</div>
                   </div>
                 </td>
                 <td className="py-3 px-4">
                   <div className="flex items-center gap-3">
-                    <Image src={submission.image} alt={submission.name} width={35} height={40} className="object-fill" />
-                    <span className="text-sm text-dark-purple">{submission.name}</span>
+                    <Image
+                      src={submission.card.frontImage}
+                      alt={submission.card.cardName}
+                      width={35}
+                      height={40}
+                      className="object-fill"
+                    />
+                    <span className="text-sm text-dark-purple">{submission.card.cardName}</span>
                   </div>
                 </td>
-                <td className="py-3 px-4">{submission.source}</td>
-                <td className="py-3  px-4">
+                <td className="py-3 px-4">{submission.submissionSource}</td>
+                <td className="py-3 px-4">
                   <span
-                    className={`inline-block w-full text-center capitalize px-10 py-3 rounded-full text-base font-semibold ${
-                      submission.status === "completed"
+                    className={`inline-block w-full text-center capitalize px-10 py-3 rounded-full text-base font-semibold ${submission.submissionStatus === submissionStatus.GRADING_COMPLETE
                         ? "bg-muted-green/20 text-muted-green"
-                        : submission.status === "pending"
-                        ? "bg-primary/20 text-primary"
-                        : "bg-secondary/20 text-secondary"
-                    }`}
+                        : submission.submissionStatus === submissionStatus.SUBMISSION_PENDING
+                          ? "bg-primary/20 text-primary"
+                          : "bg-secondary/20 text-secondary"
+                      }`}
                   >
-                    {submission.status}
+                    {formatSubmissionStatus(submission.submissionStatus)}
                   </span>
                 </td>
                 <td className="py-3 px-4">
-                  <CustomDropdown
-                      items={dropdownItems}
-                      dropdownClassName="right-2"
-                    >
-                      <MoreHorizontal className="h-4 w-4" />
-                    </CustomDropdown>
+                  <CustomDropdown items={dropdownItems(submission.id)} dropdownClassName="right-2">
+                    <MoreHorizontal className="h-4 w-4" />
+                  </CustomDropdown>
                 </td>
               </tr>
             ))}
           </tbody>
         </table>
+
+        {/* Pagination */}
+        {totalPages > 1 && !showViewAll && (
+          <div className="flex justify-center items-center gap-4 mt-6 mb-8">
+            <button
+              onClick={() => setPage(prev => Math.max(prev - 1, 1))}
+              disabled={currentPage === 1}
+              className={`px-4 py-2 rounded border text-sm ${currentPage === 1 ? 'text-gray-400 border-gray-300' : 'text-primary border-primary'
+                }`}
+            >
+              Previous
+            </button>
+
+            <span className="text-base font-medium">
+              Page {currentPage} of {totalPages}
+            </span>
+
+            <button
+              onClick={() => setPage(prev => Math.min(prev + 1, totalPages))}
+              disabled={currentPage === totalPages}
+              className={`px-4 py-2 rounded border text-sm ${currentPage === totalPages ? 'text-gray-400 border-gray-300' : 'text-primary border-primary'
+                }`}
+            >
+              Next
+            </button>
+          </div>
+        )}
       </div>
+
       <CustomModal
         isOpen={isModalOpen}
         title="Are you sure you want to delete this order?"
         message="This action cannot be undone."
-        onConfirm={() => {
-          console.log("Order Deleted!");
+        onConfirm={handleConfirmDelete}
+        onCancel={() => {
           setIsModalOpen(false);
+          setSelectedSubmissionId(null);
         }}
-        onCancel={() => setIsModalOpen(false)}
         cn="!p-20 !rounded-2xl"
       />
     </div>

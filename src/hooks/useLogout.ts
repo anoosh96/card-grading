@@ -1,4 +1,4 @@
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import axiosClient from '@/lib/axiosClient';
 import { useUserStore } from '@/stores/userStore';
 import { showToast } from '@/lib/toast';
@@ -12,6 +12,7 @@ const logoutUser = async (): Promise<ApiResponse<null>> => {
 
 export const useLogout = () => {
   const { clearUser } = useUserStore(); // assuming you have a resetUser() to clear user/token state
+  const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: logoutUser,
@@ -28,6 +29,9 @@ export const useLogout = () => {
           .replace(/^ +/, '')
           .replace(/=.*/, `=;expires=${new Date(0).toUTCString()};path=/`);
       });
+
+      queryClient.clear()
+
 
       showToast('Logged out successfully!', { variant: 'success' });
     },

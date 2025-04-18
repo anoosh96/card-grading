@@ -8,6 +8,7 @@ import { useState } from "react";
 import { useSignUp } from "@/hooks/useSignup"; // assuming you have this hook
 import { useFormState } from "@/hooks/useFormState"; // use your custom form hook
 import { handleRequestError } from "@/lib/toast";
+import { useUserStore } from "@/stores/userStore";
 
 export default function SignupPage() {
   const router = useRouter();
@@ -21,10 +22,11 @@ export default function SignupPage() {
   });
 
   // Loading and error handling
-  const [loading, setLoading] = useState(false);
   const [apiError, setApiError] = useState<string | null>(null);
 
   const { mutateAsync: signup, isPending: signupLoading, error: signupError } = useSignUp();
+  const { setUser, setToken } = useUserStore();  // Zustand hook to set user
+
 
   const handleSignup = async () => {
     resetFormErrors();
@@ -39,9 +41,10 @@ export default function SignupPage() {
     // Clear previous errors
     setError('confirmPassword', null);
 
-    setLoading(true);
     try {
-      await signup({ name, email, password });
+      const { user, token } = await signup({ name, email, password });
+      setUser(user);  // Store user data in Zustand after sign-up
+      setToken(token);
       router.push('/verification-code'); // Redirect to login page on successful signup
     } catch (err: any) {
       resetFormErrors()
@@ -54,8 +57,6 @@ export default function SignupPage() {
         handleRequestError(err)
       }
 
-    } finally {
-      setLoading(false);
     }
   };
 
