@@ -4,11 +4,12 @@ import { ButtonGradient } from "@/components/common/ButtonGradient";
 import CustomInput from "@/components/common/CustomInput";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
 import { useSignUp } from "@/hooks/useSignup"; // assuming you have this hook
 import { useFormState } from "@/hooks/useFormState"; // use your custom form hook
 import { handleRequestError } from "@/lib/toast";
 import { useUserStore } from "@/stores/userStore";
+import { AxiosError } from "axios";
+import { Loader2 } from "lucide-react";
 
 export default function SignupPage() {
   const router = useRouter();
@@ -22,9 +23,8 @@ export default function SignupPage() {
   });
 
   // Loading and error handling
-  const [apiError, setApiError] = useState<string | null>(null);
 
-  const { mutateAsync: signup, isPending: signupLoading, error: signupError } = useSignUp();
+  const { mutateAsync: signup, isPending: signupLoading } = useSignUp();
   const { setUser, setToken } = useUserStore();  // Zustand hook to set user
 
 
@@ -46,17 +46,16 @@ export default function SignupPage() {
       setUser(user);  // Store user data in Zustand after sign-up
       setToken(token);
       router.push('/verification-code'); // Redirect to login page on successful signup
-    } catch (err: any) {
+    } catch (err) {
       resetFormErrors()
       // Check if the error response has validation errors
-      if (err?.response?.data?.errors) {
+      if (err instanceof AxiosError &&  err?.response?.data?.errors) {
         handleApiValidationError(err.response.data); // Map API errors to form fields
       }
       else {
         // If there is a general message (e.g., "User already exists"), set it globally
         handleRequestError(err)
       }
-
     }
   };
 
@@ -126,10 +125,17 @@ export default function SignupPage() {
       </div>
 
       {/* Show error message if there's a form-wide error */}
-      {apiError && <p className="text-red-500 text-sm">{apiError}</p>}
+      {/* {apiError && <p className="text-red-500 text-sm">{apiError}</p>} */}
 
       <ButtonGradient className="w-full mt-6 py-6" onClick={handleSignup} disabled={signupLoading}>
-        {signupLoading ? 'Signing Up...' : 'Create Account'}
+        {signupLoading ? (
+            <>
+              <Loader2 className="animate-spin w-5 h-5" />
+              Signing Up...
+            </>
+          ) : (
+            "Create Account"
+          )}
       </ButtonGradient>
 
       <div className="mt-4 font-medium text-center">

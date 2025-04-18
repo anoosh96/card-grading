@@ -6,8 +6,10 @@ import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useFormState } from "@/hooks/useFormState";
 import { useResetPassword } from "@/hooks/useResetPassword";
+import { AxiosError } from "axios";
+import { Suspense } from "react";
 
-export default function ResetPasswordPage() {
+function ResetPasswordForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
 
@@ -39,8 +41,8 @@ export default function ResetPasswordPage() {
       });
       resetForm();
       router.push('/login');
-    } catch (error: any) {
-      if (error?.response?.data?.errors) {
+    } catch (error) {
+      if (error instanceof AxiosError && error?.response?.data?.errors) {
         handleApiValidationError(error.response.data);
       }
     }
@@ -96,4 +98,12 @@ export default function ResetPasswordPage() {
       </div>
     </div>
   );
+}
+
+export default function ResetPasswordPage() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <ResetPasswordForm />
+    </Suspense>
+  )
 }

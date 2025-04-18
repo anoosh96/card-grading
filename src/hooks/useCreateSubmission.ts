@@ -4,7 +4,7 @@ import axiosClient from '@/lib/axiosClient';
 import { handleRequestError, showToast } from '@/lib/toast';
 
 interface CreateSubmissionInput {
-  values: any; // Replace with a properly typed interface later if needed
+  values: Record<string, string | number | undefined | null | object>; // Replace with a properly typed interface later if needed
   frontImage: File;
   backImage: File;
 }
@@ -31,7 +31,7 @@ const createSubmission = async ({ values, frontImage, backImage }: CreateSubmiss
 export const useCreateSubmission = () => {
   return useMutation({
     mutationFn: createSubmission,
-    onSuccess: (data) => {
+    onSuccess: () => {
       showToast('Submission created successfully!', { variant: 'success' });
     },
     onError: handleRequestError,

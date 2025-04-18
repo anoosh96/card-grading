@@ -1,9 +1,6 @@
 import type { Metadata } from "next";
-import { ThemeProvider } from "@/providers/theme-provider";
 import "./globals.css";
 import { Lato } from "next/font/google";
-import { ReactQueryProvider } from "@/providers/ReactQueryProvider";
-import { SnackbarProvider } from 'notistack'
 import ClientProvider from "@/providers/ClientProvider";
 
 const lato = Lato({ weight: ["100", "300", "400", "700", "900"], subsets: ["latin"] });

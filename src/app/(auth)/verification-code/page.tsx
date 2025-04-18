@@ -7,6 +7,7 @@ import { useRef } from "react";
 import { useFormState } from "@/hooks/useFormState";
 import { useVerifyEmail } from "@/hooks/useVerifyEmail";
 import { useResendVerification } from "@/hooks/useResendVerification";
+import { AxiosError } from "axios";
 
 export default function VerificationCodePage() {
   const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
@@ -48,8 +49,8 @@ export default function VerificationCodePage() {
       await verifyCodeMutation.mutateAsync({ code: values.code });
       resetForm();
       router.push('/user-dashboard');
-    } catch (error: any) {
-      if (error?.response?.data?.errors) {
+    } catch (error) {
+      if (error instanceof AxiosError && error?.response?.data?.errors) {
         handleApiValidationError(error.response.data);
       }
     }
@@ -69,7 +70,7 @@ export default function VerificationCodePage() {
         <div className="flex gap-2">
           {Array.from({ length: 6 }, (_, i) => (
             <CustomInput
-              ref={(el) => inputRefs.current[i] = el}
+              ref={(el) => { inputRefs.current[i] = el; }}
               key={i}
               id={`code_digit_${i}`}
               name={`code_digit_${i}`}
@@ -96,7 +97,7 @@ export default function VerificationCodePage() {
 
       <div className="mt-4 font-medium text-center">
         <span>
-          Didn't receive the code?{" "}
+          Didn&#39;t receive the code?{" "}
           <button
             className="text-light-red underline"
             type="button"

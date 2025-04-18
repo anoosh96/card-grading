@@ -3,14 +3,14 @@ import { useMutation } from '@tanstack/react-query';
 import axiosClient from '@/lib/axiosClient';
 import { useUserStore } from '@/stores/userStore';
 import { showToast } from '@/lib/toast';
-import { ApiResponse, LoginResponse } from '@/types';
+import { ApiResponse, SignUpResponse } from '@/types';
 
 interface LoginInput {
   email: string;
   password: string;
 }
 
-const loginUser = async (data: LoginInput): Promise<ApiResponse<LoginResponse>> => {
+const loginUser = async (data: LoginInput): Promise<ApiResponse<SignUpResponse>> => {
   const res = await axiosClient.post('/api/auth/login', data);
   return res.data;
 };

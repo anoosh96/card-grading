@@ -3,13 +3,11 @@
 import { ButtonGradient } from "@/components/common/ButtonGradient";
 import CustomInput from "@/components/common/CustomInput";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { useFormState } from "@/hooks/useFormState";
 import { useForgotPassword } from "@/hooks/useForgotPassword";
+import { AxiosError } from "axios";
 
 export default function ForgotPasswordPage() {
-  const router = useRouter();
-
   const { values, setValue, errors, resetForm, handleApiValidationError } = useFormState({
     email: ''
   });
@@ -26,8 +24,8 @@ export default function ForgotPasswordPage() {
       await forgotPasswordMutation.mutateAsync({ email: values.email });
       resetForm();
       //router.push('/verification-code');
-    } catch (error: any) {
-      if (error?.response?.data?.errors) {
+    } catch (error) {
+      if (error instanceof AxiosError && error?.response?.data?.errors) {
         handleApiValidationError(error.response.data);
       }
     }

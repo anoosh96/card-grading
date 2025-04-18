@@ -9,8 +9,6 @@ import { useUserStore } from "@/stores/userStore";
 export default function SubscriptionPage() {
   const { user } = useUserStore();
 
-  console.log(user)
-
   const subscriptionData = user?.subscription
     ? {
       status: user.subscription.status,
@@ -30,23 +28,25 @@ export default function SubscriptionPage() {
       <h2 className="text-2xl my-8 font-semibold">Current Subscription Details</h2>
 
       {subscriptionData ? (
-        <SubscriptionBox className="mt-6" data={subscriptionData} />
+        <>
+          <SubscriptionBox className="mt-6" data={subscriptionData} />
+
+          {/* Buttons */}
+          <div className="flex gap-6 mt-8">
+            <Button
+              size={"lg"}
+              className="h-auto font-semibold bg-soft-grey rounded-full text-pure-grey py-3 px-14 text-base hover:bg-soft-grey"
+            >
+              Cancel Subscription
+            </Button>
+            <ButtonGradient size={"lg"} className="py-3 px-14 h-auto" type="submit">
+              Change Plan
+            </ButtonGradient>
+          </div>
+        </>
       ) : (
         <p className="mt-6 text-neutral-grey">No subscription information available.</p>
       )}
-
-      {/* Buttons */}
-      <div className="flex gap-6 mt-8">
-        <Button
-          size={"lg"}
-          className="h-auto font-semibold bg-soft-grey rounded-full text-pure-grey py-3 px-14 text-base hover:bg-soft-grey"
-        >
-          Cancel Subscription
-        </Button>
-        <ButtonGradient size={"lg"} className="py-3 px-14 h-auto" type="submit">
-          Change Plan
-        </ButtonGradient>
-      </div>
     </section>
   )
 }

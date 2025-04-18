@@ -11,6 +11,7 @@ import { useSubmissionStore } from "@/stores/submissionStore";
 import { useUserStore } from "@/stores/userStore";
 import { useUser } from "@/hooks/useUser";
 import { Loader2 } from "lucide-react";
+import { submissionData } from "@/app/(admin)/dashboard/submission-status/SubmissionStatus.constant";
 
 
 export default function Subscription({ handleNext, handlePrevious }: FormStepProps) {
@@ -99,7 +100,7 @@ export default function Subscription({ handleNext, handlePrevious }: FormStepPro
         >
           Back
         </Button>
-        <ButtonGradient size="lg" className="py-3 px-14 h-auto" onClick={handleSubmit} disabled={!isChecked || createSubmission.isPending }>
+        <ButtonGradient size="lg" className="py-3 px-14 h-auto" onClick={handleSubmit} disabled={!isChecked || createSubmission.isPending || (!subscriptionData || submissionData.status !== 'ACTIVE') }>
           {createSubmission.isPending ? (
             <>
               <Loader2 className="animate-spin w-5 h-5" />

@@ -7,6 +7,8 @@ import { useRouter } from "next/navigation";
 import { useFormState } from "@/hooks/useFormState";
 import { useLogin } from "@/hooks/useLogin";
 import { handleRequestError } from "@/lib/toast";
+import { AxiosError } from "axios";
+import { Loader2 } from "lucide-react";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -19,25 +21,23 @@ export default function LoginPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
+  
     try {
-      const { data } = await loginMutation.mutateAsync(values); // awaits the promise
-
-      if(data.user.emailVerified){
+      const { data } = await loginMutation.mutateAsync(values);
+  
+      if (data.user.emailVerified) {
         router.push('/user-dashboard');
+      } else {
+        router.push('/verification-code');
       }
-      else {
-        router.push('/verification-code')
-      }
-    } catch (error: any) {
-      resetFormErrors()
-      if (error?.response?.data?.errors) {
+    } catch (error) {
+      resetFormErrors();
+  
+      if (error instanceof AxiosError && error.response?.data?.errors) {
         handleApiValidationError(error.response.data);
+      } else {
+        handleRequestError(error);
       }
-      else{
-        handleRequestError(error)
-      }
-      // You might still have a global toast from handleRequestError inside the mutation’s onError
     }
   };
 
@@ -82,8 +82,15 @@ export default function LoginPage() {
           </Link>
         </div>
 
-        <ButtonGradient type="submit" className="w-full mt-6 py-6">
-          {loginMutation.isPending ? 'Logging in...' : 'Log in'}
+        <ButtonGradient type="submit" className="w-full mt-6 py-6" disabled={loginMutation.isPending}>
+          {loginMutation.isPending ? (
+            <>
+              <Loader2 className="animate-spin w-5 h-5" />
+               Loggin in...
+            </>
+          ) : (
+            "Log in"
+          )}
         </ButtonGradient>
       </form>
 

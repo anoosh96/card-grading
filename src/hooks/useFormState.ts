@@ -6,7 +6,7 @@ type FormState<T extends object> = {
   values: T;
   errors: Record<keyof T, string | null>;
   handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  setValue: (field: keyof T, value: any) => void;
+  setValue: <K extends keyof T>(field: K, value: T[K]) => void;
   setError: (field: keyof T, error: string | null) => void;
   resetForm: () => void;
   resetFormErrors: () => void;
@@ -35,7 +35,7 @@ export function useFormState<T extends object>(initialValues: T): FormState<T> {
   };
 
   // Set a specific field's value manually
-  const setValue = (field: keyof T, value: any) => {
+  const setValue = <K extends keyof T>(field: K, value: T[K]) => {
     setValues((prev) => ({
       ...prev,
       [field]: value,
@@ -68,7 +68,7 @@ export function useFormState<T extends object>(initialValues: T): FormState<T> {
       setError(key as keyof typeof values, null); // Clear each error
     });
   };
-  
+
 
   // When API validation errors are returned, map them to the fields
   const handleApiValidationError = (apiErrorResponse: { message: string; errors: APIError[] }) => {

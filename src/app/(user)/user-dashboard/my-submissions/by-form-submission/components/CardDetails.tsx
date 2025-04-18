@@ -22,8 +22,7 @@ export default function CardDetails({ handleNext }: FormStepProps) {
     errors,
     handleChange,
     setValue,
-    setError,
-    resetForm,
+    setError
   } = useFormState({
     cardName: submission.cardName,
     category: submission.category,

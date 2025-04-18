@@ -1,9 +1,10 @@
 import { ButtonGradient } from "@/components/common/ButtonGradient";
 import { Button } from "@/components/ui/button";
-import { FormStepProps } from "@/types";
+import { FormStepProps, Subscription as Sub } from "@/types";
 import SubmissionSummary from "../../SubmissionSummary";
 import SubscriptionBox from "../../SubscriptionBox";
 import CustomCheckbox from "@/components/common/CustomCheckbox";
+import { useState } from "react";
 
 const summaryFields = {
   cardName: 'Charizard Holo',
@@ -14,16 +15,19 @@ const summaryFields = {
   shippingStatus: 'Confirmed'
 }
 
-const subscriptionData = {
+const subscriptionData: Sub = {
   status: 'active',
   type: 'premium',
   renewalDate: '2025-03-06',
   totalCards: 20,
-  cardsUsed: 14
+  cardsUsed: 14,
+  cardLimit: 20
 }
 
 
 export default function Subscription({ handlePrevious }: FormStepProps) {
+
+    const [checked, setChecked] = useState<boolean>(false)
 
   return (
     <section className="bg-white">
@@ -34,7 +38,7 @@ export default function Subscription({ handlePrevious }: FormStepProps) {
       <SubmissionSummary fields={summaryFields} className="mt-6" />
       <SubscriptionBox className="mt-6" data={subscriptionData} />
 
-      <CustomCheckbox className="bg-white mt-4" />
+      <CustomCheckbox className="bg-white mt-4" checked={checked} onChange={setChecked}/>
 
       {/* Buttons */}
       <div className="flex gap-6 mt-8">

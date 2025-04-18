@@ -9,8 +9,9 @@ import { useSubmissionById } from "@/hooks/useSubmissionById";
 import { SubmissionData } from "@/app/(admin)/dashboard/submission-status/add-post/add-post-types";
 import { useUserStore } from "@/stores/userStore";
 import { formatSubmissionStatus } from "@/app/(user)/lib/utils/helpers";
+import { Suspense } from "react";
 
-export default function OrderDetailsPage() {
+function OrderDetails() {
   const router = useRouter();
   const params = useSearchParams();
   const submissionId = params.get('id') as string;
@@ -75,4 +76,12 @@ export default function OrderDetailsPage() {
       </div>
     </section>
   );
+}
+
+export default function OrderDetailsPage() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <OrderDetails />
+    </Suspense>
+  )
 }

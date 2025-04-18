@@ -3,7 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import axiosInstance from "@/lib/axiosClient";
 
 export const getUserSubmissions = async (limit?: number, page?: number) => {
-  const params: any = {};
+  const params: {limit?: number; page?: number;} = {};
   if (limit) params.limit = limit;
   if (page) params.page = page;
 

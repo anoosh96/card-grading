@@ -1,6 +1,6 @@
 import { create } from "zustand";
 
-interface SubmissionData {
+export interface SubmissionData {
   cardName: string;
   category: string;
   cardType: string;

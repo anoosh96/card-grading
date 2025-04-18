@@ -11,6 +11,7 @@ import { useRouter } from "next/navigation";
 import { useSubmissions } from "@/hooks/useSubmissions";
 import { submissionStatus } from "../../lib/utils/constants";
 import { useDeleteSubmission } from "@/hooks/useDeleteSubmission";
+import { Submission } from "@/types";
 
 interface SubmissionTrackingProps {
   showViewAll?: boolean;
@@ -96,7 +97,7 @@ export function DashboardSubmissionTracking({ showViewAll = false }: SubmissionT
             </tr>
           </thead>
           <tbody>
-            {submissions.map((submission: any) => (
+            {submissions.map((submission: Submission) => (
               <tr key={submission.id} className="border-b last:border-0">
                 <td className="py-3 pl-16 pr-4">#{submission.trackingNumber}</td>
                 <td className="py-3 pl-16 pr-4">
@@ -108,7 +109,7 @@ export function DashboardSubmissionTracking({ showViewAll = false }: SubmissionT
                 <td className="py-3 px-4">
                   <div className="flex items-center gap-3">
                     <Image
-                      src={submission.card.frontImage}
+                      src={submission.card.frontImage as string}
                       alt={submission.card.cardName}
                       width={35}
                       height={40}

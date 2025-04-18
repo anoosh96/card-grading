@@ -1,8 +1,7 @@
 // hooks/useSignUp.ts
 import { useMutation } from '@tanstack/react-query';
 import axiosClient from '@/lib/axiosClient'; // Axios client
-import { useUserStore } from '@/stores/userStore'; // Zustand store
-import { handleRequestError, showToast } from '@/lib/toast';
+import { showToast } from '@/lib/toast';
 import { SignUpResponse } from '@/types';
 
 interface SignUpInput {
@@ -21,7 +20,7 @@ export const useSignUp = () => {
 
   return useMutation({
     mutationFn: signUpUser,
-    onSuccess: (data) => {
+    onSuccess: () => {
       showToast('Sign-up successful!', { variant: 'success' });  // Success snackbar
     },
   });

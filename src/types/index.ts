@@ -33,19 +33,6 @@ export interface AddonProps {
   desc: string;
 }
 
-export interface Card {
-  cardName: string;
-  year: string;
-  category: string;
-  condition: string;
-  serviceType: string;
-  frontImage?: string;
-  backImage?: string;
-  fullName?: string;
-  shippingAddress?: string;
-  phoneNumber?: string;
-}
-
 export interface FormStepProps {
   handleNext: () => void;
   handlePrevious?: () => void;
@@ -100,19 +87,40 @@ export interface User {
   profileImageUrl?: string
 }
 
+
+export interface Card {
+  cardName: string;
+  category: string;
+  cardType: string;
+  yearOfRelease: number | null;
+  conditionEstimate: string;
+  serviceType: string;
+  frontImage: string | undefined;
+  backImage: string | undefined;
+}
+
+export interface Submission {
+  id: string;
+  submissionSource: string;
+  trackingNumber: string;
+  overallProgress: number;
+  estimatedCompletion: string;
+  submissionStatus: string;
+  card: Card
+  dateTime: string;
+}
+
 export interface SignUpResponse {
   user: User
   token: string
 }
-
-export interface LoginResponse extends SignUpResponse {}
 
 export interface APIError {
   path: string[];
   message: string;
 }
 
-export interface ApiResponse<T = any> {
+export interface ApiResponse<T> {
   message: string;
   data: T;
 }

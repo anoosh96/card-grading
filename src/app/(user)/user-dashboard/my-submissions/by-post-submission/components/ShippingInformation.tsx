@@ -2,14 +2,14 @@ import { ButtonGradient } from "@/components/common/ButtonGradient";
 import CustomInput from "@/components/common/CustomInput";
 import CustomSelect from "@/components/common/CustomSelect";
 import { Button } from "@/components/ui/button";
-import { Card, FormStepProps } from "@/types";
+import { FormStepProps } from "@/types";
 import { SetStateAction, useState } from "react";
 
 const cardTypes: string[] = ["Card Type", "Pokémon", "Spiderman", "Sports", "One Piece"];
 const conditions: string[] = ["Mint", "Near Mint", "Good", "Excellant", "Fair"];
 
 export default function ShippingInformation({handleNext, handlePrevious}: FormStepProps) {
-  const [cardDetails, setCardDetails] = useState<Card>({
+  const [cardDetails, setCardDetails] = useState({
     cardName: "",
     category: "Card Type",
     year: "",

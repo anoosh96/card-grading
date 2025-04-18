@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button"
 import { FormStepProps } from "@/types"
 import Image from "next/image"
 import { useRouter } from "next/navigation"
+import { useState } from "react"
 import { FaInfoCircle } from "react-icons/fa"
 
 const instructions = [
@@ -18,6 +19,7 @@ const instructions = [
 export default function ShippingInstruction({ handleNext }: FormStepProps) {
 
   const router = useRouter()
+  const [checked, setChecked] = useState<boolean>(false)
 
   return (
     <div>
@@ -38,7 +40,7 @@ export default function ShippingInstruction({ handleNext }: FormStepProps) {
           <FaInfoCircle className="text-2xl bg-transparent" />
           <p className="text-xl ml-6 font-regular">Once received, you&#39;ll get a tracking number to monitor progress.</p>
         </div>
-        <CustomCheckbox text="I confirm that I have read and will follow the shipping instructions" className="bg-transparent mt-4" size="md" />
+        <CustomCheckbox text="I confirm that I have read and will follow the shipping instructions" className="bg-transparent mt-4" size="md" checked={checked} onChange={setChecked} />
       </div>
 
       {/* Buttons */}

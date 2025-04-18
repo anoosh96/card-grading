@@ -5,10 +5,10 @@ import ProgressTracker from "./ProgressTracker";
 import { ButtonGradient } from "@/components/common/ButtonGradient";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useSubmissionById } from "@/hooks/useSubmissionById";
-import { formatSubmissionStatus } from "@/app/(user)/lib/utils/helpers";
+import { Suspense } from "react";
 
 
-export default function OrderTracking() {
+function OrderTracking() {
   const router = useRouter()
   const params = useSearchParams()
   const submissionId = params.get('id') as string;
@@ -56,5 +56,13 @@ export default function OrderTracking() {
         </ButtonGradient>
       </div>
     </section>
+  )
+}
+
+export default function OrderTrackingPage() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <OrderTracking />
+    </Suspense>
   )
 }
