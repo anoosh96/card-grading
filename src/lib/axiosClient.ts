@@ -2,7 +2,7 @@
 import axios from 'axios';
 
 const axiosClient = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_URL,  // Change this if your API has a different base URL
+  baseURL: '',  // Change this if your API has a different base URL
   headers: {
     'Content-Type': 'application/json',
   },
