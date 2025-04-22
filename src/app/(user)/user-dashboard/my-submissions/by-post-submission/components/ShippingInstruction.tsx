@@ -52,7 +52,7 @@ export default function ShippingInstruction({ handleNext }: FormStepProps) {
         >
           Back
         </Button>
-        <ButtonGradient size={"lg"} className="py-3 px-14 h-auto" type="submit" onClick={handleNext}>
+        <ButtonGradient size={"lg"} className="py-3 px-14 h-auto" type="button" onClick={handleNext} disabled={!checked}>
           Next
         </ButtonGradient>
       </div>

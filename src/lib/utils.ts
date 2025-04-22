@@ -11,3 +11,9 @@ export function formatDateToReadable(dateString: string): string {
   const options: Intl.DateTimeFormatOptions = { year: 'numeric', month: 'long', day: 'numeric' };
   return date.toLocaleDateString('en-US', options);
 }
+
+export function removeEmpty<T extends Object>(obj: T) {
+  return Object.fromEntries(
+    Object.entries(obj).filter(([_, v]) => v != null && v !== '')
+  );
+}

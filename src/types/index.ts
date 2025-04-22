@@ -65,6 +65,7 @@ export interface UserProfile {
   password?: string;
   confirmPassword?: string;
   paymentMethod?: string;
+  profileImage?: string
 }
 
 export interface DialogProps {
@@ -85,6 +86,7 @@ export interface User {
   updatedAt: string; // Date string (ISO 8601 format)
   subscription?: Subscription
   profileImageUrl?: string
+  role: string
 }
 
 

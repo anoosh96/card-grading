@@ -14,7 +14,10 @@ export interface SubmissionData {
   overallProgress: number;
   estimatedCompletion: string;
   submissionStatus: string;
-  step: number
+  step: number;
+  fullName?: string;
+  shippingAddress?: string;
+  phoneNumber?: string;
 }
 
 interface SubmissionStore {
@@ -38,7 +41,10 @@ export const useSubmissionStore = create<SubmissionStore>((set) => ({
     estimatedCompletion: '',
     trackingNumber: '',
     submissionStatus: '',
-    step: 1
+    step: 1,
+    fullName: '',
+    shippingAddress: '',
+    phoneNumber: ''
   },
   setSubmission: (data) =>
     set((state) => ({
@@ -60,7 +66,10 @@ export const useSubmissionStore = create<SubmissionStore>((set) => ({
         estimatedCompletion: '',
         trackingNumber: '',
         submissionStatus: '',
-        step: 1
+        step: 1,
+        fullName: '',
+        shippingAddress: '',
+        phoneNumber: ''
       },
     }),
 }));

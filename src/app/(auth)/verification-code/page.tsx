@@ -8,10 +8,13 @@ import { useFormState } from "@/hooks/useFormState";
 import { useVerifyEmail } from "@/hooks/useVerifyEmail";
 import { useResendVerification } from "@/hooks/useResendVerification";
 import { AxiosError } from "axios";
+import { useUserStore } from "@/stores/userStore";
+import { User } from "@/types";
 
 export default function VerificationCodePage() {
   const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
   const router = useRouter();
+  const { user, setUser } = useUserStore()
 
   const { values, setValue, errors, resetForm, handleApiValidationError } = useFormState({
     code: ''
@@ -48,6 +51,7 @@ export default function VerificationCodePage() {
     try {
       await verifyCodeMutation.mutateAsync({ code: values.code });
       resetForm();
+      setUser({...user, emailVerified: true} as User)
       router.push('/user-dashboard');
     } catch (error) {
       if (error instanceof AxiosError && error?.response?.data?.errors) {

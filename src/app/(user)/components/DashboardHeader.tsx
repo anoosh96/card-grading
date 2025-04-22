@@ -1,10 +1,23 @@
+'use client'
+
 import CustomInput from "@/components/common/CustomInput";
 import { useUserStore } from "@/stores/userStore";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 
 export function DashboardHeader() {
 
   const { user } = useUserStore()
+  const router = useRouter()
+
+  useEffect(() => {
+    if (user) {
+      if (!user.emailVerified) {
+        router.push('/verification-code');
+      }
+    }
+  }, [user]);
 
   return (
     <header className="bg-white ml-0 md:ml-20 lg:ml-72">

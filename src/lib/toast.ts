@@ -2,9 +2,25 @@ import { enqueueSnackbar, OptionsObject } from 'notistack';
 
 import { AxiosError } from 'axios';
 
-interface ErrorResponse {
-  message?: string | string[];
+
+interface ValidationError {
+  path: string[];
+  message: string;
 }
+
+interface ErrorResponse {
+  message: string;
+  errors?: ValidationError[];
+}
+
+export function getFirstErrorMessage(error: ErrorResponse): string {
+  console.log(error)
+  if (error.errors && error.errors.length > 0) {
+    return error.errors[0].message;
+  }
+  return error.message;
+}
+
 
 export const handleRequestError = (error: unknown) => {
   const axiosError = error as AxiosError;
@@ -12,10 +28,20 @@ export const handleRequestError = (error: unknown) => {
   if (axiosError?.response) {
     const msg = axiosError.response.data as ErrorResponse;
 
-    // Handle both string and array cases
-    const errorMessage = Array.isArray(msg?.message)
-      ? msg.message.join(', ') // Join array messages into a single string
-      : msg?.message || 'Something went wrong. Please try again.';
+    let errorMessage = 'Something went wrong. Please try again.';
+
+    if (Array.isArray(msg?.message)) {
+      // Case: message is an array
+      errorMessage = msg.message.join(', ');
+    } else if (typeof msg?.message === 'string') {
+      // Case: message is a string
+      errorMessage = msg.message;
+    }
+
+    // If there are validation errors, prefer the first one
+    if (msg.errors && msg.errors.length > 0) {
+      errorMessage = msg.errors[0].message;
+    }
 
     showToast(errorMessage, {
       variant: 'error',

@@ -22,3 +22,13 @@ export const submissionStatus = {
   GRADING_IN_PROGRESS: 'GRADING_IN_PROGRESS',
   GRADING_COMPLETE: 'GRADING_COMPLETE'
 }
+
+export const submissionSources = {
+  BY_POST: 'BY_POST',
+  BY_FORM: 'BY_FORM'
+}
+
+export const USER_ROLES = {
+  ADMIN: 'ADMIN',
+  CUSTOMER: 'CUSTOMER'
+}

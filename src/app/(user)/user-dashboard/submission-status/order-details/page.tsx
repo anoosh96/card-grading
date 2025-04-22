@@ -50,10 +50,12 @@ function OrderDetails() {
     <section className="bg-white p-7">
       <h1 className="heading-primary font-bold mb-10">Order Details</h1>
 
-      <CardImages
-        frontImage={submission.card.frontImage}
-        backImage={submission.card.backImage}
-      />
+      { submission.card.frontImage &&
+        <CardImages
+          frontImage={submission.card.frontImage}
+          backImage={submission.card.backImage}
+        />
+      }
 
       <SubmissionSummary
         title="Submission Summary"

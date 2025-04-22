@@ -11,6 +11,7 @@ import { useSubmissionStore } from "@/stores/submissionStore";
 import { FormStepProps } from "@/types";
 import { useEffect, useMemo } from "react";
 import { useFormState } from "@/hooks/useFormState";
+import { submissionSources } from "@/app/(user)/lib/utils/constants";
 
 export default function CardDetails({ handleNext }: FormStepProps) {
   const { data: enums } = useEnums();
@@ -32,7 +33,7 @@ export default function CardDetails({ handleNext }: FormStepProps) {
     serviceType: submission.serviceType,
     frontImage: submission.frontImage,
     backImage: submission.backImage,
-    submissionSource: "BY_FORM",
+    submissionSource: submissionSources.BY_FORM,
   });
 
   useEffect(() => {

@@ -108,13 +108,15 @@ export function DashboardSubmissionTracking({ showViewAll = false }: SubmissionT
                 </td>
                 <td className="py-3 px-4">
                   <div className="flex items-center gap-3">
-                    <Image
-                      src={submission.card.frontImage as string}
-                      alt={submission.card.cardName}
-                      width={35}
-                      height={40}
-                      className="object-fill"
-                    />
+                    { submission.card?.frontImage &&
+                      <Image
+                        src={submission.card.frontImage as string}
+                        alt={submission.card.cardName}
+                        width={35}
+                        height={40}
+                        className="object-fill"
+                      />
+                    }
                     <span className="text-sm text-dark-purple">{submission.card.cardName}</span>
                   </div>
                 </td>

@@ -9,6 +9,8 @@ import { useLogin } from "@/hooks/useLogin";
 import { handleRequestError } from "@/lib/toast";
 import { AxiosError } from "axios";
 import { Loader2 } from "lucide-react";
+import { User } from "@/types";
+import { USER_ROLES } from "@/app/(user)/lib/utils/constants";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -19,17 +21,22 @@ export default function LoginPage() {
 
   const loginMutation = useLogin();
 
+  const loginBasedonRole = (user: User) => {
+    if (user.emailVerified) {
+      const path = user.role == USER_ROLES.ADMIN ? '/dashboard' : '/user-dashboard'
+      router.push(path);
+    } else {
+      router.push('/verification-code');
+    }
+  }
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
   
     try {
       const { data } = await loginMutation.mutateAsync(values);
   
-      if (data.user.emailVerified) {
-        router.push('/user-dashboard');
-      } else {
-        router.push('/verification-code');
-      }
+      loginBasedonRole(data.user)
     } catch (error) {
       resetFormErrors();
   

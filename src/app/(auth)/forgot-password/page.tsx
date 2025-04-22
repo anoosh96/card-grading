@@ -1,5 +1,6 @@
 'use client'
 
+import { useState, useEffect } from "react";
 import { ButtonGradient } from "@/components/common/ButtonGradient";
 import CustomInput from "@/components/common/CustomInput";
 import Link from "next/link";
@@ -14,16 +15,33 @@ export default function ForgotPasswordPage() {
 
   const forgotPasswordMutation = useForgotPassword();
 
-  const handleSubmit = async () => {
-    if (!values.email) {
-      // Optional local validation
-      return;
+  const [isCooldown, setIsCooldown] = useState(false);
+  const [cooldownTime, setCooldownTime] = useState(10);
+
+  useEffect(() => {
+    let timer: NodeJS.Timeout;
+    if (isCooldown) {
+      timer = setInterval(() => {
+        setCooldownTime(prev => {
+          if (prev === 1) {
+            clearInterval(timer);
+            setIsCooldown(false);
+            return 10;
+          }
+          return prev - 1;
+        });
+      }, 1000);
     }
+    return () => clearInterval(timer);
+  }, [isCooldown]);
+
+  const handleSubmit = async () => {
+    if (!values.email) return;
 
     try {
       await forgotPasswordMutation.mutateAsync({ email: values.email });
       resetForm();
-      //router.push('/verification-code');
+      setIsCooldown(true);
     } catch (error) {
       if (error instanceof AxiosError && error?.response?.data?.errors) {
         handleApiValidationError(error.response.data);
@@ -52,9 +70,13 @@ export default function ForgotPasswordPage() {
       <ButtonGradient
         className="w-full mt-6 py-6"
         onClick={handleSubmit}
-        disabled={forgotPasswordMutation.isPending}
+        disabled={forgotPasswordMutation.isPending || isCooldown}
       >
-        {forgotPasswordMutation.isPending ? 'Submitting...' : 'Recover Password'}
+        {forgotPasswordMutation.isPending
+          ? 'Submitting...'
+          : isCooldown
+          ? `Please wait ${cooldownTime}s before trying again`
+          : 'Recover Password'}
       </ButtonGradient>
 
       <div className="mt-4 text-lg font-medium text-center">
