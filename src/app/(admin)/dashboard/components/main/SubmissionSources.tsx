@@ -1,6 +1,10 @@
 import DashboardCardsInProgressIcon from "@/components/svgs/DashboardCardsInProgressIcon";
 
-export function SubmissionSources() {
+interface SubmissionSourcesProps {
+  inProcessing: number
+}
+
+export function SubmissionSources({ inProcessing }: SubmissionSourcesProps) {
   return (
     <div className="bg-white w-full rounded-[1.25rem] p-7 shadow-sm">
       <div className="flex flex-col items-start  gap-6 mb-4">
@@ -9,7 +13,7 @@ export function SubmissionSources() {
         </div>
         <div>
           <div className="flex items-end">
-            <h2 className="text-[2rem] text-charcol font-bold">87</h2>
+            <h2 className="text-[2rem] text-charcol font-bold">{ inProcessing }</h2>
             <p className="text-base text-charcol px-2 mb-1">Cards</p>
           </div>
         </div>

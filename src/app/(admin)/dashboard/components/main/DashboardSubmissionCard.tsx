@@ -1,8 +1,11 @@
 import DashboardTotalCardsIcon from "@/components/svgs/DashboardTotalCardsIcons";
 import React from "react";
 import { SubmissionSources } from "./SubmissionSources";
+import { useAdminSubmissionAnalysis } from "@/hooks/useAdminSubmissionAnalysis";
 
 function DashboardSubmissionCard() {
+    const { data, isLoading, isError } = useAdminSubmissionAnalysis()
+  
   return (
     <div className="flex items-stretch flex-col lg:flex-row gap-5">
       <div className="bg-white w-full lg:w-2/5 rounded-[1.25rem] p-7 shadow-sm">
@@ -12,7 +15,7 @@ function DashboardSubmissionCard() {
           </div>
           <div>
             <div className="flex items-end">
-              <h2 className="text-[2rem] text-charcol font-bold">1,250</h2>
+              <h2 className="text-[2rem] text-charcol font-bold">{ data?.totalSubmissions }</h2>
               <p className="text-base text-charcol px-2 mb-1">Cards</p>
             </div>
           </div>
@@ -20,7 +23,7 @@ function DashboardSubmissionCard() {
         <h3 className="font-medium text-xl text-charcol">Total Cards</h3>
       </div>
 
-      <SubmissionSources />
+      <SubmissionSources inProcessing={data?.inProcessingCount}/>
     </div>
   );
 }

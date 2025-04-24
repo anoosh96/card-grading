@@ -112,6 +112,20 @@ export interface Submission {
   dateTime: string;
 }
 
+export interface SubmissionInfo {
+  id: string;
+  submissionSource: string;
+  trackingNumber: string;
+  overallProgress: number;
+  estimatedCompletion: string;
+  submissionStatus: string;
+}
+
+export interface AiGrade {
+  grade: number;
+  aiRemarks: string;
+}
+
 export interface SignUpResponse {
   user: User
   token: string

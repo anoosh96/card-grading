@@ -52,8 +52,8 @@ export default function Subscription({ handleNext, handlePrevious }: FormStepPro
         serviceType: submission.serviceType,
         submissionSource: submission.submissionSource,
       },
-      frontImage: submission.frontImage,
-      backImage: submission.backImage
+      frontImage: submission.frontImage as File,
+      backImage: submission.backImage as File
     }, {
       onSuccess: async (data) => {
         const trackingData = data.data.submission

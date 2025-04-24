@@ -112,12 +112,12 @@ export default function CardDetails({ handleNext }: FormStepProps) {
   // Memoized preview URLs
   const frontImagePreview = useMemo(() => {
     if (!values.frontImage) return undefined;
-    return URL.createObjectURL(values.frontImage);
+    return URL.createObjectURL(values.frontImage as File);
   }, [values.frontImage]);
 
   const backImagePreview = useMemo(() => {
     if (!values.backImage) return undefined;
-    return URL.createObjectURL(values.backImage);
+    return URL.createObjectURL(values.backImage as File);
   }, [values.backImage]);
 
   return (

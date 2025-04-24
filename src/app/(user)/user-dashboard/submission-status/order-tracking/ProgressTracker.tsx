@@ -38,7 +38,7 @@ export default function ProgressTracker({ trackingNumber, overallProgress, estim
         </div>
         <div className="mt-8 pl-4 space-y-6">
           <div className="flex items-center gap-8">
-              <div className={`flex items-center justify-center rounded-full w-8 h-6 sm:h-8 ${statusMap[submissionStatus] >= 1 ? 'bg-light-red': 'bg-soft-grey'} text-white text-sm`}>
+              <div className={`flex items-center justify-center rounded-full w-8 h-6 sm:h-8 ${statusMap[submissionStatus] >= 1 ? 'bg-light-red text-white': 'bg-soft-grey text-black'}  text-sm`}>
                 <span>1</span>
               </div>
               <div>

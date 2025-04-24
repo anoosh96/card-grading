@@ -18,7 +18,7 @@ export const dateFormat = (datetime: string) => {
 
   const formatted = `${day}${getOrdinalSuffix(day)} ${month} ${time}`;
 
-  
+
   return formatted
 }
 
@@ -27,6 +27,7 @@ export const capitalize = (str: string) => {
 }
 
 export const formatSubmissionStatus = (status: string) => {
+  console.log(status)
   switch (status) {
     case 'SUBMISSION_PENDING':
       return 'Submission Pending';
@@ -36,6 +37,8 @@ export const formatSubmissionStatus = (status: string) => {
       return 'Grading In Progress';
     case 'GRADING_COMPLETE':
       return 'Grading Complete';
+    case 'SUBMISSION_REJECTED':
+      return 'Submission Rejected';
     default:
       return 'Unknown Status';
   }

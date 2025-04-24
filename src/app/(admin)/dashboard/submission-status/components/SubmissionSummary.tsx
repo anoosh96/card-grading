@@ -3,7 +3,9 @@
 
 import { useState, useEffect } from "react";
 import { Pencil, Check, X } from "lucide-react";
-import { SubmissionData } from "../add-post-types";
+import { SubmissionData } from "../add-post/add-post-types";
+import CustomSelect from "@/components/common/CustomSelect";
+import { useEnums } from "@/hooks/useEnums";
 
 interface SubmissionSummaryProps {
   title: string;
@@ -22,6 +24,9 @@ const SubmissionSummary = ({
 }: SubmissionSummaryProps) => {
   const [formData, setFormData] = useState<SubmissionData>(data);
   const [isEditing, setIsEditing] = useState(false);
+  
+  // Fetch enums for dropdown options
+  const { data: enumData, isLoading } = useEnums();
 
   useEffect(() => {
     setFormData(data);
@@ -44,6 +49,22 @@ const SubmissionSummary = ({
     setIsEditing(false);
   };
 
+  // Get dropdown options from enum data
+  const getCategoryOptions = () => {
+    // You might need to adjust these based on your actual enum data structure
+    return enumData?.cardTypes || [];
+  };
+
+  const getConditionOptions = () => {
+    return enumData?.conditionEstimateOptions || 
+      ["MINT", "NEAR_MINT", "GOOD", "FAIR", "POOR"];
+  };
+
+  const getStatusOptions = () => {
+    return enumData?.submissionStatusOptions || 
+      ["SUBMISSION_PENDING", "SUBMISSION_RECEIVED", "GRADING_IN_PROGRESS", "GRADING_COMPLETE"];
+  };
+
   const fields = Object.keys(data).map((key) => ({
     label: key
       .replace(/([A-Z])/g, " $1")
@@ -51,6 +72,19 @@ const SubmissionSummary = ({
     value: formData[key as keyof SubmissionData],
     key: key as keyof SubmissionData,
   }));
+
+  // Determine if a field should be rendered as a dropdown
+  const isDropdownField = (key: string) => {
+    return key === "category" || key === "condition" || key === "status";
+  };
+
+  // Get options for a specific dropdown field
+  const getOptionsForField = (key: string) => {
+    if (key === "category") return getCategoryOptions();
+    if (key === "condition") return getConditionOptions();
+    if (key === "status") return getStatusOptions();
+    return [];
+  };
 
   return (
     <div
@@ -113,13 +147,20 @@ const SubmissionSummary = ({
               >
                 <span className="font-medium text-gray-900">{label}</span>
                 {isEditing ? (
-                  key === "condition" ? (
-                    <textarea
-                      value={value}
-                      onChange={(e) => handleChange(key, e.target.value)}
-                      className="border border-gray-300 rounded px-2 py-1 w-full min-h-[60px] resize-y"
-                    />
+                  isDropdownField(key) ? (
+                    // Render CustomSelect for dropdown fields
+                    <div className="w-full">
+                      <CustomSelect
+                        options={getOptionsForField(key)}
+                        selectedOption={value || ""}
+                        setSelectedOption={(selected) => handleChange(key, selected as string)}
+                        borderColor="border-gray-300"
+                        bg="bg-white"
+                        className="w-full"
+                      />
+                    </div>
                   ) : (
+                    // Render regular input for other fields
                     <input
                       type="text"
                       value={value}

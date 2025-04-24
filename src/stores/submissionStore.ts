@@ -1,14 +1,15 @@
 import { create } from "zustand";
 
 export interface SubmissionData {
+  id: string;
   cardName: string;
   category: string;
-  cardType: string;
+  cardType: string | null;
   yearOfRelease: number | null;
   conditionEstimate: string;
   serviceType: string;
-  frontImage: File | null;
-  backImage: File | null;
+  frontImage: string | null | File;
+  backImage: string | null | File;
   submissionSource: string;
   trackingNumber: string;
   overallProgress: number;
@@ -18,6 +19,11 @@ export interface SubmissionData {
   fullName?: string;
   shippingAddress?: string;
   phoneNumber?: string;
+  submissionDate?: string;
+  email?: string;
+  editing?: boolean;
+  grade?: number | null;
+  aiRemarks?: string;
 }
 
 interface SubmissionStore {
@@ -28,6 +34,7 @@ interface SubmissionStore {
 
 export const useSubmissionStore = create<SubmissionStore>((set) => ({
   submission: {
+    id: "",
     cardName: "",
     category: "",
     cardType: "",
@@ -44,7 +51,12 @@ export const useSubmissionStore = create<SubmissionStore>((set) => ({
     step: 1,
     fullName: '',
     shippingAddress: '',
-    phoneNumber: ''
+    phoneNumber: '',
+    submissionDate: '',
+    email: '',
+    editing: false,
+    grade: null,
+    aiRemarks: ''
   },
   setSubmission: (data) =>
     set((state) => ({
@@ -69,7 +81,13 @@ export const useSubmissionStore = create<SubmissionStore>((set) => ({
         step: 1,
         fullName: '',
         shippingAddress: '',
-        phoneNumber: ''
+        phoneNumber: '',
+        id: "",
+        submissionDate: '',
+        email: '',
+        editing: false,
+        grade: null,
+        aiRemarks: ''
       },
     }),
 }));

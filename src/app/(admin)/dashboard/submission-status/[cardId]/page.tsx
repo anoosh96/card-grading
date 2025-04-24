@@ -1,71 +1,82 @@
-"use client";
+'use client'
 
-import React, { useState } from "react";
-import SubmissionSummary from "../add-post/components/SubmissionSummary";
-import { SubmissionData } from "../add-post/add-post-types";
-import CardImages from "@/app/(user)/user-dashboard/submission-status/order-details/CardImages";
-import { ButtonGradient } from "@/components/common/ButtonGradient";
-import { Button } from "@/components/ui/button";
-import { useRouter } from "next/navigation";
+import { submissionStatus } from "@/app/(user)/lib/utils/constants";
+import { useAdminSubmissionDetails } from "@/hooks/useAdminSubmissionDetails";
+import { useSubmissionStore } from "@/stores/submissionStore";
+import { useParams, useRouter } from "next/navigation";
+import { useEffect } from "react";
+import CardDetails from "../components/CardDetails";
+import OrderDetails from "../components/OrderDetails";
 
-const CardDetailedView = () => {
-  const router = useRouter();
-  const [data, setData] = useState<SubmissionData>({
-    name: "Henrietta Bogisich",
-    email: "bogisich@gmail.com",
-    orderId: "01",
-    cardName: "Charizard Holo",
-    category: "Pokemon",
-    yearOfRelease: "1999",
-    condition: "Good",
-    submissionDate: "2/27/2025",
-    status: "Pending",
-  });
 
-  const handleUpdate = (updatedData: SubmissionData) => {
-    setData(updatedData);
-  };
+export default function SubmissionStatusPage() {
+  const { cardId } = useParams();
+  const { data, isLoading, isError } = useAdminSubmissionDetails(cardId as string);
+  const { submission, setSubmission } = useSubmissionStore();
+
+  useEffect(() => {
+    if (data) {
+      console.log(data)
+      const {
+        id,
+        trackingNumber,
+        overallProgress,
+        submissionStatus,
+        estimatedCompletion,
+        submissionSource,
+        dateTime,
+        card,
+        user
+      } = data.data;
+
+      setSubmission({
+        id,
+        cardName: card.cardName,
+        category: card.category,
+        cardType: card.cardType,
+        yearOfRelease: card.yearOfRelease,
+        conditionEstimate: card.conditionEstimate,
+        serviceType: card.serviceType, // Populate as needed
+        frontImage: card.frontImage,
+        backImage: card.backImage,
+        submissionSource,
+        trackingNumber,
+        overallProgress,
+        estimatedCompletion,
+        submissionStatus,
+        step: 1, // Set appropriately
+        fullName: user.fullName, // Populate as needed
+        shippingAddress: user.shippingAddress, // Populate as needed
+        phoneNumber: user.phoneNumber, // Populate as needed
+        submissionDate: dateTime,
+        email: user.email,
+        grade: card?.grade?.grade,
+        aiRemarks: card?.grade?.aiRemarks || ''
+      });
+    }
+  }, [data, setSubmission]);
+
+  if (isLoading) {
+    return <div>Loading submission details...</div>;
+  }
+
+  if (isError) {
+    return <div>Error loading submission details.</div>;
+  }
+
+  if (!data || !submission?.id) {
+    return <div>No submission data available.</div>;
+  }
 
   return (
-    <div className="bg-white border-md px-4 py-4 rounded-md">
-      <div className="mb-2">
-        <h1 className="heading-primary font-bold mb-1">Submission Status</h1>
-        <p className="heading-tertiary text-muted-foreground">
-          Latest actions across the grading workflow
-        </p>
-      </div>
-
-      <div>
-        <CardImages
-          frontImage="/assets/images/mike-trout.svg"
-          backImage="/assets/images/mike-trout.svg"
-        />
-      </div>
-
-      <SubmissionSummary
-        title="Submission Summary"
-        data={data}
-        onSubmit={handleUpdate}
-        classNames="mt-4"
-      />
-
-      <div className="flex items-center gap-6 ml-2 sm:ml-6 mt-4">
-        <Button
-          onClick={() => router.back()}
-          variant={"ghost"}
-          className="rounded-full text-light-grey-100 heading-secondary font-medium bg-[#E0E0E0] hover:bg-gray-300 hover:text-black"
-        >
-          Reject Submissions
-        </Button>
-        <ButtonGradient
-          onClick={() => router.push(`/dashboard/grading-review`)}
-          className="max-w-[8rem] w-full"
-        >
-          Start Grading
-        </ButtonGradient>
-      </div>
-    </div>
-  );
-};
-
-export default CardDetailedView;
+    <>
+      {
+        submission.submissionStatus !== submissionStatus.SUBMISSION_PENDING && !submission.editing 
+          ?
+          <OrderDetails />
+          :
+          <CardDetails />
+      }
+    </>
+  )
+}

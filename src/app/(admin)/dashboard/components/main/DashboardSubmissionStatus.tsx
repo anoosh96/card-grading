@@ -1,24 +1,18 @@
-"use client";
+'use client';
 
-import { FC, useState } from "react";
-import { ChevronRight, Eye, MoreHorizontal, Trash2 } from "lucide-react";
-import { CustomCheckbox } from "@/components/ui/checkbox";
-import CalendarIcon from "@/components/svgs/dashboard/CalendarIcon";
-import CustomDropdown from "@/components/common/CustomDropDown/CustomDropDown";
-import Link from "@/components/common/CustomLink/CustomLink";
-import { useRouter } from "next/navigation";
-// import DeleteModal from "@/modals/DeleteModal";
-import CustomModal from "@/components/common/CustomModal";
-
-// Define the submission data type
-type Submission = {
-  id: number;
-  date: string;
-  action: string;
-  source: string;
-  status: "Completed" | "Pending" | "Grading";
-  selected?: boolean;
-};
+import { FC, useState } from 'react';
+import { ChevronRight, Eye, MoreHorizontal, Trash2 } from 'lucide-react';
+import { CustomCheckbox } from '@/components/ui/checkbox';
+import CalendarIcon from '@/components/svgs/dashboard/CalendarIcon';
+import CustomDropdown from '@/components/common/CustomDropDown/CustomDropDown';
+import Link from '@/components/common/CustomLink/CustomLink';
+import { useRouter } from 'next/navigation';
+import CustomModal from '@/components/common/CustomModal';
+import { dateFormat, formatSubmissionStatus } from '@/app/(user)/lib/utils/helpers';
+import { submissionStatus } from '@/app/(user)/lib/utils/constants';
+import { useAdminSubmissions } from '@/hooks/useAdminSubmissions';
+import { Submission, SubmissionInfo } from '@/types';
+import { useAdminDeleteSubmission } from '@/hooks/useAdminDeleteSubmission';
 
 interface DashboardSubmissionStatusProps {
   isMoreItem?: boolean;
@@ -28,92 +22,70 @@ const DashboardSubmissionStatus: FC<DashboardSubmissionStatusProps> = ({
   isMoreItem = false,
 }) => {
   const [isDeleteModal, setIsDeleteModal] = useState(false);
+  const [selectedSubmissionId, setSelectedSubmissionId] = useState<string | null>(null);
+  const [limit] = useState<number>(10);
+  const [page, setPage] = useState<number>(1);
+
   const router = useRouter();
+  const { data, isLoading, isError } = useAdminSubmissions(limit, page);
+  const deleteMutation = useAdminDeleteSubmission();
 
-  // Sample data based on the image
-  const [submissions, setSubmissions] = useState<Submission[]>([
-    {
-      id: 1,
-      date: "05 Mar 10:30 AM",
-      action: "Card Received",
-      source: "By Post",
-      status: "Completed",
-      selected: true,
-    },
-    {
-      id: 2,
-      date: "05 Mar 10:30 AM",
-      action: "Grade Confirmed",
-      source: "By Form",
-      status: "Pending",
-    },
-    {
-      id: 3,
-      date: "05 Mar 10:30 AM",
-      action: "Online Submission",
-      source: "By Form",
-      status: "Grading",
-    },
-    {
-      id: 4,
-      date: "05 Mar 10:30 AM",
-      action: "Shipped to Customer",
-      source: "By Post",
-      status: "Pending",
-    },
-    {
-      id: 5,
-      date: "05 Mar 10:30 AM",
-      action: "Online Submission",
-      source: "By Form",
-      status: "Grading",
-    },
-    {
-      id: 6,
-      date: "05 Mar 10:30 AM",
-      action: "Card Received",
-      source: "By Form",
-      status: "Completed",
-    },
-  ]);
-
-  // Toggle selection for a submission
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const toggleSelection = (id: number) => {
-    setSubmissions(
-      submissions.map((submission) =>
-        submission.id === id
-          ? { ...submission, selected: !submission.selected }
-          : submission
-      )
-    );
+  const handleDeleteClick = (submissionId: string) => {
+    setSelectedSubmissionId(submissionId);
+    setIsDeleteModal(true);
   };
 
-  // Get status badge styling based on status
-  const getStatusBadge = (status: Submission["status"]) => {
+  const handleConfirmDelete = async () => {
+    if (selectedSubmissionId) {
+      await deleteMutation.mutateAsync(selectedSubmissionId);
+      setIsDeleteModal(false);
+      setSelectedSubmissionId(null);
+    }
+  };
+
+  const handleViewDetailClick = (submission: SubmissionInfo) => {
+    let route = `/dashboard/submission-status/${submission.id}`
+    router.push(route)
+  }
+
+  const submissions = data?.data?.submissions || [];
+  const meta = data?.data?.meta;
+  const totalPages = meta?.totalPages || 1;
+  const currentPage = meta?.currentPage || 1;
+
+  const getStatusBadge = (status: string) => {
     switch (status) {
-      case "Completed":
+      case submissionStatus.GRADING_COMPLETE:
         return (
           <div className="text-center rounded-full p-1.5 bg-green-100 text-[#3A974C]">
-            {status}
+            {formatSubmissionStatus(status)}
           </div>
         );
-      case "Pending":
+      case submissionStatus.SUBMISSION_PENDING:
         return (
           <div className="text-center rounded-full p-1.5 bg-[#fcebe7] text-[#E3350D]">
-            {status}
+            {formatSubmissionStatus(status)}
           </div>
         );
-      case "Grading":
+      case submissionStatus.SUBMISSION_RECEIVED:
         return (
           <div className="text-center rounded-full p-1.5 bg-[#fbf6e2] text-[#FFCC00]">
-            {status}
+            {formatSubmissionStatus(status)}
+          </div>
+        );
+      case submissionStatus.SUBMISSION_REJECTED:
+        return (
+          <div className="text-center rounded-full p-1.5 bg-[#fcebe7] text-[#E3350D]">
+            {formatSubmissionStatus(status)}
           </div>
         );
       default:
-        return <div>{status}</div>;
+        return <div>{formatSubmissionStatus(status)}</div>;
     }
   };
+
+  if (isLoading) return <div className="p-5">Loading submissions…</div>;
+  if (isError) return <div className="p-5 text-red-500">Failed to load submissions.</div>;
 
   return (
     <div className="w-full mx-auto bg-white rounded-lg shadow-sm border">
@@ -141,73 +113,46 @@ const DashboardSubmissionStatus: FC<DashboardSubmissionStatusProps> = ({
               <th className="w-10 p-3">
                 <CustomCheckbox />
               </th>
-              <th className="p-3">Order Id</th>
+              <th className="p-3">Track No</th>
               <th className="p-3">Date & Time</th>
-              <th className="p-3">Action</th>
+              {/* <th className="p-3">Action</th> */}
               <th className="p-3">Submission Source</th>
               <th className="p-3">Card Status</th>
               <th className="w-10 p-3"></th>
             </tr>
           </thead>
           <tbody className="divide-y">
-            {submissions.map((submission) => (
-              <tr
-                key={submission.id}
-                className={
-                  submission.selected
-                    ? "bg-light-grey"
-                    : "hover:bg-light-grey-50"
-                }
-              >
+            {submissions.map((submission: Submission) => (
+              <tr key={submission.id} className="hover:bg-light-grey-50">
                 <td className="p-3">
-                  <CustomCheckbox
-                    checked={submission.selected}
-                    onCheckedChange={() => toggleSelection(submission.id)}
-                  />
+                  <CustomCheckbox />
                 </td>
-                <td className="p-3 font-medium">{submission.id}</td>
+                <td className="p-3 font-medium">#{submission.trackingNumber}</td>
                 <td className="p-3">
                   <div className="flex items-center gap-1">
                     <CalendarIcon />
-                    <span>{submission.date}</span>
+                    <span>{dateFormat(submission.dateTime)}</span>
                   </div>
                 </td>
-                <td className="p-3">{submission.action}</td>
-                <td className="p-3">{submission.source}</td>
-                <td className="p-3">{getStatusBadge(submission.status)}</td>
-                {/* <td className="p-3">
-                  <CustomDropdown
-                    items={dropdownItems}
-                    dropdownClassName="right-2"
-                  >
-                    <MoreHorizontal className="h-4 w-4" />
-                  </CustomDropdown>
-                </td> */}
+                {/* <td className="p-3">{}</td> */}
+                <td className="p-3">{submission.submissionSource}</td>
+                <td className="p-3">{getStatusBadge(submission.submissionStatus)}</td>
                 <td className="p-3">
                   <CustomDropdown
                     items={[
                       {
-                        label: "View Detail",
+                        label: 'View Detail',
                         icon: <Eye className="h-4 w-4" />,
-                        onClick: () => {
-                          if (submission.source === "By Post") {
-                            router.push(
-                              `/dashboard/submission-status/add-post`
-                            );
-                          } else if (submission.source === "By Form") {
-                            router.push(
-                              `/dashboard/submission-status/${submission.id}`
-                            );
-                          }
-                        },
+                        onClick: () => handleViewDetailClick(submission)
                       },
                       {
-                        label: "Delete",
+                        label: 'Delete',
                         icon: <Trash2 className="h-4 w-4" />,
-                        onClick: () => setIsDeleteModal(true),
+                        onClick: () => handleDeleteClick(submission.id),
                       },
                     ]}
                     dropdownClassName="right-2"
+                    position='left'
                   >
                     <MoreHorizontal className="h-4 w-4" />
                   </CustomDropdown>
@@ -218,22 +163,46 @@ const DashboardSubmissionStatus: FC<DashboardSubmissionStatusProps> = ({
         </table>
       </div>
 
-      {/* <DeleteModal
-        isOpen={isDeleteModal}
-        onClose={() => setIsDeleteModal(false)}
-        message="Are you sure you want to delete this order?"
-        handleDelete={() => console.log("on Delete")}
-      /> */}
+      {/* Pagination */}
+      {totalPages > 1 && !isMoreItem && (
+        <div className="flex justify-center items-center gap-4 mt-6 mb-8">
+          <button
+            onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
+            disabled={currentPage === 1}
+            className={`px-4 py-2 rounded border text-sm ${currentPage === 1
+                ? 'text-gray-400 border-gray-300'
+                : 'text-primary border-primary'
+              }`}
+          >
+            Previous
+          </button>
+
+          <span className="text-base font-medium">
+            Page {currentPage} of {totalPages}
+          </span>
+
+          <button
+            onClick={() => setPage((prev) => Math.min(prev + 1, totalPages))}
+            disabled={currentPage === totalPages}
+            className={`px-4 py-2 rounded border text-sm ${currentPage === totalPages
+                ? 'text-gray-400 border-gray-300'
+                : 'text-primary border-primary'
+              }`}
+          >
+            Next
+          </button>
+        </div>
+      )}
 
       <CustomModal
         isOpen={isDeleteModal}
         title="Are you sure you want to delete this order?"
         message="This action cannot be undone."
-        onConfirm={() => {
-          console.log("Order Deleted!");
+        onConfirm={handleConfirmDelete}
+        onCancel={() => {
           setIsDeleteModal(false);
+          setSelectedSubmissionId(null);
         }}
-        onCancel={() => setIsDeleteModal(false)}
         cn="!p-20 !rounded-2xl"
       />
     </div>

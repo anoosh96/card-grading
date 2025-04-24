@@ -1,5 +1,6 @@
 import Image from "next/image";
 import React from "react";
+import { AuthRedirect } from "./AuthRedirect";
 
 export default function AuthLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -9,7 +10,7 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
           <div className="text-3xl mb-10 lg:mb-20 mt-10 lg:mt-0">
             Logo
           </div>
-          { children }
+          <AuthRedirect>{ children }</AuthRedirect>
         </div>
       </div>
       <div className="relative">

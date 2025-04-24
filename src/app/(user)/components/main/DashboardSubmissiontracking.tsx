@@ -44,6 +44,32 @@ export function DashboardSubmissionTracking({ showViewAll = false }: SubmissionT
     }
   };
 
+  const getStatusBadge = (status: string) => {
+    switch (status) {
+      case submissionStatus.GRADING_COMPLETE:
+        return (
+          <div className="text-center rounded-full p-1.5 bg-green-100 text-[#3A974C]">
+            {formatSubmissionStatus(status)}
+          </div>
+        );
+      case submissionStatus.SUBMISSION_PENDING:
+      case submissionStatus.SUBMISSION_REJECTED:
+        return (
+          <div className="text-center rounded-full p-1.5 bg-[#fcebe7] text-[#E3350D]">
+            {formatSubmissionStatus(status)}
+          </div>
+        );
+      case submissionStatus.SUBMISSION_RECEIVED:
+        return (
+          <div className="text-center rounded-full p-1.5 bg-[#fbf6e2] text-[#FFCC00]">
+            {formatSubmissionStatus(status)}
+          </div>
+        );
+      default:
+        return <div>{formatSubmissionStatus(status)}</div>;
+    }
+  };
+
   const dropdownItems = (submissionId: string) => [
     {
       label: "View Detail",
@@ -85,89 +111,89 @@ export function DashboardSubmissionTracking({ showViewAll = false }: SubmissionT
       </div>
 
       <div className="w-full overflow-x-auto md:max-w-full">
-        <table className="w-full min-w-[600px] md:min-w-[800px] lg:min-w-full">
-          <thead>
-            <tr className="border-b px-16">
-              <th className="text-left py-3 pl-16 pr-4">Track No</th>
-              <th className="text-left py-3 pl-16 pr-4">Date and Time</th>
-              <th className="text-left py-3 px-4">Card Name</th>
-              <th className="text-left py-3 px-4">Submission Source</th>
-              <th className="text-left py-3 pl-4 pr-16">Card Status</th>
-              <th></th>
-            </tr>
-          </thead>
-          <tbody>
-            {submissions.map((submission: Submission) => (
-              <tr key={submission.id} className="border-b last:border-0">
-                <td className="py-3 pl-16 pr-4">#{submission.trackingNumber}</td>
-                <td className="py-3 pl-16 pr-4">
-                  <div className="flex gap-2">
-                    <Image src={"/icons/calendar.svg"} alt="Calendar Icon" width={15} height={15} />
-                    <div>{dateFormat(submission.dateTime)}</div>
-                  </div>
-                </td>
-                <td className="py-3 px-4">
-                  <div className="flex items-center gap-3">
-                    { submission.card?.frontImage &&
-                      <Image
-                        src={submission.card.frontImage as string}
-                        alt={submission.card.cardName}
-                        width={35}
-                        height={40}
-                        className="object-fill"
-                      />
-                    }
-                    <span className="text-sm text-dark-purple">{submission.card.cardName}</span>
-                  </div>
-                </td>
-                <td className="py-3 px-4">{submission.submissionSource}</td>
-                <td className="py-3 px-4">
-                  <span
-                    className={`inline-block w-full text-center capitalize px-10 py-3 rounded-full text-base font-semibold ${submission.submissionStatus === submissionStatus.GRADING_COMPLETE
-                        ? "bg-muted-green/20 text-muted-green"
-                        : submission.submissionStatus === submissionStatus.SUBMISSION_PENDING
-                          ? "bg-primary/20 text-primary"
-                          : "bg-secondary/20 text-secondary"
-                      }`}
-                  >
-                    {formatSubmissionStatus(submission.submissionStatus)}
-                  </span>
-                </td>
-                <td className="py-3 px-4">
-                  <CustomDropdown items={dropdownItems(submission.id)} dropdownClassName="right-2">
-                    <MoreHorizontal className="h-4 w-4" />
-                  </CustomDropdown>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-
-        {/* Pagination */}
-        {totalPages > 1 && !showViewAll && (
-          <div className="flex justify-center items-center gap-4 mt-6 mb-8">
-            <button
-              onClick={() => setPage(prev => Math.max(prev - 1, 1))}
-              disabled={currentPage === 1}
-              className={`px-4 py-2 rounded border text-sm ${currentPage === 1 ? 'text-gray-400 border-gray-300' : 'text-primary border-primary'
-                }`}
-            >
-              Previous
-            </button>
-
-            <span className="text-base font-medium">
-              Page {currentPage} of {totalPages}
-            </span>
-
-            <button
-              onClick={() => setPage(prev => Math.min(prev + 1, totalPages))}
-              disabled={currentPage === totalPages}
-              className={`px-4 py-2 rounded border text-sm ${currentPage === totalPages ? 'text-gray-400 border-gray-300' : 'text-primary border-primary'
-                }`}
-            >
-              Next
-            </button>
+        {submissions.length === 0 ? (
+          <div className="flex flex-col items-center justify-center py-16 text-center">
+            <p className="text-lg text-gray-500 font-medium">No submissions created yet</p>
+            <p className="text-sm text-pure-grey mt-2">Your submission tracking information will appear here once you create an order</p>
           </div>
+        ) : (
+          <>
+            <table className="w-full min-w-[600px] md:min-w-[800px] lg:min-w-full">
+              <thead>
+                <tr className="border-b px-16">
+                  <th className="text-left py-3 pl-16 pr-4">Track No</th>
+                  <th className="text-left py-3 pl-16 pr-4">Date and Time</th>
+                  <th className="text-left py-3 px-4">Card Name</th>
+                  <th className="text-left py-3 px-4">Submission Source</th>
+                  <th className="text-left py-3 pl-4 pr-16">Card Status</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody>
+                {submissions.map((submission: Submission) => (
+                  <tr key={submission.id} className="border-b last:border-0">
+                    <td className="py-3 pl-16 pr-4">#{submission.trackingNumber}</td>
+                    <td className="py-3 pl-16 pr-4">
+                      <div className="flex gap-2">
+                        <Image src={"/icons/calendar.svg"} alt="Calendar Icon" width={15} height={15} />
+                        <div>{dateFormat(submission.dateTime)}</div>
+                      </div>
+                    </td>
+                    <td className="py-3 px-4">
+                      <div className="flex items-center gap-3">
+                        {submission.card?.frontImage &&
+                          <Image
+                            src={submission.card.frontImage as string}
+                            alt={submission.card.cardName}
+                            width={35}
+                            height={40}
+                            className="object-fill"
+                          />
+                        }
+                        <span className="text-sm text-dark-purple">{submission.card.cardName}</span>
+                      </div>
+                    </td>
+                    <td className="py-3 px-4">{submission.submissionSource}</td>
+                    <td className="py-3 px-4">
+                      {getStatusBadge(submission.submissionStatus)}
+                    </td>
+                    <td className="py-3 px-4">
+                      <CustomDropdown items={dropdownItems(submission.id)} dropdownClassName="right-2">
+                        <MoreHorizontal className="h-4 w-4" />
+                      </CustomDropdown>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+
+            {/* Pagination */}
+            {totalPages > 1 && !showViewAll && (
+              <div className="flex justify-center items-center gap-4 mt-6 mb-8">
+                <button
+                  onClick={() => setPage(prev => Math.max(prev - 1, 1))}
+                  disabled={currentPage === 1}
+                  className={`px-4 py-2 rounded border text-sm ${currentPage === 1 ? 'text-gray-400 border-gray-300' : 'text-primary border-primary'
+                    }`}
+                >
+                  Previous
+                </button>
+
+                <span className="text-base font-medium">
+                  Page {currentPage} of {totalPages}
+                </span>
+
+                <button
+                  onClick={() => setPage(prev => Math.min(prev + 1, totalPages))}
+                  disabled={currentPage === totalPages}
+                  className={`px-4 py-2 rounded border text-sm ${currentPage === totalPages ? 'text-gray-400 border-gray-300' : 'text-primary border-primary'
+                    }`}
+                >
+                  Next
+                </button>
+              </div>
+            )}
+          </>
         )}
       </div>
 

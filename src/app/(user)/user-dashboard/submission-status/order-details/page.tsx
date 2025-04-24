@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import CardImages from "./CardImages";
 import { ButtonGradient } from "@/components/common/ButtonGradient";
 import { useRouter, useSearchParams } from "next/navigation";
-import SubmissionSummary from "@/app/(admin)/dashboard/submission-status/add-post/components/SubmissionSummary";
+import SubmissionSummary from "@/app/(admin)/dashboard/submission-status/components/SubmissionSummary";
 import { useSubmissionById } from "@/hooks/useSubmissionById";
 import { SubmissionData } from "@/app/(admin)/dashboard/submission-status/add-post/add-post-types";
 import { useUserStore } from "@/stores/userStore";

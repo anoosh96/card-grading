@@ -24,5 +24,5 @@ export const dashboardSidebarItems: SidebarItemProps[] = [
   //   Icon: DashboardSubtrackingIcon,
   // },
   { href: "/dashboard/profile", label: "Profile", Icon: DashboardProfileIcon },
-  { href: "/#logout", label: "Logout", Icon: DashboardLogoutIcon },
+  { href: "", label: "Logout", Icon: DashboardLogoutIcon, isBtn: true },
 ];

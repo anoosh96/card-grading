@@ -4,13 +4,15 @@ import DashboardCustomSelect from "@/components/common/DashboardCustomSelect/Das
 import React, { FC, useState } from "react";
 import { cardGrades } from "../grading-review.constant";
 import { defaultSelectTheme } from "@/utils";
+import { AiGrade } from "@/types";
 
 interface AiGradingProps {
   className?: string;
+  aiData: AiGrade 
 }
 
-const AiGrading: FC<AiGradingProps> = ({ className }) => {
-  const [selectedGrade, setSelectedGrade] = useState("0");
+const AiGrading: FC<AiGradingProps> = ({ className, aiData }) => {
+  const [selectedGrade, setSelectedGrade] = useState(aiData?.grade || 0);
   return (
     <div
       className={`w-full p-4 bg-light-grey rounded-lg shadow-sm ${className}`}
@@ -22,7 +24,7 @@ const AiGrading: FC<AiGradingProps> = ({ className }) => {
         <div className="flex justify-between items-start">
           <span className="text-sm text-gray-600">AI Detected Issues</span>
           <span className="text-sm text-gray-900">
-            Scratches, Centering, Discoloration
+            { aiData?.aiRemarks || 'N/A' }
           </span>
         </div>
 
@@ -41,7 +43,7 @@ const AiGrading: FC<AiGradingProps> = ({ className }) => {
               placeholder="Grade"
               options={cardGrades}
               theme={defaultSelectTheme}
-              onChange={(value) => setSelectedGrade(value)}
+              onChange={(value) => setSelectedGrade(Number(value))}
               className="w-full"
             />
           </div>

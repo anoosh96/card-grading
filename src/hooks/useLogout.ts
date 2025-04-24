@@ -3,6 +3,7 @@ import axiosClient from '@/lib/axiosClient';
 import { useUserStore } from '@/stores/userStore';
 import { showToast } from '@/lib/toast';
 import { ApiResponse } from '@/types';
+import { useSubmissionStore } from '@/stores/submissionStore';
 
 // Logout function
 const logoutUser = async (): Promise<ApiResponse<null>> => {
@@ -12,6 +13,7 @@ const logoutUser = async (): Promise<ApiResponse<null>> => {
 
 export const useLogout = () => {
   const { clearUser } = useUserStore(); // assuming you have a resetUser() to clear user/token state
+  const { resetSubmission } = useSubmissionStore();
   const queryClient = useQueryClient();
 
   return useMutation({
@@ -19,6 +21,7 @@ export const useLogout = () => {
     onSuccess: () => {
       // Clear user state in store
       clearUser();
+      resetSubmission();
 
       // Clear localStorage
       localStorage.clear();
