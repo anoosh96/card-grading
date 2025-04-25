@@ -11,8 +11,7 @@ import { useSubmissionStore } from "@/stores/submissionStore";
 import { useUserStore } from "@/stores/userStore";
 import { useUser } from "@/hooks/useUser";
 import { Loader2 } from "lucide-react";
-import { AxiosError } from "axios";
-import { getFirstErrorMessage, handleRequestError } from "@/lib/toast";
+import { handleRequestError } from "@/lib/toast";
 
 
 export default function Subscription({ handleNext, handlePrevious }: FormStepProps) {

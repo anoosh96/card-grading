@@ -4,7 +4,7 @@ import { SubmissionSources } from "./SubmissionSources";
 import { useAdminSubmissionAnalysis } from "@/hooks/useAdminSubmissionAnalysis";
 
 function DashboardSubmissionCard() {
-    const { data, isLoading, isError } = useAdminSubmissionAnalysis()
+    const { data } = useAdminSubmissionAnalysis()
   
   return (
     <div className="flex items-stretch flex-col lg:flex-row gap-5">

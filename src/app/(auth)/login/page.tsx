@@ -3,7 +3,6 @@
 import { ButtonGradient } from "@/components/common/ButtonGradient";
 import CustomInput from "@/components/common/CustomInput";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { useFormState } from "@/hooks/useFormState";
 import { useLogin } from "@/hooks/useLogin";
 import { handleRequestError } from "@/lib/toast";

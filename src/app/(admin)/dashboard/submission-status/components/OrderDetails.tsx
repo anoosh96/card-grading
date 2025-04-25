@@ -12,6 +12,7 @@ import { SubmissionData } from "../add-post/add-post-types";
 import { formatSubmissionStatus } from "@/app/(user)/lib/utils/helpers";
 import { useUpdateSubmission } from "@/hooks/useUpdateSubmission";
 import { submissionStatus } from "@/app/(user)/lib/utils/constants";
+import { FlexibleRecord } from "@/types";
 
 const OrderDetails = () => {
 
@@ -23,7 +24,7 @@ const OrderDetails = () => {
 
   const updateStatus = () => {
 
-    const values: Record<string, any> = {
+    const values: FlexibleRecord = {
       submissionStatus: submissionStatus.SUBMISSION_REJECTED
     };
 

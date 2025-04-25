@@ -44,7 +44,7 @@ const DashboardSubmissionStatus: FC<DashboardSubmissionStatusProps> = ({
   };
 
   const handleViewDetailClick = (submission: SubmissionInfo) => {
-    let route = `/dashboard/submission-status/${submission.id}`
+    const route = `/dashboard/submission-status/${submission.id}`
     router.push(route)
   }
 

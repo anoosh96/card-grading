@@ -11,7 +11,6 @@ import { useSubmissionStore } from "@/stores/submissionStore";
 import { useUserStore } from "@/stores/userStore";
 import { useUser } from "@/hooks/useUser";
 import { Loader2 } from "lucide-react";
-import { submissionData } from "@/app/(admin)/dashboard/submission-status/SubmissionStatus.constant";
 
 
 export default function Subscription({ handleNext, handlePrevious }: FormStepProps) {

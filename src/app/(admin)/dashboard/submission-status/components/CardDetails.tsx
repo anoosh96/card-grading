@@ -9,6 +9,7 @@ import { SubmissionData } from "@/stores/submissionStore";
 import { useRouter } from "next/navigation";
 import { useSubmissionStore } from "@/stores/submissionStore";
 import { useUpdateSubmission } from "@/hooks/useUpdateSubmission";
+import { FlexibleRecord } from "@/types";
 
 export default function CardDetails() {
   const router = useRouter();
@@ -59,7 +60,7 @@ export default function CardDetails() {
     }
 
     // Prepare the values object for the API
-    const values: Record<string, any> = {
+    const values: FlexibleRecord = {
       cardName: submission.cardName,
       category: submission.category,
       yearOfRelease: submission.yearOfRelease,

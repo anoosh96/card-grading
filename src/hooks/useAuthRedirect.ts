@@ -1,6 +1,5 @@
 import { USER_ROLES } from "@/app/(user)/lib/utils/constants"
 import { useUserStore } from "@/stores/userStore"
-import { User } from "@/types"
 import { useRouter } from "next/navigation"
 import { useEffect } from "react"
 

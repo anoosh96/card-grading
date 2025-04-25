@@ -19,11 +19,9 @@ interface CustomDropdownProps {
 export default function CustomDropdown({
   items,
   children,
-  dropdownClassName = "",
-  position = "left",
+  dropdownClassName = ""
 }: CustomDropdownProps) {
   const [isOpen, setIsOpen] = useState(false);
-  const [dropdownPosition, setDropdownPosition] = useState({});
   const dropdownRef = useRef<HTMLDivElement>(null);
   const triggerRef = useRef<HTMLDivElement>(null);
 
@@ -123,7 +121,6 @@ export default function CustomDropdown({
       {/* Dropdown menu - Portal to body to avoid being cut off by overflow:hidden containers */}
       {isOpen && (
         <div
-          style={dropdownPosition}
           className={`fixed text-description font-medium min-w-[150px] bg-white rounded-md shadow-lg border border-gray-200 z-[9999] ${dropdownClassName}`}
         >
           <div className="py-1">

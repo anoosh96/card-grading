@@ -2,7 +2,6 @@
 
 import { ButtonGradient } from "@/components/common/ButtonGradient";
 import CustomInput from "@/components/common/CustomInput";
-import CustomSelect from "@/components/common/CustomSelect";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import { useDropzone } from "react-dropzone";
@@ -13,6 +12,8 @@ import { useUpdateProfile } from "@/hooks/useUpdateProfile"; // you'll need to i
 import { User, UserProfile } from "@/types";
 import { removeEmpty } from "@/lib/utils";
 import { useRouter } from "next/navigation";
+import { AxiosError } from "axios";
+import { handleRequestError } from "@/lib/toast";
 
 export default function ProfilePage() {
   const { user, setUser } = useUserStore(state => state);
@@ -65,8 +66,13 @@ export default function ProfilePage() {
 
     const cleanData = removeEmpty({ ...form.values, profileImage: imageFile })
     updateProfile(cleanData, {
-      onError: (error: any) => {
-        form.handleApiValidationError(error.response.data);
+      onError: (error: unknown) => {
+        if(error instanceof AxiosError && error.response){
+          form.handleApiValidationError(error.response.data);
+        }
+        else {
+          handleRequestError(error)
+        }
       },
       onSuccess: async (data) => {
         form.resetForm();
@@ -77,7 +83,7 @@ export default function ProfilePage() {
 
   useEffect(() => {
     if (user) {
-      let updatedData: UserProfile = initialData()
+      const updatedData: UserProfile = initialData()
       Object.keys(updatedData).forEach(key => {
         form.setValue(key as keyof UserProfile, updatedData[key as keyof UserProfile])
       })

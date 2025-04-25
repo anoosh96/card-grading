@@ -126,6 +126,8 @@ export interface AiGrade {
   aiRemarks: string;
 }
 
+export type FlexibleRecord = Record<string, string | object | number | null | undefined>
+
 export interface SignUpResponse {
   user: User
   token: string

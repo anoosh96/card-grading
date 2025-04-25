@@ -3,7 +3,7 @@
 import { submissionStatus } from "@/app/(user)/lib/utils/constants";
 import { useAdminSubmissionDetails } from "@/hooks/useAdminSubmissionDetails";
 import { useSubmissionStore } from "@/stores/submissionStore";
-import { useParams, useRouter } from "next/navigation";
+import { useParams } from "next/navigation";
 import { useEffect } from "react";
 import CardDetails from "../components/CardDetails";
 import OrderDetails from "../components/OrderDetails";

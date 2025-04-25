@@ -12,8 +12,8 @@ export function formatDateToReadable(dateString: string): string {
   return date.toLocaleDateString('en-US', options);
 }
 
-export function removeEmpty<T extends Object>(obj: T) {
+export function removeEmpty<T extends object>(obj: T) {
   return Object.fromEntries(
-    Object.entries(obj).filter(([_, v]) => v != null && v !== '')
+    Object.entries(obj).filter(([_, v]) => _ && v != null && v !== '')
   );
 }
