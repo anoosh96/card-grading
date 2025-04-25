@@ -36,7 +36,7 @@ const CustomSelect: React.FC<CustomDropdownProps> = ({
   const updateDropdownPosition = () => {
     if (buttonRef.current) {
       const rect = buttonRef.current.getBoundingClientRect();
-      const dropdownHeight = dropdownRef.current?.scrollHeight || 200; // Assume height if not available
+      const dropdownHeight = dropdownRef.current?.scrollHeight || 250; // Increased default height
       const spaceBelow = window.innerHeight - rect.bottom;
       const spaceAbove = rect.top;
 
@@ -51,12 +51,22 @@ const CustomSelect: React.FC<CustomDropdownProps> = ({
     }
   };
 
+  // Initial position calculation with delay to ensure rendering
   useLayoutEffect(() => {
     if (isOpen) {
+      // First immediate update
       updateDropdownPosition();
+      
+      // Second update after a slight delay to ensure rendering is complete
+      const timer = setTimeout(() => {
+        updateDropdownPosition();
+      }, 50);
+      
+      return () => clearTimeout(timer);
     }
   }, [isOpen]);
 
+  // Handle window scroll and resize events
   useEffect(() => {
     if (isOpen) {
       const handleScroll = () => requestAnimationFrame(updateDropdownPosition);
@@ -71,12 +81,14 @@ const CustomSelect: React.FC<CustomDropdownProps> = ({
     }
   }, [isOpen]);
 
+  // Handle click outside to close dropdown
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (
         dropdownRef.current &&
         !dropdownRef.current.contains(event.target as Node) &&
-        buttonRef.current !== event.target
+        buttonRef.current !== event.target &&
+        !buttonRef.current?.contains(event.target as Node)
       ) {
         setIsOpen(false);
       }

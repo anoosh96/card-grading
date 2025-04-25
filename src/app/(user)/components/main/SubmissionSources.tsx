@@ -1,5 +1,7 @@
 import { Separator } from "@radix-ui/react-separator";
-import Image from "next/image";
+import { PieChart, Pie, Cell } from "recharts";
+
+const COLORS = ['#F4A300', '#D14836']; // Yellow, Red
 
 interface SubmissionSourcesProps {
   byFormPercentage: number;
@@ -7,6 +9,12 @@ interface SubmissionSourcesProps {
 }
 
 export function SubmissionSources({ byFormPercentage, byPostPercentage }: SubmissionSourcesProps) {
+
+  const data = [
+    { name: 'By Form', value: byFormPercentage },
+    { name: 'By Post', value: byPostPercentage },
+  ];
+
   return (
     <div className="bg-white w-full rounded-[1.25rem] p-6 shadow-sm">
       <div className="flex flex-col items-start justify-between mb-3">
@@ -42,8 +50,23 @@ export function SubmissionSources({ byFormPercentage, byPostPercentage }: Submis
             </div>
           </div>
         </div>
-        <div className="flex relative items-start justify-start">
-          <Image src={"/assets/images/chart-progress-creative.svg"} className="w-36 h-32" alt="Pie Chart Progress" width={160} height={130} />
+        <div className="flex items-center justify-center w-36 h-32">
+          <PieChart width={130} height={130}>
+            <Pie
+              data={data}
+              cx="50%"
+              cy="50%"
+              innerRadius={40}
+              outerRadius={60}
+              fill="#8884d8"
+              paddingAngle={2}
+              dataKey="value"
+            >
+              {data.map((_, index) => (
+                <Cell key={`cell-${index}`} fill={COLORS[index]} />
+              ))}
+            </Pie>
+          </PieChart>
         </div>
       </div>
     </div>

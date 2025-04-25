@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { ButtonGradient } from "./common/ButtonGradient";
 import { Button } from "./ui/button";
 
@@ -12,15 +13,19 @@ function HeroSection() {
               <br />
               for Pokémon Cards
             </h1>
-            <p className="font-medium text-lg mb-8">Accurate, fast, and transparent AI card grading—trusted by <br/> collectors worldwide.</p>
+            <p className="font-medium text-lg mb-8">Accurate, fast, and transparent AI card grading—trusted by <br /> collectors worldwide.</p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center mb-1">
-              <ButtonGradient size={"lg"} className="font-semibold rounded-full px-8 !py-2 text-base">
-                Get Started
-              </ButtonGradient>
+              <Link href="/login">
+                <ButtonGradient size={"lg"} className="font-semibold rounded-full px-8 !py-2 text-base">
+                  Get Started
+                </ButtonGradient>
+              </Link>
 
-              <Button size={"lg"} className="font-semibold bg-soft-grey rounded-full text-pure-grey py-2 px-8 text-base hover:bg-soft-grey">
-                View Pricing
-              </Button>
+              <Link href="/services-and-pricing">
+                <Button size={"lg"} className="font-semibold bg-soft-grey rounded-full text-pure-grey py-2 px-8 text-base hover:bg-soft-grey">
+                  View Pricing
+                </Button>
+              </Link>
             </div>
 
           </div>

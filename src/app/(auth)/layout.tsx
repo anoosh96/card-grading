@@ -1,15 +1,16 @@
 import Image from "next/image";
 import React from "react";
 import { AuthRedirect } from "./AuthRedirect";
+import Link from "next/link";
 
 export default function AuthLayout({ children }: { children: React.ReactNode }) {
   return (
     <section className="grid lg:grid-cols-2 overflow-hidden">
       <div className="flex flex-col items-center justify-start lg:mt-44 z-30 mb-14 lg:mb-0">
         <div className="p-10 lg:p-0 w-full md:w-[55%]">
-          <div className="text-3xl mb-10 lg:mb-20 mt-10 lg:mt-0">
+          <Link href="/" className="inline-block text-3xl mb-10 lg:mb-20 mt-10 lg:mt-0 font-bold">
             Logo
-          </div>
+          </Link>
           <AuthRedirect>{ children }</AuthRedirect>
         </div>
       </div>
