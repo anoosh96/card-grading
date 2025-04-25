@@ -5,6 +5,7 @@ import DashboardLogoutIcon from "@/components/svgs/DashboardLogoutIcon";
 import { SidebarItemProps } from "../../types/sidebar.type";
 import DashboardSubscriptionIcon from "@/components/svgs/DashboardSubscriptionIcon";
 import DashboardSubmissionStatusIcon from "@/components/svgs/DashboardSubmissionStatusIcon";
+import { FlexibleRecord } from "@/types";
 
 export const dashboardSidebarItems: SidebarItemProps[] = [
   { href: "/user-dashboard", label: "Dashboard", Icon: DashboardSidebarIcon },
@@ -32,4 +33,11 @@ export const submissionSources = {
 export const USER_ROLES = {
   ADMIN: 'ADMIN',
   CUSTOMER: 'CUSTOMER'
+}
+
+export const paymentMethodMap: FlexibleRecord = {
+  PAYPAL: 'Paypal',
+  CARD: 'Card',
+  Paypal: 'Paypal',
+  Card: 'Card'
 }

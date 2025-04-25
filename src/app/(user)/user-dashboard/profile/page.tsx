@@ -15,6 +15,7 @@ import { removeEmpty } from "@/lib/utils";
 import { useRouter } from "next/navigation";
 import { AxiosError } from "axios";
 import { handleRequestError } from "@/lib/toast";
+import { paymentMethodMap } from "../../lib/utils/constants";
 
 export default function ProfilePage() {
   const { user, setUser } = useUserStore(state => state);
@@ -187,7 +188,7 @@ export default function ProfilePage() {
               <CustomSelect
                 options={['Card', 'Paypal']}
                 optionIcons={['/icons/credit-card.svg', '/icons/logos_paypal.svg']}
-                selectedOption={form.values.paymentMethod as string}
+                selectedOption={paymentMethodMap[form.values.paymentMethod as string] as string}
                 borderColor="border-transparent"
                 bg="bg-white"
                 setSelectedOption={(value) => form.setValue("paymentMethod", value as string)}
