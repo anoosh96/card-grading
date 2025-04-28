@@ -51,7 +51,9 @@ function OrderTracking() {
         >
           Back
         </Button>
-        <ButtonGradient size={"lg"} className="py-3 px-14 h-auto">
+        <ButtonGradient size={"lg"} className="py-3 px-14 h-auto" 
+          onClick={() => router.back()}
+        >
           Done
         </ButtonGradient>
       </div>

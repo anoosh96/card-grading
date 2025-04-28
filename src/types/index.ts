@@ -127,6 +127,7 @@ export interface AiGrade {
 }
 
 export type FlexibleRecord = Record<string, string | object | number | null | undefined>
+export type SignupField = 'name' | 'email' | 'password' | 'confirmPassword'
 
 export interface SignUpResponse {
   user: User

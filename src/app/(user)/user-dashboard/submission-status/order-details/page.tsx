@@ -73,7 +73,7 @@ function OrderDetails() {
           Back
         </Button>
         <ButtonGradient size={"lg"} className="py-3 px-14 h-auto">
-          Done
+          Download PDF
         </ButtonGradient>
       </div>
     </section>

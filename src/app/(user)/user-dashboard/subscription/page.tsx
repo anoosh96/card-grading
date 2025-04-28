@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button"
 import SubscriptionBox from "../my-submissions/SubscriptionBox"
 import { ButtonGradient } from "@/components/common/ButtonGradient"
 import { useUserStore } from "@/stores/userStore";
+import Link from "next/link";
 
 
 export default function SubscriptionPage() {
@@ -39,9 +40,11 @@ export default function SubscriptionPage() {
             >
               Cancel Subscription
             </Button>
-            <ButtonGradient size={"lg"} className="py-3 px-14 h-auto" type="submit">
-              Change Plan
-            </ButtonGradient>
+            <Link href={"/services-and-pricing"}>
+              <ButtonGradient size={"lg"} className="py-3 px-14 h-auto" type="submit">
+                Change Plan
+              </ButtonGradient>
+            </Link>
           </div>
         </>
       ) : (

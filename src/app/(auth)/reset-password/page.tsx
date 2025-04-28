@@ -15,7 +15,7 @@ function ResetPasswordForm() {
 
   const token = searchParams.get('token');
 
-  const { values, setValue, errors, resetForm, handleApiValidationError } = useFormState({
+  const { values, setValue, errors, resetForm, handleApiValidationError, setError } = useFormState({
     password: '',
     confirmPassword: ''
   });
@@ -29,7 +29,7 @@ function ResetPasswordForm() {
 
     if (values.password !== values.confirmPassword) {
       // Optional local validation
-      alert("Passwords do not match.");
+      setError("confirmPassword", "Passwords do not match.")
       return;
     }
 

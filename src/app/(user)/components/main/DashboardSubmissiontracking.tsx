@@ -48,14 +48,14 @@ export function DashboardSubmissionTracking({ showViewAll = false }: SubmissionT
     switch (status) {
       case submissionStatus.GRADING_COMPLETE:
         return (
-          <div className="text-center rounded-full p-1.5 bg-green-100 text-[#3A974C]">
+          <div className="text-center rounded-full p-2 bg-green-100 text-[#3A974C]">
             {formatSubmissionStatus(status)}
           </div>
         );
       case submissionStatus.SUBMISSION_PENDING:
       case submissionStatus.SUBMISSION_REJECTED:
         return (
-          <div className="text-center rounded-full p-1.5 bg-[#fcebe7] text-[#E3350D]">
+          <div className="text-center rounded-full py-3 px-2 bg-[#fcebe7] text-[#E3350D]">
             {formatSubmissionStatus(status)}
           </div>
         );

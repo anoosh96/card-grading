@@ -3,6 +3,7 @@ import SmallProgressBar from "../../components/SmallProgressBar";
 import { cn, formatDateToReadable } from "@/lib/utils";
 import { Subscription } from "@/types";
 import { capitalize } from "../../lib/utils/helpers";
+import Link from "next/link";
 
 interface SubscriptionBoxProps {
   className?: string
@@ -25,7 +26,9 @@ export default function SubscriptionBox({ className, data }: SubscriptionBoxProp
                 <span className="text-xl">{formatDateToReadable(data.renewalDate)}</span>
               </div>
               <div>
-                <ButtonGradient size={'lg'} className="p-2 bg-custom-gradient-2">Manage Subscription</ButtonGradient>
+                <Link href={"/user-dashboard/subscription"}>
+                  <ButtonGradient size={'lg'} className="p-2 bg-custom-gradient-2">Manage Subscription</ButtonGradient>
+                </Link>
               </div>
             </div>
             <div className="flex justify-between mb-4">
