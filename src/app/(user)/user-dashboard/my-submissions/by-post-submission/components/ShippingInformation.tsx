@@ -57,8 +57,19 @@ export default function ShippingInformation({ handleNext, handlePrevious }: Form
       ok = false
     }
     if (!values.yearOfRelease) {
-      setError('yearOfRelease', 'Year of release is required.')
-      ok = false
+      setError("yearOfRelease", "Year of release is required.");
+      ok = false;
+    } else {
+      const year = parseInt(values.yearOfRelease as string);
+      const currentYear = new Date().getFullYear();
+      
+      if (isNaN(year)) {
+        setError("yearOfRelease", "Please enter a valid number for year.");
+        ok = false;
+      } else if (year < 1800 || year > currentYear + 1) {
+        setError("yearOfRelease", `Year must be between 1800 and ${currentYear + 1}.`);
+        ok = false;
+      }
     }
     if (!values.conditionEstimate) {
       setError('conditionEstimate', 'Condition estimate is required.')

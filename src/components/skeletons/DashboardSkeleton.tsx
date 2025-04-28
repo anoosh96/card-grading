@@ -294,3 +294,48 @@ export function SubscriptionBoxSkeleton({ className, isActive = true }: Subscrip
     </div>
   );
 }
+
+
+export default function SkeletonProfilePage() {
+  return (
+    <section className="p-10 animate-pulse">
+      {/* Profile picture and basic info */}
+      <div className="flex flex-col items-start justify-center w-44 gap-2">
+        <div className="relative w-32 h-32">
+          <div className="w-32 h-32 rounded-full bg-gray-200" />
+          <div className="absolute bottom-2 right-1 w-9 h-9 rounded-full bg-gray-300" />
+        </div>
+
+        <div className="h-5 w-32 mt-4 bg-gray-200 rounded" />
+        <div className="flex gap-2 text-sm items-center mt-2">
+          <div className="w-4 h-4 bg-gray-200 rounded-full" />
+          <div className="h-4 w-24 bg-gray-200 rounded" />
+        </div>
+      </div>
+
+      {/* Form inputs */}
+      <div className="mt-10 w-full">
+        <div className="grid grid-cols-2 gap-8 mt-8 p-2">
+          {Array.from({ length: 6 }).map((_, i) => (
+            <div key={i} className="flex flex-col gap-2">
+              <div className="h-5 w-40 bg-gray-200 rounded" />
+              <div className="h-12 w-full bg-gray-200 rounded-md" />
+            </div>
+          ))}
+
+          {/* Payment method select */}
+          <div className="col-span-full flex flex-col gap-2 mt-4">
+            <div className="h-5 w-40 bg-gray-200 rounded" />
+            <div className="h-12 w-full bg-gray-200 rounded-md" />
+          </div>
+
+          {/* Buttons */}
+          <div className="flex gap-6 mt-8 col-span-full">
+            <div className="h-12 w-40 bg-gray-300 rounded-full" />
+            <div className="h-12 w-40 bg-gray-300 rounded-full" />
+          </div>
+        </div>
+      </div>
+    </section>
+  )
+}

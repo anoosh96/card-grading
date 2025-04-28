@@ -5,7 +5,7 @@ export interface SubmissionData {
   cardName: string;
   category: string;
   cardType: string | null;
-  yearOfRelease: number | null;
+  yearOfRelease: number | null | string;
   conditionEstimate: string;
   serviceType: string;
   frontImage: string | null | File;

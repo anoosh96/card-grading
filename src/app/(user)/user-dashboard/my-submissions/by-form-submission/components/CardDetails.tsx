@@ -73,6 +73,17 @@ export default function CardDetails({ handleNext }: FormStepProps) {
     if (!values.yearOfRelease) {
       setError("yearOfRelease", "Year of release is required.");
       isValid = false;
+    } else {
+      const year = parseInt(values.yearOfRelease as string);
+      const currentYear = new Date().getFullYear();
+      
+      if (isNaN(year)) {
+        setError("yearOfRelease", "Please enter a valid number for year.");
+        isValid = false;
+      } else if (year < 1800 || year > currentYear + 1) {
+        setError("yearOfRelease", `Year must be between 1800 and ${currentYear + 1}.`);
+        isValid = false;
+      }
     }
 
     if (!values.conditionEstimate) {
@@ -206,7 +217,7 @@ export default function CardDetails({ handleNext }: FormStepProps) {
                 value={values.yearOfRelease as number}
                 onChange={(e) => {
                   handleChange(e);
-                  setSubmission({ yearOfRelease: Number(e.target.value) });
+                  setSubmission({ yearOfRelease: e.target.value });
                 }}
               />
               {errors.yearOfRelease && (
