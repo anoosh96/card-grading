@@ -1,6 +1,6 @@
 'use client';
 
-import { FC, ReactNode, useState } from 'react';
+import { FC, useState } from 'react';
 import { ChevronRight, Eye, MoreHorizontal, Trash2 } from 'lucide-react';
 import { CustomCheckbox } from '@/components/ui/checkbox';
 import CalendarIcon from '@/components/svgs/dashboard/CalendarIcon';
@@ -135,7 +135,7 @@ const DashboardSubmissionStatus: FC<DashboardSubmissionStatusProps> = ({
                   </div>
                 </td>
                 {/* <td className="p-3">{}</td> */}
-                <td className="p-3">{ submissionSourceMap[submission.submissionSource] as ReactNode }</td>
+                <td className="p-3">{ submissionSourceMap[submission.submissionSource] }</td>
                 <td className="p-3">{getStatusBadge(submission.submissionStatus)}</td>
                 <td className="p-4">
                   <CustomDropdown

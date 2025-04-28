@@ -6,6 +6,7 @@ import { SidebarItemProps } from "../../types/sidebar.type";
 import DashboardSubscriptionIcon from "@/components/svgs/DashboardSubscriptionIcon";
 import DashboardSubmissionStatusIcon from "@/components/svgs/DashboardSubmissionStatusIcon";
 import { FlexibleRecord } from "@/types";
+import { ReactNode } from "react";
 
 export const dashboardSidebarItems: SidebarItemProps[] = [
   { href: "/user-dashboard", label: "Dashboard", Icon: DashboardSidebarIcon },
@@ -43,7 +44,7 @@ export const paymentMethodMap: FlexibleRecord = {
 }
 
 
-export const submissionSourceMap: FlexibleRecord = {
+export const submissionSourceMap: {[key: string]: ReactNode} = {
   'BY_POST': 'By Post',
   'BY_FORM': 'By Form'
 }
