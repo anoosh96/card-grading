@@ -48,20 +48,20 @@ export function DashboardSubmissionTracking({ showViewAll = false }: SubmissionT
     switch (status) {
       case submissionStatus.GRADING_COMPLETE:
         return (
-          <div className="text-center rounded-full p-2 bg-green-100 text-[#3A974C]">
+          <div className="text-center rounded-[0.2rem] md:rounded-full p-2 bg-green-100 text-[#3A974C]">
             {formatSubmissionStatus(status)}
           </div>
         );
       case submissionStatus.SUBMISSION_PENDING:
       case submissionStatus.SUBMISSION_REJECTED:
         return (
-          <div className="text-center rounded-full py-3 px-2 bg-[#fcebe7] text-[#E3350D]">
+          <div className="text-center rounded-[1.4rem] md:rounded-full py-3 px-2 bg-[#fcebe7] text-[#E3350D]">
             {formatSubmissionStatus(status)}
           </div>
         );
       case submissionStatus.SUBMISSION_RECEIVED:
         return (
-          <div className="text-center rounded-full p-1.5 bg-[#fbf6e2] text-[#FFCC00]">
+          <div className="text-center rounded-[0.2rem] md:rounded-full p-1.5 bg-[#fbf6e2] text-[#FFCC00]">
             {formatSubmissionStatus(status)}
           </div>
         );
@@ -121,19 +121,19 @@ export function DashboardSubmissionTracking({ showViewAll = false }: SubmissionT
             <table className="w-full min-w-[600px] md:min-w-[800px] lg:min-w-full">
               <thead>
                 <tr className="border-b px-16">
-                  <th className="text-left py-3 pl-16 pr-4">Track No</th>
-                  <th className="text-left py-3 pl-16 pr-4">Date and Time</th>
+                  <th className="text-left py-3 pl-4 lg:pl-16 pr-4">Track No</th>
+                  <th className="text-left py-3 pl-4 lg:pl-16 pr-4">Date and Time</th>
                   <th className="text-left py-3 px-4">Card Name</th>
                   <th className="text-left py-3 px-4">Submission Source</th>
-                  <th className="text-left py-3 pl-4 pr-16">Card Status</th>
+                  <th className="text-left py-3 pl-4 pr-4 lg:pr-16">Card Status</th>
                   <th></th>
                 </tr>
               </thead>
               <tbody>
                 {submissions.map((submission: Submission) => (
                   <tr key={submission.id} className="border-b last:border-0">
-                    <td className="py-3 pl-16 pr-4">#{submission.trackingNumber}</td>
-                    <td className="py-3 pl-16 pr-4">
+                    <td className="py-3 pl-4 lg:pl-16 pr-4">#{submission.trackingNumber}</td>
+                    <td className="py-3 pl-4 lg:pl-16 pr-4">
                       <div className="flex gap-2">
                         <Image src={"/icons/calendar.svg"} alt="Calendar Icon" width={15} height={15} />
                         <div>{dateFormat(submission.dateTime)}</div>
@@ -154,7 +154,7 @@ export function DashboardSubmissionTracking({ showViewAll = false }: SubmissionT
                       </div>
                     </td>
                     <td className="py-3 px-4">{ submissionSourceMap[submission.submissionSource] }</td>
-                    <td className="py-3 px-4">
+                    <td className="py-3 px-4 text-xs lg:text-base">
                       {getStatusBadge(submission.submissionStatus)}
                     </td>
                     <td className="py-3 px-4">
