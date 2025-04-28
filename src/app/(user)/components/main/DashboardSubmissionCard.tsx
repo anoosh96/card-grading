@@ -4,9 +4,12 @@ import DashboardTotalCardsIcon from "@/components/svgs/DashboardTotalCardsIcons"
 import React from "react";
 import { SubmissionSources } from "./SubmissionSources";
 import { useSubmissionAnalysis } from "@/hooks/useSubmissionAnalysis";
+import { SkeletonCard } from "@/components/skeletons/DashboardSkeleton";
 
 function DashboardSubmissionCard() {
   const { data, isLoading, isError } = useSubmissionAnalysis()
+
+  if (isLoading) return <SkeletonCard />;
 
   return (
     <div className="flex items-stretch flex-col lg:flex-row gap-5">

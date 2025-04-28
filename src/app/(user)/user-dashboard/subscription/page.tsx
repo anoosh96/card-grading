@@ -5,6 +5,7 @@ import SubscriptionBox from "../my-submissions/SubscriptionBox"
 import { ButtonGradient } from "@/components/common/ButtonGradient"
 import { useUserStore } from "@/stores/userStore";
 import Link from "next/link";
+import { SubscriptionBoxSkeleton } from "@/components/skeletons/DashboardSkeleton";
 
 
 export default function SubscriptionPage() {
@@ -28,7 +29,7 @@ export default function SubscriptionPage() {
 
       <h2 className="text-2xl my-8 font-semibold">Current Subscription Details</h2>
 
-      {subscriptionData ? (
+      {user?.id && subscriptionData? (
         <>
           <SubscriptionBox className="mt-6" data={subscriptionData} />
 
@@ -47,9 +48,14 @@ export default function SubscriptionPage() {
             </Link>
           </div>
         </>
-      ) : (
+      ) : !user?.id ? (
+        // <p className="mt-6 text-neutral-grey">No subscription information available.</p>
+        <SubscriptionBoxSkeleton />
+      ) 
+       :
         <p className="mt-6 text-neutral-grey">No subscription information available.</p>
-      )}
+
+     }
     </section>
   )
 }

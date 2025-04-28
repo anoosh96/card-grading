@@ -1,6 +1,7 @@
 'use client'
 
 import CustomInput from "@/components/common/CustomInput";
+import { SkeletonHeader } from "@/components/skeletons/DashboardSkeleton";
 import { setAuthRedirectFunction } from "@/lib/axiosClient";
 import { useUserStore } from "@/stores/userStore";
 import Image from "next/image";
@@ -26,6 +27,8 @@ export function DashboardHeader() {
       }
     }
   }, [user]);
+
+  if (!user?.fullName) { return <SkeletonHeader /> }
 
   return (
     <header className="bg-white ml-0 md:ml-20 lg:ml-72">

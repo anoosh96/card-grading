@@ -12,6 +12,7 @@ import { useSubmissions } from "@/hooks/useSubmissions";
 import { submissionSourceMap, submissionStatus } from "../../lib/utils/constants";
 import { useDeleteSubmission } from "@/hooks/useDeleteSubmission";
 import { Submission } from "@/types";
+import { SkeletonTracking } from "@/components/skeletons/DashboardSkeleton";
 
 interface SubmissionTrackingProps {
   showViewAll?: boolean;
@@ -88,7 +89,7 @@ export function DashboardSubmissionTracking({ showViewAll = false }: SubmissionT
     },
   ];
 
-  if (isLoading) return <div className="p-5">Loading submissions…</div>;
+  if (isLoading) return <SkeletonTracking />;
   if (isError) return <div className="p-5 text-red-500">Failed to load submissions.</div>;
 
   const submissions = data?.data?.submissions || [];
