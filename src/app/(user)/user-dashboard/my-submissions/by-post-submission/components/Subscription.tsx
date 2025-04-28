@@ -103,7 +103,7 @@ export default function Subscription({ handleNext, handlePrevious }: FormStepPro
         >
           Back
         </Button>
-        <ButtonGradient size="lg" className="py-3 px-14 h-auto" onClick={handleSubmit} disabled={!isChecked || createSubmission.isPending || (!subscriptionData || subscriptionData.status !== 'ACTIVE')}>
+        <ButtonGradient size="lg" className="py-3 px-14 h-auto" onClick={handleSubmit} disabled={!isChecked || createSubmission.isPending}>
           {createSubmission.isPending ? (
             <>
               <Loader2 className="animate-spin w-5 h-5" />
