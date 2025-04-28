@@ -41,3 +41,9 @@ export const paymentMethodMap: FlexibleRecord = {
   Paypal: 'Paypal',
   Card: 'Card'
 }
+
+
+export const submissionSourceMap: FlexibleRecord = {
+  'BY_POST': 'By Post',
+  'BY_FORM': 'By Form'
+}

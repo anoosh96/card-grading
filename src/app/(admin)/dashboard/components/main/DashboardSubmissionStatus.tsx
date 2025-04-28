@@ -1,6 +1,6 @@
 'use client';
 
-import { FC, useState } from 'react';
+import { FC, ReactNode, useState } from 'react';
 import { ChevronRight, Eye, MoreHorizontal, Trash2 } from 'lucide-react';
 import { CustomCheckbox } from '@/components/ui/checkbox';
 import CalendarIcon from '@/components/svgs/dashboard/CalendarIcon';
@@ -9,7 +9,7 @@ import Link from '@/components/common/CustomLink/CustomLink';
 import { useRouter } from 'next/navigation';
 import CustomModal from '@/components/common/CustomModal';
 import { dateFormat, formatSubmissionStatus } from '@/app/(user)/lib/utils/helpers';
-import { submissionStatus } from '@/app/(user)/lib/utils/constants';
+import { submissionSourceMap, submissionStatus } from '@/app/(user)/lib/utils/constants';
 import { useAdminSubmissions } from '@/hooks/useAdminSubmissions';
 import { Submission, SubmissionInfo } from '@/types';
 import { useAdminDeleteSubmission } from '@/hooks/useAdminDeleteSubmission';
@@ -57,25 +57,25 @@ const DashboardSubmissionStatus: FC<DashboardSubmissionStatusProps> = ({
     switch (status) {
       case submissionStatus.GRADING_COMPLETE:
         return (
-          <div className="text-center rounded-full p-1.5 bg-green-100 text-[#3A974C]">
+          <div className="text-center rounded-full p-2 w-[70%] bg-green-100 text-[#3A974C]">
             {formatSubmissionStatus(status)}
           </div>
         );
       case submissionStatus.SUBMISSION_PENDING:
         return (
-          <div className="text-center rounded-full p-1.5 bg-[#fcebe7] text-[#E3350D]">
+          <div className="text-center rounded-full p-2 w-[70%] bg-[#fcebe7] text-[#E3350D]">
             {formatSubmissionStatus(status)}
           </div>
         );
       case submissionStatus.SUBMISSION_RECEIVED:
         return (
-          <div className="text-center rounded-full p-1.5 bg-[#fbf6e2] text-[#FFCC00]">
+          <div className="text-center rounded-full p-2 w-[70%] bg-[#fbf6e2] text-[#FFCC00]">
             {formatSubmissionStatus(status)}
           </div>
         );
       case submissionStatus.SUBMISSION_REJECTED:
         return (
-          <div className="text-center rounded-full p-1.5 bg-[#fcebe7] text-[#E3350D]">
+          <div className="text-center rounded-full p-2 w-[70%] bg-[#fcebe7] text-[#E3350D]">
             {formatSubmissionStatus(status)}
           </div>
         );
@@ -135,9 +135,9 @@ const DashboardSubmissionStatus: FC<DashboardSubmissionStatusProps> = ({
                   </div>
                 </td>
                 {/* <td className="p-3">{}</td> */}
-                <td className="p-3">{submission.submissionSource}</td>
+                <td className="p-3">{ submissionSourceMap[submission.submissionSource] as ReactNode }</td>
                 <td className="p-3">{getStatusBadge(submission.submissionStatus)}</td>
-                <td className="p-3">
+                <td className="p-4">
                   <CustomDropdown
                     items={[
                       {
@@ -154,7 +154,7 @@ const DashboardSubmissionStatus: FC<DashboardSubmissionStatusProps> = ({
                     dropdownClassName="right-2"
                     position='left'
                   >
-                    <MoreHorizontal className="h-4 w-4" />
+                    <MoreHorizontal className="h-6 w-6" />
                   </CustomDropdown>
                 </td>
               </tr>

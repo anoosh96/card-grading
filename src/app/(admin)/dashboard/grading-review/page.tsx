@@ -10,6 +10,7 @@ import { Button } from "@/components/ui/button";
 import { ButtonGradient } from "@/components/common/ButtonGradient";
 import AiGrading from "./components/AiGrading";
 import { useSubmissionStore } from "@/stores/submissionStore";
+import { submissionStatus } from "@/app/(user)/lib/utils/constants";
 
 const GradingReview = () => {
   const router = useRouter();
@@ -62,7 +63,7 @@ const GradingReview = () => {
       </div>
 
       {
-        !submission.id
+        !submission.id || submission.submissionStatus == submissionStatus.SUBMISSION_PENDING
           ?
             <p className="mt-6 text-neutral-grey">No Submission Selected for Grading Review.</p>
           :

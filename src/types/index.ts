@@ -1,3 +1,5 @@
+import { ReactNode } from "react";
+
 export interface SvgIconProps extends React.SVGProps<SVGSVGElement> {
   width?: string | number;
   height?: string | number;
@@ -126,7 +128,7 @@ export interface AiGrade {
   aiRemarks: string;
 }
 
-export type FlexibleRecord = Record<string, string | object | number | null | undefined>
+export type FlexibleRecord = Record<string, string | object | number | null | undefined | ReactNode>
 export type SignupField = 'name' | 'email' | 'password' | 'confirmPassword'
 
 export interface SignUpResponse {

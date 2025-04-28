@@ -2,14 +2,14 @@
 
 import Image from "next/image";
 import { dateFormat, formatSubmissionStatus } from "@/app/(user)/lib/utils/helpers";
-import { useState } from "react";
+import { ReactNode, useState } from "react";
 import CustomModal from "@/components/common/CustomModal";
 import { Eye, MoreHorizontal, Trash2 } from "lucide-react";
 import CustomDropdown from "@/components/common/CustomDropDown/CustomDropDown";
 import TrackIcon from "@/components/svgs/dashboard/TrackIcon";
 import { useRouter } from "next/navigation";
 import { useSubmissions } from "@/hooks/useSubmissions";
-import { submissionStatus } from "../../lib/utils/constants";
+import { submissionSourceMap, submissionStatus } from "../../lib/utils/constants";
 import { useDeleteSubmission } from "@/hooks/useDeleteSubmission";
 import { Submission } from "@/types";
 
@@ -153,7 +153,7 @@ export function DashboardSubmissionTracking({ showViewAll = false }: SubmissionT
                         <span className="text-sm text-dark-purple">{submission.card.cardName}</span>
                       </div>
                     </td>
-                    <td className="py-3 px-4">{submission.submissionSource}</td>
+                    <td className="py-3 px-4">{ submissionSourceMap[submission.submissionSource] as ReactNode }</td>
                     <td className="py-3 px-4">
                       {getStatusBadge(submission.submissionStatus)}
                     </td>
