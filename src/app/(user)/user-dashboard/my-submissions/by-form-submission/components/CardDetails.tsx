@@ -23,7 +23,8 @@ export default function CardDetails({ handleNext }: FormStepProps) {
     errors,
     handleChange,
     setValue,
-    setError
+    setError,
+    clearError,
   } = useFormState({
     cardName: submission.cardName,
     category: submission.category,
@@ -45,16 +46,19 @@ export default function CardDetails({ handleNext }: FormStepProps) {
   const handleUploadImage = (type: "frontImage" | "backImage", file: File) => {
     setValue(type, file);
     setSubmission({ [type]: file });
+    clearError(type);
   };
 
   const handleRemoveImage = (type: "frontImage" | "backImage") => {
     setValue(type, null);
     setSubmission({ [type]: null });
+    clearError(type);
   };
 
   const handleSelectChange = (field: keyof typeof values, selected: string) => {
     setValue(field, selected);
     setSubmission({ [field]: selected });
+    clearError(field);
   };
 
   const validateForm = () => {
@@ -76,7 +80,7 @@ export default function CardDetails({ handleNext }: FormStepProps) {
     } else {
       const year = parseInt(values.yearOfRelease as string);
       const currentYear = new Date().getFullYear();
-      
+
       if (isNaN(year)) {
         setError("yearOfRelease", "Please enter a valid number for year.");
         isValid = false;
@@ -141,34 +145,38 @@ export default function CardDetails({ handleNext }: FormStepProps) {
       <div className="overflow-hidden mt-8">
         <h3 className="heading-tertiary mb-2">Card Images</h3>
         <form className="w-full" onSubmit={handleSubmit}>
-          <div className="flex-between gap-4">
-            <ImageEditor
-              image={
-                frontImagePreview
-                  ? { url: frontImagePreview, alt: "Front" }
-                  : undefined
-              }
-              placeholder="Drag and drop your card front image here"
-              onAddImage={(file) => handleUploadImage("frontImage", file[0])}
-              onDeleteImage={() => handleRemoveImage("frontImage")}
-            />
-            {errors.frontImage && (
-              <p className="text-red-500 mt-1 text-sm">{errors.frontImage}</p>
-            )}
+          <div className="flex-between gap-4 flex-col md:flex-row">
+            <div className="w-full">
+              <ImageEditor
+                image={
+                  frontImagePreview
+                    ? { url: frontImagePreview, alt: "Front" }
+                    : undefined
+                }
+                placeholder="Drag and drop your card front image here"
+                onAddImage={(file) => handleUploadImage("frontImage", file[0])}
+                onDeleteImage={() => handleRemoveImage("frontImage")}
+              />
+              {errors.frontImage && (
+                <p className="text-red-500 mt-1 text-sm">{errors.frontImage}</p>
+              )}
+            </div>
 
-            <ImageEditor
-              image={
-                backImagePreview
-                  ? { url: backImagePreview, alt: "Back" }
-                  : undefined
-              }
-              placeholder="Drag and drop your card back image here"
-              onAddImage={(file) => handleUploadImage("backImage", file[0])}
-              onDeleteImage={() => handleRemoveImage("backImage")}
-            />
-            {errors.backImage && (
-              <p className="text-red-500 mt-1 text-sm">{errors.backImage}</p>
-            )}
+            <div className="w-full">
+              <ImageEditor
+                image={
+                  backImagePreview
+                    ? { url: backImagePreview, alt: "Back" }
+                    : undefined
+                }
+                placeholder="Drag and drop your card back image here"
+                onAddImage={(file) => handleUploadImage("backImage", file[0])}
+                onDeleteImage={() => handleRemoveImage("backImage")}
+              />
+              {errors.backImage && (
+                <p className="text-red-500 mt-1 text-sm">{errors.backImage}</p>
+              )}
+            </div>
           </div>
 
           <div className="mt-8 p-2 space-y-4">
@@ -183,6 +191,7 @@ export default function CardDetails({ handleNext }: FormStepProps) {
                 onChange={(e) => {
                   handleChange(e);
                   setSubmission({ cardName: e.target.value });
+                  clearError("cardName");
                 }}
               />
               {errors.cardName && (
@@ -197,9 +206,9 @@ export default function CardDetails({ handleNext }: FormStepProps) {
                 selectedOption={values.category || "Select Category"}
                 borderColor="border-transparent"
                 bg="bg-light-grey"
-                setSelectedOption={(value) =>
-                  handleSelectChange("category", value as string)
-                }
+                setSelectedOption={(value) => {
+                  handleSelectChange("category", value as string);
+                }}
                 className="relative"
               />
               {errors.category && (
@@ -218,6 +227,7 @@ export default function CardDetails({ handleNext }: FormStepProps) {
                 onChange={(e) => {
                   handleChange(e);
                   setSubmission({ yearOfRelease: e.target.value });
+                  clearError("yearOfRelease");
                 }}
               />
               {errors.yearOfRelease && (
@@ -232,9 +242,9 @@ export default function CardDetails({ handleNext }: FormStepProps) {
                 selectedOption={values.conditionEstimate || "Select Condition"}
                 borderColor="border-transparent"
                 bg="bg-light-grey"
-                setSelectedOption={(value) =>
-                  handleSelectChange("conditionEstimate", value as string)
-                }
+                setSelectedOption={(value) => {
+                  handleSelectChange("conditionEstimate", value as string);
+                }}
                 className="relative"
               />
               {errors.conditionEstimate && (
@@ -249,9 +259,9 @@ export default function CardDetails({ handleNext }: FormStepProps) {
                 selectedOption={values.serviceType || "Select Service"}
                 borderColor="border-transparent"
                 bg="bg-light-grey"
-                setSelectedOption={(value) =>
-                  handleSelectChange("serviceType", value as string)
-                }
+                setSelectedOption={(value) => {
+                  handleSelectChange("serviceType", value as string);
+                }}
                 className="relative"
               />
               {errors.serviceType && (
@@ -259,18 +269,18 @@ export default function CardDetails({ handleNext }: FormStepProps) {
               )}
             </div>
 
-            <div className="flex gap-6 mt-8">
+            <div className="flex gap-2 lg:gap-6 mt-8">
               <Button
                 size={"lg"}
                 type="button"
-                className="h-auto font-semibold bg-soft-grey rounded-full text-pure-grey py-3 px-14 text-base hover:bg-soft-grey"
+                className="h-auto font-semibold bg-soft-grey rounded-full text-pure-grey py-3  px-8 lg:px-14 text-base hover:bg-soft-grey"
                 onClick={() => router.back()}
               >
                 Back
               </Button>
               <ButtonGradient
                 size={"lg"}
-                className="py-3 px-14 h-auto"
+                className="py-3 px-8 lg:px-14 h-auto"
                 type="submit"
               >
                 Next

@@ -101,11 +101,11 @@ export default function ProfilePage() {
   if (!user?.id) { return <SkeletonProfilePage /> }
 
   return (
-    <section className="p-10">
-      <div className="flex flex-col items-start justify-center w-44 gap-2">
-        <div className="relative w-32 h-32">
+    <section className="p-4 sm:p-6 md:p-8 lg:p-10">
+      <div className="flex flex-col items-start justify-center w-full sm:w-44 gap-2">
+        <div className="relative w-24 h-24 sm:w-32 sm:h-32">
           <div
-            className="w-32 h-32 rounded-full overflow-hidden border-2 border-gray-300"
+            className="w-24 h-24 sm:w-32 sm:h-32 rounded-full overflow-hidden border-2 border-gray-300"
             {...getRootProps()}
           >
             <input {...getInputProps()} />
@@ -115,24 +115,24 @@ export default function ProfilePage() {
               className="w-full h-full object-cover cursor-pointer"
             />
           </div>
-          <div {...getRootProps()} className="absolute bottom-2 right-1 cursor-pointer">
-            <Image src={"/icons/camera.svg"} alt="camera icon" width={35} height={35} />
+          <div {...getRootProps()} className="absolute bottom-1 right-0 sm:bottom-2 sm:right-1 cursor-pointer">
+            <Image src={"/icons/camera.svg"} alt="camera icon"  width={25} height={25} className="w-6 h-6 sm:w-9 sm:h-9" />
           </div>
         </div>
 
-        <div>{user?.fullName}</div>
-        <div className="flex gap-2 text-sm">
-          <Image src={"/icons/email-grey.svg"} alt="email icon" width={16} height={16} />
+        <div className="text-lg sm:text-xl">{user?.fullName}</div>
+        <div className="flex gap-1 sm:gap-2 text-sm">
+          <Image src={"/icons/email-grey.svg"} alt="email icon"  width={14} height={14} className="w-4 h-4 sm:w-5 sm:h-5" />
           <div>@{user?.email}</div>
         </div>
       </div>
 
-      <div className="mt-10">
+      <div className="mt-6 sm:mt-10">
         <form className="w-full" onSubmit={handleSubmit}>
-          <div className="mt-8 p-2 grid grid-cols-2 gap-8">
+          <div className="mt-4 sm:mt-8 p-2 grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-8">
             <div>
-              <label className="block font-semibold mb-2">Full Name</label>
-              <CustomInput id="name" name="name" placeholder="Enter Full Name" className="w-full p-6 bg-white"
+              <label className="block font-semibold mb-1 sm:mb-2">Full Name</label>
+              <CustomInput id="name" name="name" placeholder="Enter Full Name" className="w-full p-3 sm:p-6 bg-white"
                 value={form.values.name}
                 onChange={form.handleChange}
               />
@@ -140,8 +140,8 @@ export default function ProfilePage() {
             </div>
 
             <div>
-              <label className="block font-semibold mb-2">Email</label>
-              <CustomInput id="email" name="email" placeholder="Enter Email" className="w-full p-6 bg-white"
+              <label className="block font-semibold mb-1 sm:mb-2">Email</label>
+              <CustomInput id="email" name="email" placeholder="Enter Email" className="w-full p-3 sm:p-6 bg-white"
                 value={form.values.email}
                 onChange={form.handleChange}
               />
@@ -149,8 +149,8 @@ export default function ProfilePage() {
             </div>
 
             <div>
-              <label className="block font-semibold mb-2">Shipping Address</label>
-              <CustomInput id="shippingAddress" name="shippingAddress" placeholder="Enter Shipping Address" className="w-full p-6 bg-white"
+              <label className="block font-semibold mb-1 sm:mb-2">Shipping Address</label>
+              <CustomInput id="shippingAddress" name="shippingAddress" placeholder="Enter Shipping Address" className="w-full p-3 sm:p-6 bg-white"
                 value={form.values.shippingAddress}
                 onChange={form.handleChange}
               />
@@ -158,8 +158,8 @@ export default function ProfilePage() {
             </div>
 
             <div>
-              <label className="block font-semibold mb-2">Phone Number</label>
-              <CustomInput id="phoneNumber" name="phoneNumber" placeholder="Enter Phone Number" className="w-full p-6 bg-white"
+              <label className="block font-semibold mb-1 sm:mb-2">Phone Number</label>
+              <CustomInput id="phoneNumber" name="phoneNumber" placeholder="Enter Phone Number" className="w-full p-3 sm:p-6 bg-white"
                 value={form.values.phoneNumber}
                 onChange={form.handleChange}
               />
@@ -167,9 +167,9 @@ export default function ProfilePage() {
             </div>
 
             <div className="flex flex-col">
-              <label className="block font-semibold text-gray-700 mb-2">Password</label>
+              <label className="block font-semibold text-gray-700 mb-1 sm:mb-2">Password</label>
               <CustomInput id="password" name="password" type="password" placeholder="Enter Password"
-                className="w-full p-6 bg-white"
+                className="w-full p-3 sm:p-6 bg-white"
                 value={form.values.password}
                 onChange={form.handleChange}
               />
@@ -177,17 +177,17 @@ export default function ProfilePage() {
             </div>
 
             <div className="flex flex-col">
-              <label className="block font-semibold text-gray-700 mb-2">Confirm Password</label>
+              <label className="block font-semibold text-gray-700 mb-1 sm:mb-2">Confirm Password</label>
               <CustomInput id="confirmPassword" name="confirmPassword" type="password" placeholder="Confirm Password"
-                className="w-full p-6 bg-white"
+                className="w-full p-3 sm:p-6 bg-white"
                 value={form.values.confirmPassword}
                 onChange={form.handleChange}
               />
               {form.errors.confirmPassword && <p className="text-red-500 mt-1 text-sm">{form.errors.confirmPassword}</p>}
             </div>
 
-            <div className="col-span-full">
-              <label className="block font-semibold mb-2">Payment Method</label>
+            <div className="col-span-1 sm:col-span-2">
+              <label className="block font-semibold mb-1 sm:mb-2">Payment Method</label>
               <CustomSelect
                 options={['Card', 'Paypal']}
                 optionIcons={['/icons/credit-card.svg', '/icons/logos_paypal.svg']}
@@ -200,19 +200,19 @@ export default function ProfilePage() {
               {form.errors.paymentMethod && <p className="text-red-500 mt-1 text-sm">{form.errors.paymentMethod}</p>}
             </div>
 
-            <div className="flex gap-6 mt-8 col-span-full">
+            <div className="flex flex-col sm:flex-row gap-4 mt-4 sm:mt-6 col-span-1 sm:col-span-2">
               <Button
                 size={"lg"}
                 type="button"
                 onClick={form.resetForm}
-                className="h-auto font-semibold bg-soft-grey rounded-full text-pure-grey py-3 px-14 text-base hover:bg-soft-grey"
+                className="h-auto font-semibold bg-soft-grey rounded-full text-pure-grey py-2 sm:py-3 px-8 sm:px-14 text-base hover:bg-soft-grey"
               >
                 Cancel
               </Button>
               <ButtonGradient
                 size={"lg"}
                 type="submit"
-                className="py-3 px-14 h-auto"
+                className="py-2 sm:py-3 px-8 sm:px-14 h-auto"
                 disabled={isLoading}
               >
                 {isLoading ? "Saving..." : "Save Changes"}

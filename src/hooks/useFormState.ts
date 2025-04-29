@@ -8,6 +8,7 @@ type FormState<T extends object> = {
   handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   setValue: <K extends keyof T>(field: K, value: T[K]) => void;
   setError: (field: keyof T, error: string | null) => void;
+  clearError: (field: keyof T) => void;
   resetForm: () => void;
   resetFormErrors: () => void;
   handleApiValidationError: (apiErrorResponse: { message: string; errors: APIError[] }) => void;
@@ -50,6 +51,14 @@ export function useFormState<T extends object>(initialValues: T): FormState<T> {
     }));
   };
 
+   // Clear an error message for a specific field
+   const clearError = (field: keyof T) => {
+    setErrors((prev) => ({
+      ...prev,
+      [field]: null,
+    }));
+  };
+
   // Reset form values and errors
   const resetForm = () => {
     setValues(initialValues);
@@ -81,6 +90,7 @@ export function useFormState<T extends object>(initialValues: T): FormState<T> {
     handleChange,
     setValue,
     setError,
+    clearError,
     resetForm,
     handleApiValidationError,
     resetFormErrors

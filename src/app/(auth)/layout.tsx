@@ -1,6 +1,5 @@
 import Image from "next/image";
 import React from "react";
-import { AuthRedirect } from "./AuthRedirect";
 import Link from "next/link";
 
 export default function AuthLayout({ children }: { children: React.ReactNode }) {
@@ -11,7 +10,7 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
           <Link href="/" className="inline-block text-3xl mb-10 lg:mb-20 mt-10 lg:mt-0 font-bold">
             Logo
           </Link>
-          <AuthRedirect>{ children }</AuthRedirect>
+          { children }
         </div>
       </div>
       <div className="relative">

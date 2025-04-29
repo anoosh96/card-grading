@@ -9,6 +9,7 @@ import { useEnums } from "@/hooks/useEnums";
 import { useFormState } from "@/hooks/useFormState";
 import { useSubmissionStore } from "@/stores/submissionStore";
 import { submissionSources } from "@/app/(user)/lib/utils/constants";
+import { useRef } from "react";
 
 export default function ShippingInformation({ handleNext, handlePrevious }: FormStepProps) {
   // Fetch enums using useEnums
@@ -21,7 +22,7 @@ export default function ShippingInformation({ handleNext, handlePrevious }: Form
   const { cardTypes, conditionEstimates, serviceTypes } = enumsData || {};
 
   // Initialize form state with useFormState
-  const { values, errors, handleChange, setValue, setError } = useFormState({
+  const { values, errors, handleChange, setValue, setError, clearError } = useFormState({
     cardName: submission.cardName,
     category: submission.category,
     yearOfRelease: submission.yearOfRelease,
@@ -33,12 +34,20 @@ export default function ShippingInformation({ handleNext, handlePrevious }: Form
     submissionSource: submissionSources.BY_POST
   });
 
+  const errorRef = useRef<HTMLDivElement>(null);
+
   // — Validation before advancing —
   const validateForm = (): boolean => {
     let ok = true
     if (!values.fullName) {
       setError('fullName', 'Full name is required.')
       ok = false
+    } else {
+      const nameRegex = /^[a-zA-Z\s]*$/;
+      if (!nameRegex.test(values.fullName)) {
+        setError('fullName', 'Full name should only contain letters and spaces.');
+        ok = false;
+      }
     }
     if (!values.shippingAddress) {
       setError('shippingAddress', 'Shipping address is required.')
@@ -79,6 +88,11 @@ export default function ShippingInformation({ handleNext, handlePrevious }: Form
       setError('serviceType', 'Service type is required.')
       ok = false
     }
+
+    if (!ok && errorRef.current) {
+      errorRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
     return ok
   }
 
@@ -120,7 +134,7 @@ export default function ShippingInformation({ handleNext, handlePrevious }: Form
       <form className="w-full" onSubmit={handleSubmit}>
         <div className="mt-8 p-2 space-y-4">
           {/* Full Name */}
-          <div>
+          <div ref={errors.fullName ? errorRef : null}>
             <label className="block font-semibold mb-2">Full Name</label>
             <CustomInput
               id="fullName"
@@ -128,7 +142,10 @@ export default function ShippingInformation({ handleNext, handlePrevious }: Form
               placeholder="Enter Full Name"
               className="w-full p-6"
               value={values.fullName}
-              onChange={handleChange}
+              onChange={(e) => {
+                handleChange(e);
+                clearError('fullName');
+              }}
             />
             {errors.fullName && (
               <p className="text-red-500 mt-1 text-sm">{errors.fullName}</p>
@@ -136,7 +153,7 @@ export default function ShippingInformation({ handleNext, handlePrevious }: Form
           </div>
 
           {/* Shipping Address */}
-          <div>
+          <div ref={errors.shippingAddress ? errorRef : null}>
             <label className="block font-semibold mb-2">Shipping Address</label>
             <CustomInput
               id="shippingAddress"
@@ -144,7 +161,10 @@ export default function ShippingInformation({ handleNext, handlePrevious }: Form
               placeholder="Enter Shipping Address"
               className="w-full p-6"
               value={values.shippingAddress}
-              onChange={handleChange}
+              onChange={(e) => {
+                handleChange(e);
+                clearError('shippingAddress');
+              }}
             />
             {errors.shippingAddress && (
               <p className="text-red-500 mt-1 text-sm">{errors.shippingAddress}</p>
@@ -152,7 +172,7 @@ export default function ShippingInformation({ handleNext, handlePrevious }: Form
           </div>
 
           {/* Phone Number */}
-          <div>
+          <div ref={errors.phoneNumber ? errorRef : null}>
             <label className="block font-semibold mb-2">Phone Number</label>
             <CustomInput
               id="phoneNumber"
@@ -160,7 +180,10 @@ export default function ShippingInformation({ handleNext, handlePrevious }: Form
               placeholder="Enter Phone Number"
               className="w-full p-6"
               value={values.phoneNumber}
-              onChange={handleChange}
+              onChange={(e) => {
+                handleChange(e);
+                clearError('phoneNumber');
+              }}
             />
             {errors.phoneNumber && (
               <p className="text-red-500 mt-1 text-sm">{errors.phoneNumber}</p>
@@ -168,7 +191,7 @@ export default function ShippingInformation({ handleNext, handlePrevious }: Form
           </div>
 
           {/* Card Name */}
-          <div>
+          <div ref={errors.cardName ? errorRef : null}>
             <label className="block font-semibold mb-2">Card Name</label>
             <CustomInput
               id="cardName"
@@ -176,7 +199,10 @@ export default function ShippingInformation({ handleNext, handlePrevious }: Form
               placeholder="Enter Card Name"
               className="w-full p-6"
               value={values.cardName}
-              onChange={handleChange}
+              onChange={(e) => {
+                handleChange(e);
+                clearError('cardName');
+              }}
             />
             {errors.cardName && (
               <p className="text-red-500 mt-1 text-sm">{errors.cardName}</p>
@@ -184,14 +210,17 @@ export default function ShippingInformation({ handleNext, handlePrevious }: Form
           </div>
 
           {/* Category */}
-          <div>
+          <div ref={errors.category ? errorRef : null}>
             <label className="block font-semibold mb-2">Category</label>
             <CustomSelect
               options={cardTypes}
               selectedOption={values.category || "Select Category"}
               borderColor="border-transparent"
               bg="bg-light-grey"
-              setSelectedOption={(value) => setValue("category", value as string)}
+              setSelectedOption={(value) => {
+                setValue("category", value as string);
+                clearError('category');
+              }}
               className="relative"
             />
             {errors.category && (
@@ -200,7 +229,7 @@ export default function ShippingInformation({ handleNext, handlePrevious }: Form
           </div>
 
           {/* Year of Release */}
-          <div>
+          <div ref={errors.yearOfRelease ? errorRef : null}>
             <label className="block font-semibold mb-2">Year of Release</label>
             <CustomInput
               id="year"
@@ -208,7 +237,10 @@ export default function ShippingInformation({ handleNext, handlePrevious }: Form
               placeholder="Year of Release"
               className="w-full p-6"
               value={values.yearOfRelease as number}
-              onChange={handleChange}
+              onChange={(e) => {
+                handleChange(e);
+                clearError('yearOfRelease');
+              }}
             />
             {errors.yearOfRelease && (
               <p className="text-red-500 mt-1 text-sm">{errors.yearOfRelease}</p>
@@ -216,14 +248,17 @@ export default function ShippingInformation({ handleNext, handlePrevious }: Form
           </div>
 
           {/* Condition */}
-          <div>
+          <div ref={errors.conditionEstimate ? errorRef : null}>
             <label className="block font-semibold mb-2">Condition (Your Estimate)</label>
             <CustomSelect
               options={conditionEstimates}
               selectedOption={values.conditionEstimate || "Select Condition"}
               borderColor="border-transparent"
               bg="bg-light-grey"
-              setSelectedOption={(value) => setValue("conditionEstimate", value as string)}
+              setSelectedOption={(value) => {
+                setValue("conditionEstimate", value as string);
+                clearError('conditionEstimate');
+              }}
               className="relative"
             />
             {errors.conditionEstimate && (
@@ -232,14 +267,17 @@ export default function ShippingInformation({ handleNext, handlePrevious }: Form
           </div>
 
           {/* Service Type */}
-          <div>
+          <div ref={errors.serviceType ? errorRef : null}>
             <label className="block font-semibold mb-2">Service Type</label>
             <CustomSelect
               options={serviceTypes}
               selectedOption={values.serviceType || "Select Service Type"}
               borderColor="border-transparent"
               bg="bg-light-grey"
-              setSelectedOption={(value) => setValue("serviceType", value as string)}
+              setSelectedOption={(value) => {
+                setValue("serviceType", value as string);
+                clearError('serviceType');
+              }}
               className="relative"
             />
             {errors.serviceType && (

@@ -32,7 +32,7 @@ const ImageEditor: FC<ImageEditorProps> = ({
           onUpload={(file) => onAddImage(file)} // Handle single file
         />
       ) : (
-        <div className="flex justify-between relative h-[220px] flex-col sm:flex-row border-2 border-dashed">
+        <div className="flex justify-between relative min-h-[250px] h-[250px] flex-col sm:flex-row border-2 border-dashed rounded-md">
           {/* Delete Button */}
           <div
             onClick={handleDelete}
