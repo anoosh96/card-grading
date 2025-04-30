@@ -134,8 +134,8 @@ export default function ProfilePage() {
 
       <div className="mt-10">
         <form className="w-full" onSubmit={handleSubmit}>
-          <div className="mt-8 p-2 grid grid-cols-2 gap-8">
-            <div>
+          <div className="mt-8 p-2 grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <div className="">
               <label className="block font-semibold mb-2">Full Name</label>
               <CustomInput id="name" name="name" placeholder="Enter Full Name" className="w-full p-6 bg-white"
                 value={form.values.name}
@@ -211,12 +211,12 @@ export default function ProfilePage() {
               {form.errors.paymentMethod && <p className="text-red-500 mt-1 text-sm">{form.errors.paymentMethod}</p>}
             </div> */}
 
-            <div className="flex gap-6 mt-8 col-span-full">
+            <div className="flex flex-col md:flex-row gap-6 mt-8 col-span-full">
               <Button
                 size={"lg"}
                 type="button"
                 onClick={form.resetForm}
-                className="h-auto font-semibold bg-soft-grey rounded-full text-pure-grey py-3 px-14 text-base hover:bg-soft-grey"
+                className="h-auto font-semibold bg-soft-grey rounded-full text-pure-grey py-3 px-14 text-base hover:bg-soft-grey mb-4 md:mb-0"
               >
                 Cancel
               </Button>
