@@ -3,6 +3,7 @@ import { useMutation } from '@tanstack/react-query';
 import axiosClient from '@/lib/axiosClient'; // Axios client
 import { showToast } from '@/lib/toast';
 import { SignUpResponse } from '@/types';
+import { MESSAGES } from '@/lib/constants';
 
 interface SignUpInput {
   email: string;
@@ -21,7 +22,7 @@ export const useSignUp = () => {
   return useMutation({
     mutationFn: signUpUser,
     onSuccess: () => {
-      showToast('Sign-up successful!', { variant: 'success' });  // Success snackbar
+      showToast(MESSAGES.SIGNUP_SUCCESS, { variant: 'success' });  // Success snackbar
     },
   });
 };

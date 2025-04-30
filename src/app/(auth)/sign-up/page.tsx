@@ -16,7 +16,7 @@ export default function SignupPage() {
   const router = useRouter();
 
   // Form state using custom useFormState hook
-  const { values, errors, handleChange, setError, resetFormErrors, handleApiValidationError } = useFormState({
+  const { values, errors, handleChange, setError, clearError, resetFormErrors, handleApiValidationError } = useFormState({
     name: '',
     email: '',
     password: '',
@@ -107,7 +107,10 @@ export default function SignupPage() {
           placeholder="Enter Name"
           className="w-full p-6"
           value={values.name}
-          onChange={handleChange}
+          onChange={(e) => {
+            handleChange(e);
+            clearError('name');
+          }}
           required
         />
         {errors.name && <p className="text-red-500 text-sm">{errors.name}</p>}
@@ -123,7 +126,10 @@ export default function SignupPage() {
           placeholder="Enter Email"
           className="w-full p-6"
           value={values.email}
-          onChange={handleChange}
+          onChange={(e) => {
+            handleChange(e);
+            clearError('email');
+          }}
           required
         />
         {errors.email && <p className="text-red-500 text-sm">{errors.email}</p>}
@@ -140,7 +146,10 @@ export default function SignupPage() {
           type="password"
           className="w-full p-6"
           value={values.password}
-          onChange={handleChange}
+          onChange={(e) => {
+            handleChange(e);
+            clearError('password');
+          }}
           required
         />
         {errors.password && <p className="text-red-500 text-sm">{errors.password}</p>}
@@ -157,7 +166,10 @@ export default function SignupPage() {
           type="password"
           className="w-full p-6"
           value={values.confirmPassword}
-          onChange={handleChange}
+          onChange={(e) => {
+            handleChange(e);
+            clearError('confirmPassword');
+          }}
           required
         />
         {errors.confirmPassword && <p className="text-red-500 text-sm">{errors.confirmPassword}</p>}

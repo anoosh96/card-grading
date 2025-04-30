@@ -296,7 +296,7 @@ export function SubscriptionBoxSkeleton({ className, isActive = true }: Subscrip
 }
 
 
-export default function SkeletonProfilePage() {
+export function SkeletonProfilePage() {
   return (
     <section className="p-10 animate-pulse">
       {/* Profile picture and basic info */}
@@ -339,3 +339,166 @@ export default function SkeletonProfilePage() {
     </section>
   )
 }
+
+// components/skeletons/OrderDetailsSkeleton.tsx
+export function OrderDetailsSkeleton() {
+  return (
+    <div className="bg-white border-md px-4 py-4 rounded-md animate-pulse">
+      {/* Header Section */}
+      <div className="mb-2">
+        <div className="h-7 bg-gray-200 rounded w-48 mb-1"></div>
+        <div className="h-4 bg-gray-200 rounded w-64"></div>
+      </div>
+
+      {/* Card Images Section */}
+      <div>
+        <div className="h-7 bg-gray-200 rounded w-36 mb-2"></div>
+
+        <div className="relative flex justify-around mt-2 pb-8 border border-gray-200">
+          {/* Front Side */}
+          <div className="flex flex-col gap-4 items-center justify-center z-10">
+            <div className="h-10 bg-transparent w-24"></div>
+            <div className="w-[300px] h-[341px] bg-gray-200 rounded-md"></div>
+          </div>
+
+          {/* Back Side */}
+          <div className="flex flex-col gap-4 items-center justify-center z-10">
+            <div className="h-10 bg-transparent w-24"></div>
+            <div className="w-[300px] h-[341px] bg-gray-200 rounded-md"></div>
+          </div>
+
+          {/* Gradient header placeholder */}
+          <div className="bg-gray-300 w-full h-[60px] absolute top-0 z-0"></div>
+        </div>
+      </div>
+
+      {/* Submission Summary Section */}
+      <div className="w-full bg-light-grey rounded-md shadow-sm overflow-hidden mt-4">
+        <div className="p-4">
+          {/* Summary Header */}
+          <div className="flex justify-between items-center mb-4">
+            <div className="h-6 bg-gray-200 rounded w-48"></div>
+          </div>
+
+          {/* Summary Fields */}
+          <div className="space-y-4 px-4">
+            {/* Generate multiple field rows */}
+            {[...Array(9)].map((_, index) => (
+              <div key={index}>
+                {/* Insert Divider Before Last Two Items */}
+                {index === 7 && <div className="border-t border-gray-200 my-2"></div>}
+
+                <div className={`grid grid-cols-2 py-1 ${
+                  index >= 7 ? "text-[18px] font-medium" : ""
+                }`}>
+                  <div className="h-4 bg-gray-200 rounded w-32"></div>
+                  <div className={`h-4 ${index === 8 ? "bg-gray-300" : "bg-gray-200"} rounded w-40`}></div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* Action Buttons */}
+      <div className="flex items-center gap-6 ml-2 sm:ml-6 mt-4">
+        <div className="h-10 bg-gray-300 rounded-full w-36"></div>
+        <div className="h-10 bg-gradient-to-r from-gray-300 to-gray-400 rounded-full w-32"></div>
+      </div>
+    </div>
+  );
+};
+
+export function ProgressTrackerSkeleton() {
+  return (
+    <div className="p-4 sm:p-7 space-y-4 sm:space-y-6 bg-light-grey rounded-xl shadow-md animate-pulse">
+      {/* Tracking Number Header */}
+      <div className="flex items-start flex-col sm:flex-row">
+        <div className="h-8 bg-gray-200 rounded w-48 mb-2 sm:mb-0"></div>
+        <div className="h-8 bg-gray-200 rounded w-32 ml-0 sm:ml-auto"></div>
+      </div>
+      
+      {/* Overall Progress text */}
+      <div className="h-6 bg-gray-200 rounded w-36"></div>
+
+      <div className="w-full">
+        {/* Progress percentage row */}
+        <div className="flex gap-2 sm:gap-4 w-full items-center">
+          {/* Tick image placeholder */}
+          <div className="w-10 h-10 sm:w-14 sm:h-14 rounded-full bg-gray-200"></div>
+          <div className="w-full">
+            <div className="flex gap-2 sm:gap-4 items-center mb-2">
+              <div className="h-6 bg-gray-200 rounded w-16"></div>
+              <div className="h-6 bg-gray-200 rounded w-20"></div>
+            </div>
+            {/* Progress bar placeholder */}
+            <div className="w-full h-2 bg-gray-200 rounded-full">
+              <div className="h-2 bg-gray-300 rounded-full w-3/4"></div>
+            </div>
+          </div>
+        </div>
+
+        {/* Progress steps */}
+        <div className="mt-4 sm:mt-8 pl-2 sm:pl-4 space-y-4 sm:space-y-6">
+          {/* Step 1 */}
+          <div className="flex items-center gap-4 sm:gap-8">
+            <div className="flex items-center justify-center rounded-full w-6 h-6 sm:w-8 sm:h-8 bg-gray-300">
+              <span className="opacity-0">1</span>
+            </div>
+            <div>
+              <div className="h-5 bg-gray-200 rounded w-40 mb-2"></div>
+              <div className="h-4 bg-gray-200 rounded w-64"></div>
+            </div>
+          </div>
+          
+          {/* Step 2 */}
+          <div className="flex items-center gap-4 sm:gap-8">
+            <div className="flex items-center justify-center rounded-full w-6 h-6 sm:w-8 sm:h-8 bg-gray-300">
+              <span className="opacity-0">2</span>
+            </div>
+            <div>
+              <div className="h-5 bg-gray-200 rounded w-40 mb-2"></div>
+              <div className="h-4 bg-gray-200 rounded w-64"></div>
+            </div>
+          </div>
+          
+          {/* Step 3 */}
+          <div className="flex items-center gap-4 sm:gap-8">
+            <div className="flex items-center justify-center rounded-full w-6 h-6 sm:w-8 sm:h-8 bg-gray-300">
+              <span className="opacity-0">3</span>
+            </div>
+            <div>
+              <div className="h-5 bg-gray-200 rounded w-40 mb-2"></div>
+              <div className="h-4 bg-gray-200 rounded w-64"></div>
+            </div>
+          </div>
+          
+          {/* Estimated completion box */}
+          <div className="bg-gray-200 p-4 sm:p-8 flex items-center rounded-md">
+            <div className="w-6 h-6 bg-gray-300 rounded-full"></div>
+            <div className="h-6 bg-gray-300 rounded w-56 ml-2 sm:ml-6"></div>
+          </div>
+        </div>
+      </div>    
+    </div>
+  );
+};
+
+export function OrderTrackingSkeleton() {
+  return (
+    <section className="p-7 bg-white animate-pulse">
+      {/* Header */}
+      <div className="h-8 bg-gray-200 rounded w-40 mb-4"></div>
+      <div className="h-5 bg-gray-200 rounded w-72 mt-4 mb-10"></div>
+      
+      {/* Progress Tracker */}
+      <ProgressTrackerSkeleton />
+      
+      {/* Buttons */}
+      <div className="flex gap-6 mt-8">
+        <div className="h-12 bg-gray-200 rounded-full w-32"></div>
+        <div className="h-12 bg-gradient-to-r from-gray-200 to-gray-300 rounded-full w-32"></div>
+      </div>
+    </section>
+  );
+};

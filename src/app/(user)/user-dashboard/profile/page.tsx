@@ -16,7 +16,7 @@ import { useRouter } from "next/navigation";
 import { AxiosError } from "axios";
 import { handleRequestError } from "@/lib/toast";
 import { paymentMethodMap } from "../../lib/utils/constants";
-import SkeletonProfilePage from "@/components/skeletons/DashboardSkeleton";
+import { SkeletonProfilePage } from "@/components/skeletons/DashboardSkeleton";
 
 export default function ProfilePage() {
   const { user, setUser } = useUserStore(state => state);

@@ -11,9 +11,11 @@ interface SubmissionSourcesProps {
 export function SubmissionSources({ byFormPercentage, byPostPercentage }: SubmissionSourcesProps) {
 
   const data = [
-    { name: 'By Form', value: byFormPercentage },
     { name: 'By Post', value: byPostPercentage },
+    { name: 'By Form', value: byFormPercentage },
   ];
+
+ const hasData = byFormPercentage > 0 || byPostPercentage > 0;
 
   return (
     <div className="bg-white w-full rounded-[1.25rem] p-6 shadow-sm">
@@ -51,22 +53,28 @@ export function SubmissionSources({ byFormPercentage, byPostPercentage }: Submis
           </div>
         </div>
         <div className="flex items-center justify-center w-36 h-32">
-          <PieChart width={130} height={130}>
-            <Pie
-              data={data}
-              cx="50%"
-              cy="50%"
-              innerRadius={40}
-              outerRadius={60}
-              fill="#8884d8"
-              paddingAngle={2}
-              dataKey="value"
-            >
-              {data.map((_, index) => (
-                <Cell key={`cell-${index}`} fill={COLORS[index]} />
-              ))}
-            </Pie>
-          </PieChart>
+         <PieChart width={130} height={130}>
+           <Pie
+             data={hasData ? data : [{ name: 'No Data', value: 100 }]}
+             cx="50%"
+             cy="50%"
+             innerRadius={40}
+             outerRadius={60}
+             fill="#8884d8"
+             paddingAngle={2}
+             dataKey="value"
+             label={false}
+           >
+             {
+               hasData ?
+                 data.map((entry, index) => (
+                   <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                 ))
+                 :
+                 <Cell key="cell-0" fill="#808080" /> // Grey color for no data
+             }
+           </Pie>
+         </PieChart>
         </div>
       </div>
     </div>

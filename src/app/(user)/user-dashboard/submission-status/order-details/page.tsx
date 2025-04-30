@@ -10,6 +10,7 @@ import { SubmissionData } from "@/app/(admin)/dashboard/submission-status/add-po
 import { useUserStore } from "@/stores/userStore";
 import { formatSubmissionStatus } from "@/app/(user)/lib/utils/helpers";
 import { Suspense } from "react";
+import { OrderDetailsSkeleton } from "@/components/skeletons/DashboardSkeleton";
 
 function OrderDetails() {
   const router = useRouter();
@@ -24,7 +25,7 @@ function OrderDetails() {
   }
 
   if (isLoading) {
-    return <div className="p-5">Loading order details…</div>;
+    return <OrderDetailsSkeleton />;
   }
 
   if (isError || !data?.data) {

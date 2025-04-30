@@ -6,6 +6,7 @@ import { ButtonGradient } from "@/components/common/ButtonGradient";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useSubmissionById } from "@/hooks/useSubmissionById";
 import { Suspense } from "react";
+import { OrderTrackingSkeleton } from "@/components/skeletons/DashboardSkeleton";
 
 
 function OrderTracking() {
@@ -19,7 +20,7 @@ function OrderTracking() {
   }
 
   if (isLoading) {
-    return <div className="p-5">Loading order details…</div>;
+    return <OrderTrackingSkeleton />;
   }
 
   if (isError || !data?.data) {

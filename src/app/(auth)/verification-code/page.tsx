@@ -1,9 +1,8 @@
 'use client'
 
 import { ButtonGradient } from "@/components/common/ButtonGradient";
-import CustomInput from "@/components/common/CustomInput";
 import { useRouter } from "next/navigation";
-import { useRef } from "react";
+import { useRef, useEffect, useCallback } from "react";
 import { useFormState } from "@/hooks/useFormState";
 import { useVerifyEmail } from "@/hooks/useVerifyEmail";
 import { useResendVerification } from "@/hooks/useResendVerification";
@@ -17,19 +16,17 @@ export default function VerificationCodePage() {
   const { user, setUser } = useUserStore()
 
   const { values, setValue, errors, resetForm, handleApiValidationError } = useFormState({
-    code: ''
+    code: ['', '', '', '', '', ''],
   });
 
   const verifyCodeMutation = useVerifyEmail();
   const resendCodeMutation = useResendVerification();
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>, index: number) => {
-    const { value } = e.target;
-
+  const handleChange = (index: number, value: string) => {
     if (/^[0-9]?$/.test(value)) {
-      const newCode = values.code.split('');
+      const newCode = [...values.code];
       newCode[index] = value;
-      setValue('code', newCode.join(''));
+      setValue('code', newCode);
 
       if (value && index < inputRefs.current.length - 1) {
         inputRefs.current[index + 1]?.focus();
@@ -37,58 +34,71 @@ export default function VerificationCodePage() {
     }
   };
 
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>, index: number) => {
-    if (e.key === "Backspace" && !e.currentTarget.value && index > 0) {
+  const handleKeyDown = (index: number, e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Backspace" && !values.code[index] && index > 0) {
       inputRefs.current[index - 1]?.focus();
     }
   };
 
-  const handleSubmit = async () => {
-    if (values.code.length < 6) {
-      return; // optionally show error toast or mark fields invalid
+  const handleSubmit = useCallback(async () => {
+    const code = values.code.join('');
+    if (code.length < 6) {
+      return;
     }
 
     try {
-      await verifyCodeMutation.mutateAsync({ code: values.code });
+      await verifyCodeMutation.mutateAsync({ code });
       resetForm();
-      setUser({...user, emailVerified: true} as User)
+      setUser({ ...user, emailVerified: true } as User)
       router.push('/user-dashboard');
     } catch (error) {
       if (error instanceof AxiosError && error?.response?.data?.errors) {
         handleApiValidationError(error.response.data);
       }
+      verifyCodeMutation.reset();
     }
-  };
+  }, [values]);
+
+  useEffect(() => {
+    const code = values.code.join('');
+    if (code.length === 6) {
+      handleSubmit();
+    }
+  }, [values]);
 
   const handleResendCode = async () => {
     await resendCodeMutation.mutateAsync();
   };
 
   return (
-    <div className="mt-4">
-      <h1 className="text-xl md:text-3xl font-medium text-pure-grey mb-10">Verification Code</h1>
-      <div className="flex w-full flex-col mb-6">
+    <div className="container mx-auto mt-4">
+      <h1 className="text-xl md:text-3xl font-medium text-pure-grey mb-6">Verification Code</h1>
+      <div className="w-full flex-col mb-6">
         <label htmlFor="code" className="block text-lg font-medium text-gray-700 mb-2">
           Enter Code
         </label>
-        <div className="flex gap-2">
+        <div className="flex gap-2 justify-start">
           {Array.from({ length: 6 }, (_, i) => (
-            <CustomInput
-              ref={(el) => { inputRefs.current[i] = el; }}
+            <input
               key={i}
-              id={`code_digit_${i}`}
-              name={`code_digit_${i}`}
-              placeholder="0"
               type="text"
               maxLength={1}
-              className="w-full lg:p-6 text-center"
-              value={values.code[i] || ''}
-              onChange={(e) => handleChange(e, i)}
-              onKeyDown={(e) => handleKeyDown(e, i)}
+              className="w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 rounded-full border border-gray-300 text-center text-xl focus:outline-none focus:border-light-red"
+              value={values.code[i]}
+              onChange={(e) => {
+                const newValue = e.target.value;
+                if (/^[0-9]?$/.test(newValue)) {
+                  handleChange(i, newValue);
+                }
+              }}
+              onKeyDown={(e) => handleKeyDown(i, e)}
+              ref={(el) => {
+                inputRefs.current[i] = el;
+              }}
             />
           ))}
         </div>
-        {errors.code && <p className="text-red-500 mt-2">{errors.code}</p>}
+        {errors.code && <p className="text-red-500 mt-2 text-center">{errors.code}</p>}
       </div>
 
       <ButtonGradient
