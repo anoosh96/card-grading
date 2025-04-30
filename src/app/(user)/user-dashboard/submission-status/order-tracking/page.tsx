@@ -64,7 +64,7 @@ function OrderTracking() {
 
 export default function OrderTrackingPage() {
   return (
-    <Suspense fallback={<div>Loading...</div>}>
+    <Suspense fallback={<OrderTrackingSkeleton />}>
       <OrderTracking />
     </Suspense>
   )

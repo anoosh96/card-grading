@@ -83,7 +83,7 @@ function OrderDetails() {
 
 export default function OrderDetailsPage() {
   return (
-    <Suspense fallback={<div>Loading...</div>}>
+    <Suspense fallback={<OrderDetailsSkeleton />}>
       <OrderDetails />
     </Suspense>
   )
