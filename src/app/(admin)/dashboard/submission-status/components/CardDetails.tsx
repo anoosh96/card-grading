@@ -137,7 +137,7 @@ export default function CardDetails() {
 
       <div className="overflow-hidden">
         <h3 className="heading-tertiary mb-2">Card Images</h3>
-        <div className="flex-between gap-4">
+        <div className="flex-col md:flex-row flex-between gap-4">
           <ImageEditor
             image={
               frontImagePreview

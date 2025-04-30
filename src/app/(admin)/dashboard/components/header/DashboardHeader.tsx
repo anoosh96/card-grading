@@ -1,6 +1,7 @@
 'use client'
 
 import CustomInput from "@/components/common/CustomInput";
+import { SkeletonHeader } from "@/components/skeletons/DashboardSkeleton";
 import { setAuthRedirectFunction } from "@/lib/axiosClient";
 import { useUserStore } from "@/stores/userStore";
 import Image from "next/image";
@@ -9,8 +10,8 @@ import { useEffect } from "react";
 
 export function DashboardHeader() {
 
-  const router = useRouter()
   const { user } = useUserStore()
+  const router = useRouter()
 
   useEffect(() => {
     // Set the redirect function that will be used by the axios interceptor
@@ -19,6 +20,15 @@ export function DashboardHeader() {
     });
   }, [router]);
 
+  useEffect(() => {
+    if (user) {
+      if (!user.emailVerified) {
+        router.push('/verification-code');
+      }
+    }
+  }, [user]);
+
+  if (!user?.fullName) { return <SkeletonHeader /> }
 
   return (
     <header className="bg-white ml-0 md:ml-20 lg:ml-72">
@@ -35,7 +45,7 @@ export function DashboardHeader() {
           </button>
 
           <div className="flex items-center gap-3">
-            <Image width={40} height={40} alt="Profile Avatar Icon" src={ user?.profileImageUrl || "/assets/images/profile-avatar.svg" } className="h-10 w-10 rounded-full" />
+            <Image width={40} height={40} alt="Profile Avatar Icon" src={user?.profileImageUrl || "/assets/images/profile-avatar.svg"} className="h-10 w-10 rounded-full" />
 
             <div className="items-center gap-3 hidden md:flex">
               <div>

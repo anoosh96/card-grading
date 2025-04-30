@@ -7,6 +7,7 @@ import { useParams } from "next/navigation";
 import { useEffect } from "react";
 import CardDetails from "../components/CardDetails";
 import OrderDetails from "../components/OrderDetails";
+import { OrderDetailsSkeleton } from "@/components/skeletons/DashboardSkeleton";
 
 
 export default function SubmissionStatusPage() {
@@ -57,7 +58,7 @@ export default function SubmissionStatusPage() {
   }, [data, setSubmission]);
 
   if (isLoading) {
-    return <div>Loading submission details...</div>;
+    return <OrderDetailsSkeleton />;
   }
 
   if (isError) {

@@ -58,7 +58,7 @@ const AboutWhyChooseUs = () => {
               className={`relative flex w-full max-w-sm items-start space-x-4 rounded-2xl bg-white pt-4 pb-9 px-5 shadow-[5px_5px_15px_rgba(0,0,0,0.1)] md:max-w-xs ${
                 index === 2 ? "invisible": ""
               } ${ index == 0 ? "top-24" : "" } ${ index == 4 ? "bottom-24" : "" } 
-                ${ index == 3 ? "right-0 md:right-[3%] lg:right-[8%] xl:right-[15%] 2xl:right-[30%]" : ""} `}
+                ${ index == 3 ? "right-0 md:right-[3%] lg:right-[6%] xl:right-[12%] 2xl:right-[30%]" : ""} `}
             >
               <div className="flex flex-col gap-3">
                 {/* Icon */}

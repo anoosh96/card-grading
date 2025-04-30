@@ -14,6 +14,7 @@ import { removeEmpty } from "@/lib/utils";
 import { useRouter } from "next/navigation";
 import { AxiosError } from "axios";
 import { handleRequestError } from "@/lib/toast";
+import { SkeletonProfilePage } from "@/components/skeletons/AdminDashboardSkeleton";
 
 export default function ProfilePage() {
   const { user, setUser } = useUserStore(state => state);
@@ -58,6 +59,13 @@ export default function ProfilePage() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
+    // Name validation
+    const nameRegex = /^[a-zA-Z\s]*$/;
+    if (!nameRegex.test(form.values.name)) {
+      form.setError("name", "Name should not contain numbers or special characters");
+      return;
+    }
+
     // Password match validation
     if (form.values.password && form.values.password !== form.values.confirmPassword) {
       form.setError("confirmPassword", "Passwords do not match");
@@ -95,6 +103,8 @@ export default function ProfilePage() {
     }
   }, [user])
 
+  if (!user?.id) { return <SkeletonProfilePage /> }
+
   return (
     <section className="p-10">
       <div className="flex flex-col items-start justify-center w-44 gap-2">
@@ -118,7 +128,7 @@ export default function ProfilePage() {
         <div>{user?.fullName}</div>
         <div className="flex gap-2 text-sm">
           <Image src={"/icons/email-grey.svg"} alt="email icon" width={16} height={16} />
-          <div>@{user?.email}</div>
+          <div>{user?.email}</div>
         </div>
       </div>
 
@@ -129,7 +139,10 @@ export default function ProfilePage() {
               <label className="block font-semibold mb-2">Full Name</label>
               <CustomInput id="name" name="name" placeholder="Enter Full Name" className="w-full p-6 bg-white"
                 value={form.values.name}
-                onChange={form.handleChange}
+                onChange={(e) => {
+                  form.handleChange(e);
+                  form.clearError("name"); // Clear error on input
+                }}
               />
               {form.errors.name && <p className="text-red-500 mt-1 text-sm">{form.errors.name}</p>}
             </div>
@@ -138,7 +151,10 @@ export default function ProfilePage() {
               <label className="block font-semibold mb-2">Email</label>
               <CustomInput id="email" name="email" placeholder="Enter Email" className="w-full p-6 bg-white"
                 value={form.values.email}
-                onChange={form.handleChange}
+                onChange={(e) => {
+                  form.handleChange(e);
+                  form.clearError("email"); // Clear error on input
+                }}
               />
               {form.errors.email && <p className="text-red-500 mt-1 text-sm">{form.errors.email}</p>}
             </div>

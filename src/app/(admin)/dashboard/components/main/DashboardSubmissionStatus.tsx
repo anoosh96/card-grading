@@ -13,6 +13,7 @@ import { submissionSourceMap, submissionStatus } from '@/app/(user)/lib/utils/co
 import { useAdminSubmissions } from '@/hooks/useAdminSubmissions';
 import { Submission, SubmissionInfo } from '@/types';
 import { useAdminDeleteSubmission } from '@/hooks/useAdminDeleteSubmission';
+import { SkeletonTracking } from '@/components/skeletons/DashboardSkeleton';
 
 interface DashboardSubmissionStatusProps {
   isMoreItem?: boolean;
@@ -57,34 +58,29 @@ const DashboardSubmissionStatus: FC<DashboardSubmissionStatusProps> = ({
     switch (status) {
       case submissionStatus.GRADING_COMPLETE:
         return (
-          <div className="text-center rounded-full p-2 w-[70%] bg-green-100 text-[#3A974C]">
+          <div className="text-center rounded-[1.4rem] md:rounded-full py-3 px-2 bg-green-100 text-[#3A974C] text-[0.6rem] md:text-xs lg:text-base">
             {formatSubmissionStatus(status)}
           </div>
         );
       case submissionStatus.SUBMISSION_PENDING:
+      case submissionStatus.SUBMISSION_REJECTED:
         return (
-          <div className="text-center rounded-full p-2 w-[70%] bg-[#fcebe7] text-[#E3350D]">
+          <div className="text-center rounded-[1.4rem] md:rounded-full py-3 px-2 bg-[#fcebe7] text-[#E3350D] text-[0.6rem] md:text-xs lg:text-base">
             {formatSubmissionStatus(status)}
           </div>
         );
       case submissionStatus.SUBMISSION_RECEIVED:
         return (
-          <div className="text-center rounded-full p-2 w-[70%] bg-[#fbf6e2] text-[#FFCC00]">
-            {formatSubmissionStatus(status)}
-          </div>
-        );
-      case submissionStatus.SUBMISSION_REJECTED:
-        return (
-          <div className="text-center rounded-full p-2 w-[70%] bg-[#fcebe7] text-[#E3350D]">
+          <div className="text-center rounded-[1.4rem] md:rounded-full py-3 px-2 bg-[#fbf6e2] text-[#FFCC00] text-[0.6rem] md:text-xs lg:text-base">
             {formatSubmissionStatus(status)}
           </div>
         );
       default:
-        return <div>{formatSubmissionStatus(status)}</div>;
+        return <div className="text-[0.6rem] md:text-xs lg:text-sm">{formatSubmissionStatus(status)}</div>;
     }
   };
 
-  if (isLoading) return <div className="p-5">Loading submissions…</div>;
+  if (isLoading) return <SkeletonTracking />;
   if (isError) return <div className="p-5 text-red-500">Failed to load submissions.</div>;
 
   return (
@@ -106,8 +102,8 @@ const DashboardSubmissionStatus: FC<DashboardSubmissionStatusProps> = ({
         )}
       </div>
 
-      <div className="overflow-x-auto">
-        <table className="w-full">
+      <div className="w-full overflow-x-auto">
+        <table className="w-full min-w-[600px] md:min-w-[800px] lg:min-w-full table-auto">
           <thead className="text-sm font-medium text-left">
             <tr>
               <th className="w-10 p-3">
@@ -135,7 +131,7 @@ const DashboardSubmissionStatus: FC<DashboardSubmissionStatusProps> = ({
                   </div>
                 </td>
                 {/* <td className="p-3">{}</td> */}
-                <td className="p-3">{ submissionSourceMap[submission.submissionSource] }</td>
+                <td className="p-3">{submissionSourceMap[submission.submissionSource]}</td>
                 <td className="p-3">{getStatusBadge(submission.submissionStatus)}</td>
                 <td className="p-4">
                   <CustomDropdown

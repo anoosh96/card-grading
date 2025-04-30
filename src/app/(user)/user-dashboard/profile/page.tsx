@@ -67,6 +67,20 @@ export default function ProfilePage() {
       return;
     }
 
+    // Name validation
+    const nameRegex = /^[a-zA-Z\s]*$/;
+    if (!nameRegex.test(form.values.name)) {
+      form.setError("name", "Name should only contain letters and spaces");
+      return;
+    }
+
+    // Email validation
+    const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    if (!emailRegex.test(form.values.email)) {
+      form.setError("email", "Please enter a valid email address");
+      return;
+    }
+
     const cleanData = removeEmpty({ ...form.values, profileImage: imageFile })
     updateProfile(cleanData, {
       onError: (error: unknown) => {
@@ -116,14 +130,14 @@ export default function ProfilePage() {
             />
           </div>
           <div {...getRootProps()} className="absolute bottom-1 right-0 sm:bottom-2 sm:right-1 cursor-pointer">
-            <Image src={"/icons/camera.svg"} alt="camera icon"  width={25} height={25} className="w-6 h-6 sm:w-9 sm:h-9" />
+            <Image src={"/icons/camera.svg"} alt="camera icon" width={25} height={25} className="w-6 h-6 sm:w-9 sm:h-9" />
           </div>
         </div>
 
         <div className="text-lg sm:text-xl">{user?.fullName}</div>
         <div className="flex gap-1 sm:gap-2 text-sm">
-          <Image src={"/icons/email-grey.svg"} alt="email icon"  width={14} height={14} className="w-4 h-4 sm:w-5 sm:h-5" />
-          <div>@{user?.email}</div>
+          <Image src={"/icons/email-grey.svg"} alt="email icon" width={14} height={14} className="w-4 h-4 sm:w-5 sm:h-5" />
+          <div>{user?.email}</div>
         </div>
       </div>
 
@@ -134,7 +148,10 @@ export default function ProfilePage() {
               <label className="block font-semibold mb-1 sm:mb-2">Full Name</label>
               <CustomInput id="name" name="name" placeholder="Enter Full Name" className="w-full p-3 sm:p-6 bg-white"
                 value={form.values.name}
-                onChange={form.handleChange}
+                onChange={(e) => {
+                  form.handleChange(e);
+                  form.clearError("name"); // Clear error on input
+                }}
               />
               {form.errors.name && <p className="text-red-500 mt-1 text-sm">{form.errors.name}</p>}
             </div>
@@ -143,7 +160,10 @@ export default function ProfilePage() {
               <label className="block font-semibold mb-1 sm:mb-2">Email</label>
               <CustomInput id="email" name="email" placeholder="Enter Email" className="w-full p-3 sm:p-6 bg-white"
                 value={form.values.email}
-                onChange={form.handleChange}
+                onChange={(e) => {
+                  form.handleChange(e);
+                  form.clearError("email"); // Clear error on input
+                }}
               />
               {form.errors.email && <p className="text-red-500 mt-1 text-sm">{form.errors.email}</p>}
             </div>

@@ -24,7 +24,7 @@ const SubmissionSummary = ({
 }: SubmissionSummaryProps) => {
   const [formData, setFormData] = useState<SubmissionData>(data);
   const [isEditing, setIsEditing] = useState(false);
-  
+
   // Fetch enums for dropdown options
   const { data: enumData, isLoading } = useEnums();
 
@@ -56,12 +56,12 @@ const SubmissionSummary = ({
   };
 
   const getConditionOptions = () => {
-    return enumData?.conditionEstimateOptions || 
+    return enumData?.conditionEstimateOptions ||
       ["MINT", "NEAR_MINT", "GOOD", "FAIR", "POOR"];
   };
 
   const getStatusOptions = () => {
-    return enumData?.submissionStatusOptions || 
+    return enumData?.submissionStatusOptions ||
       ["SUBMISSION_PENDING", "SUBMISSION_RECEIVED", "GRADING_IN_PROGRESS", "GRADING_COMPLETE"];
   };
 
@@ -92,7 +92,7 @@ const SubmissionSummary = ({
     >
       <div className="p-4">
         <div className="flex justify-between items-center mb-4">
-          <h2 className="text-2xl font-semibold text-gray-900">{title}</h2>
+          <h2 className="text-xl md:text-2xl font-semibold text-gray-900">{title}</h2>
 
           {isEditable && (
             <div className="flex space-x-2">
@@ -139,11 +139,10 @@ const SubmissionSummary = ({
               )}
 
               <div
-                className={`grid grid-cols-2 py-1 ${
-                  key === "submissionDate" || key === "status"
-                    ? "text-[18px] font-medium"
-                    : ""
-                }`}
+                className={`grid sm:grid-cols-2 py-1 ${key === "submissionDate" || key === "status"
+                  ? "text-[18px] font-medium"
+                  : ""
+                  }`}
               >
                 <span className="font-medium text-gray-900">{label}</span>
                 {isEditing ? (
