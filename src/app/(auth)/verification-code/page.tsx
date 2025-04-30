@@ -83,7 +83,7 @@ export default function VerificationCodePage() {
               key={i}
               type="text"
               maxLength={1}
-              className="w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 rounded-full border border-gray-300 text-center text-xl focus:outline-none focus:border-light-red"
+              className="w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 rounded-full border border-gray-300 text-center text-xl focus:outline-none focus:border-light-red bg-transparent"
               value={values.code[i]}
               onChange={(e) => {
                 const newValue = e.target.value;
