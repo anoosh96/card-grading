@@ -1,12 +1,13 @@
 "use client";
 
 import CardImages from "@/app/(user)/user-dashboard/submission-status/order-details/CardImages";
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import { GenerateCertificateSummary } from "./components/generate-certificate-summary";
 import { Button } from "@/components/ui/button";
 import { ButtonGradient } from "@/components/common/ButtonGradient";
 import { CertificationDetails } from "./components/certification-detail";
 import ConfirmationModal from "@/modals/ConfirmationModal";
+import { useSubmissionStore } from "@/stores/submissionStore";
 
 const GenerateCertificate = () => {
   const [isConfirmDoc, setIsConfirmDoc] = useState(false);
@@ -15,6 +16,8 @@ const GenerateCertificate = () => {
     adminName: "Admin Name",
     adminSignature: "",
   });
+
+  const submission = useSubmissionStore((state) => state.submission);
 
   const handleSaveCertification = (data: {
     certifiedBy: string;
@@ -25,6 +28,19 @@ const GenerateCertificate = () => {
     console.log("Saved certification data:", data);
   };
 
+  // Memoized preview URLs
+  const frontImagePreview = useMemo(() => {
+    if (!submission.frontImage) return undefined;
+    if (typeof submission.frontImage === 'string') return submission.frontImage;
+    return URL.createObjectURL(submission.frontImage as File);
+  }, [submission.frontImage]);
+
+  const backImagePreview = useMemo(() => {
+    if (!submission.backImage) return undefined;
+    if (typeof submission.backImage === 'string') return submission.backImage;
+    return URL.createObjectURL(submission.backImage as File);
+  }, [submission.backImage]);
+
   return (
     <div className="bg-white border-md px-4 py-4 rounded-md">
       <div className="mb-2">
@@ -32,30 +48,30 @@ const GenerateCertificate = () => {
           Official Card Grading Certificate
         </h1>
         <p className="heading-tertiary text-muted-foreground">
-          Certificate ID: #1234567890
+          Certificate ID: #{submission.trackingNumber}
         </p>
       </div>
 
       <CardImages
-        frontImage="/assets/images/mike-trout.svg"
-        backImage="/assets/images/mike-trout.svg"
+        frontImage={frontImagePreview || "/assets/images/default-front.png"}
+        backImage={backImagePreview || "/assets/images/default-back.png"}
       />
 
       <GenerateCertificateSummary
         title="Submission Summary"
         className="mt-4"
         // Personal Information
-        name="Henrietta Bogisich"
-        email="bogisich@gmail.com"
-        orderId="01"
-        cardName="Charizard Holo"
-        category="Pokemon"
-        yearOfRelease="1999"
-        condition="Good"
+        name={submission.fullName || "N/A"}
+        email={submission.email || "N/A"}
+        orderId={submission.id}
+        cardName={submission.cardName}
+        category={submission.category}
+        yearOfRelease={submission.yearOfRelease?.toString() || "N/A"}
+        condition={submission.conditionEstimate}
         // Submission Details
-        submissionType="Online"
-        aiAnalysisSummary="Scratches, Centering, Discoloration"
-        finalGrade="9/10"
+        submissionType={submission.submissionSource}
+        aiAnalysisSummary={submission.aiRemarks || "N/A"}
+        finalGrade={submission.grade ? `${submission.grade}/10` : "N/A"}
       />
 
       <CertificationDetails
