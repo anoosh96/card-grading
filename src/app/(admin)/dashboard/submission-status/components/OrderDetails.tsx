@@ -13,6 +13,7 @@ import { formatSubmissionStatus } from "@/app/(user)/lib/utils/helpers";
 import { useUpdateSubmission } from "@/hooks/useUpdateSubmission";
 import { submissionStatus } from "@/app/(user)/lib/utils/constants";
 import { FlexibleRecord } from "@/types";
+import { formatToUSTimezone, padId } from "@/lib/utils";
 
 const OrderDetails = () => {
 
@@ -51,12 +52,12 @@ const OrderDetails = () => {
   const submissionSummaryData: SubmissionData = {
     name: submission?.fullName as string,
     email: submission?.email as string,
-    orderId: submission.trackingNumber,
+    orderId: padId(submission.id),
     cardName: submission.cardName,
     category: submission.category,
     yearOfRelease: String(submission.yearOfRelease),
     condition: submission.conditionEstimate,
-    submissionDate: submission.submissionDate as string,
+    submissionDate: formatToUSTimezone(submission.submissionDate as string),
     status: formatSubmissionStatus(submission.submissionStatus),
   };
 

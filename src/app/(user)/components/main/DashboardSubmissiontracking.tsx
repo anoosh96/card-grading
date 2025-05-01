@@ -1,7 +1,7 @@
 'use client'
 
 import Image from "next/image";
-import { dateFormat, formatSubmissionStatus } from "@/app/(user)/lib/utils/helpers";
+import { formatSubmissionStatus } from "@/app/(user)/lib/utils/helpers";
 import { useState } from "react";
 import CustomModal from "@/components/common/CustomModal";
 import { Eye, MoreHorizontal, Trash2 } from "lucide-react";
@@ -13,6 +13,7 @@ import { submissionSourceMap, submissionStatus } from "../../lib/utils/constants
 import { useDeleteSubmission } from "@/hooks/useDeleteSubmission";
 import { Submission } from "@/types";
 import { SkeletonTracking } from "@/components/skeletons/DashboardSkeleton";
+import { formatToUSTimezone } from "@/lib/utils";
 
 interface SubmissionTrackingProps {
   showViewAll?: boolean;
@@ -137,7 +138,7 @@ export function DashboardSubmissionTracking({ showViewAll = false }: SubmissionT
                     <td className="py-3 pl-4 lg:pl-16 pr-4 text-xs md:text-base">
                       <div className="flex gap-2">
                         <Image src={"/icons/calendar.svg"} alt="Calendar Icon" width={15} height={15} />
-                        <div>{dateFormat(submission.dateTime)}</div>
+                        <div>{formatToUSTimezone(submission.dateTime)}</div>
                       </div>
                     </td>
                     <td className="py-3 px-4 text-xs md:text-base">

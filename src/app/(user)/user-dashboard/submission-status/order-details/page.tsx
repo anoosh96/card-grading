@@ -11,6 +11,7 @@ import { useUserStore } from "@/stores/userStore";
 import { formatSubmissionStatus } from "@/app/(user)/lib/utils/helpers";
 import { Suspense } from "react";
 import { OrderDetailsSkeleton } from "@/components/skeletons/DashboardSkeleton";
+import { formatToUSTimezone, padId } from "@/lib/utils";
 
 function OrderDetails() {
   const router = useRouter();
@@ -38,12 +39,12 @@ function OrderDetails() {
   const submissionSummaryData: SubmissionData = {
     name: user?.fullName as string,
     email: user?.email as string,
-    orderId: submission.trackingNumber,
+    orderId: padId(submission.id),
     cardName: submission.card.cardName,
     category: submission.card.category,
     yearOfRelease: submission.card.yearOfRelease,
     condition: submission.card.conditionEstimate,
-    submissionDate: submission.dateTime,
+    submissionDate: formatToUSTimezone(submission.dateTime),
     status: formatSubmissionStatus(submission.submissionStatus),
   };
 

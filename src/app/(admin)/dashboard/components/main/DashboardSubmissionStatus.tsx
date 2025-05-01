@@ -14,6 +14,7 @@ import { useAdminSubmissions } from '@/hooks/useAdminSubmissions';
 import { Submission, SubmissionInfo } from '@/types';
 import { useAdminDeleteSubmission } from '@/hooks/useAdminDeleteSubmission';
 import { SkeletonTracking } from '@/components/skeletons/DashboardSkeleton';
+import { padId } from '@/lib/utils';
 
 interface DashboardSubmissionStatusProps {
   isMoreItem?: boolean;
@@ -70,6 +71,7 @@ const DashboardSubmissionStatus: FC<DashboardSubmissionStatusProps> = ({
           </div>
         );
       case submissionStatus.SUBMISSION_RECEIVED:
+      case submissionStatus.GRADING_IN_PROGRESS:
         return (
           <div className="text-center rounded-[1.4rem] md:rounded-full py-3 px-2 bg-[#fbf6e2] text-[#FFCC00] text-[0.6rem] md:text-xs lg:text-base">
             {formatSubmissionStatus(status)}
@@ -109,7 +111,7 @@ const DashboardSubmissionStatus: FC<DashboardSubmissionStatusProps> = ({
               <th className="w-10 p-3">
                 <CustomCheckbox />
               </th>
-              <th className="p-3">Track No</th>
+              <th className="p-3">Order No</th>
               <th className="p-3">Date & Time</th>
               {/* <th className="p-3">Action</th> */}
               <th className="p-3">Submission Source</th>
@@ -123,7 +125,7 @@ const DashboardSubmissionStatus: FC<DashboardSubmissionStatusProps> = ({
                 <td className="p-3">
                   <CustomCheckbox />
                 </td>
-                <td className="p-3 font-medium">#{submission.trackingNumber}</td>
+                <td className="p-3 font-medium">#{padId(submission.id)}</td>
                 <td className="p-3">
                   <div className="flex items-center gap-1">
                     <CalendarIcon />

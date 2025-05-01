@@ -6,8 +6,14 @@ import { GenerateCertificateSummary } from "./components/generate-certificate-su
 import { Button } from "@/components/ui/button";
 import { ButtonGradient } from "@/components/common/ButtonGradient";
 import { CertificationDetails } from "./components/certification-detail";
-import ConfirmationModal from "@/modals/ConfirmationModal";
 import { useSubmissionStore } from "@/stores/submissionStore";
+import { padId } from "@/lib/utils";
+import CustomModal from "@/components/common/CustomModal";
+import { FlexibleRecord } from "@/types";
+import { submissionStatus } from "@/app/(user)/lib/utils/constants";
+import { useUpdateSubmission } from "@/hooks/useUpdateSubmission";
+import { useRouter } from "next/navigation";
+import { Loader2 } from "lucide-react";
 
 const GenerateCertificate = () => {
   const [isConfirmDoc, setIsConfirmDoc] = useState(false);
@@ -17,7 +23,10 @@ const GenerateCertificate = () => {
     adminSignature: "",
   });
 
-  const submission = useSubmissionStore((state) => state.submission);
+  const { submission, setSubmission } = useSubmissionStore();
+  const updateSubmission = useUpdateSubmission();
+  const router = useRouter();
+
 
   const handleSaveCertification = (data: {
     certifiedBy: string;
@@ -41,6 +50,31 @@ const GenerateCertificate = () => {
     return URL.createObjectURL(submission.backImage as File);
   }, [submission.backImage]);
 
+  const updateStatus = () => {
+
+    const values: FlexibleRecord = {
+      submissionStatus: submissionStatus.GRADING_COMPLETE
+    };
+
+    // Call the mutation with our submission data
+    updateSubmission.mutate({
+      id: submission.id,
+      values
+    }, {
+      onSuccess: (data) => {
+        // Update the submission store with the response data
+        const updatedSubmission = data.data.submission
+
+        // Update our local submission state
+        setSubmission({
+          submissionStatus: updatedSubmission.submissionStatus
+        });
+
+        setIsConfirmDoc(true);
+      }
+    });
+  };
+
   return (
     <div className="bg-white border-md px-4 py-4 rounded-md">
       <div className="mb-2">
@@ -63,7 +97,7 @@ const GenerateCertificate = () => {
         // Personal Information
         name={submission.fullName || "N/A"}
         email={submission.email || "N/A"}
-        orderId={submission.id}
+        orderId={padId(submission.id)}
         cardName={submission.cardName}
         category={submission.category}
         yearOfRelease={submission.yearOfRelease?.toString() || "N/A"}
@@ -88,21 +122,34 @@ const GenerateCertificate = () => {
         >
           Download PDF
         </Button>
-        <ButtonGradient onClick={() => setIsConfirmDoc(true)}>
-          Confirm & Notify User
+        <ButtonGradient onClick={updateStatus} disabled={updateSubmission.isPending}>
+          {updateSubmission.isPending ? (
+            <>
+              <Loader2 className="animate-spin w-5 h-5" />
+               Confirming...
+            </>
+          ) : (
+            "Confirm & Notify User"
+          )}
         </ButtonGradient>
       </div>
 
-      <ConfirmationModal
+      <CustomModal
         isOpen={isConfirmDoc}
-        title="Your Card is Submit for Grading"
-        message="Your Tracking Number:"
-        trackNo={987654321}
+        icon_url="/icons/success.svg"
+        title="Card has been graded"
+        message="User has been Notified about the Grading Decision."
         onConfirm={() => {
           setIsConfirmDoc(false);
+          router.push("/dashboard");
         }}
-        onClose={() => setIsConfirmDoc(false)}
-        cn="!p-8"
+        onCancel={() => setIsConfirmDoc(false)}
+        cn="!p-16 !rounded-2xl"
+        yes_btn_text="Done"
+        no_btn_text="Cancel"
+        icon_bg="bg-transparent"
+        icon_h={60}
+        icon_w={60}
       />
     </div>
   );

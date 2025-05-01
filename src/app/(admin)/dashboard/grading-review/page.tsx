@@ -11,6 +11,7 @@ import { ButtonGradient } from "@/components/common/ButtonGradient";
 import AiGrading from "./components/AiGrading";
 import { useSubmissionStore } from "@/stores/submissionStore";
 import { submissionStatus } from "@/app/(user)/lib/utils/constants";
+import { formatToUSTimezone, padId } from "@/lib/utils";
 
 const GradingReview = () => {
   const router = useRouter();
@@ -43,11 +44,11 @@ const GradingReview = () => {
       category: submission.category,
       yearOfRelease: submission.yearOfRelease?.toString() || "",
       condition: submission.conditionEstimate,
-      submissionDate: submission.submissionDate || "",
+      submissionDate:  formatToUSTimezone(submission.submissionDate || ''),
       status: submission.submissionStatus,
       name: submission.fullName as string,
       email: submission.email as string,
-      orderId: submission.id
+      orderId: padId(submission.id)
     };
   }, [submission]);
 

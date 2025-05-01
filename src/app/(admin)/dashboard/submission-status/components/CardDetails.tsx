@@ -10,6 +10,7 @@ import { useRouter } from "next/navigation";
 import { useSubmissionStore } from "@/stores/submissionStore";
 import { useUpdateSubmission } from "@/hooks/useUpdateSubmission";
 import { FlexibleRecord } from "@/types";
+import { formatToUSTimezone, padId } from "@/lib/utils";
 
 export default function CardDetails() {
   const router = useRouter();
@@ -116,11 +117,11 @@ export default function CardDetails() {
       category: submission.category,
       yearOfRelease: submission.yearOfRelease?.toString() || "",
       condition: submission.conditionEstimate,
-      submissionDate: submission.submissionDate || "",
+      submissionDate: formatToUSTimezone(submission.submissionDate || ""),
       status: submission.submissionStatus,
       name: submission.fullName as string,
       email: submission.email as string,
-      orderId: submission.id
+      orderId: padId(submission.id)
     };
   }, [submission]);
 
