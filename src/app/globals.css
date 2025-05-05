@@ -144,6 +144,10 @@ body {
   .text-description {
     @apply text-xs;
   }
+
+  .clip-curve {
+    clip-path: polygon(21% 0, 100% 0, 73% 100%, 2% 100%);
+  }
 }
 
 @layer base {

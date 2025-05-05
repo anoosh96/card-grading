@@ -14,7 +14,7 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
         </div>
       </div>
       <div className="h-screen">
-        <Image src={"/assets/images/design.png"} alt="card image" width={760} height={1024} className="w-full h-screen object-cover" />
+        <Image src={"/assets/images/auth-pic.png"} alt="card image" width={760} height={1024} className="max-w-4xl w-full h-auto lg:h-screen object-fill clip-curve" />
       </div>
     </section>
   )
