@@ -14,7 +14,7 @@ import { useAdminSubmissions } from '@/hooks/useAdminSubmissions';
 import { Submission, SubmissionInfo } from '@/types';
 import { useAdminDeleteSubmission } from '@/hooks/useAdminDeleteSubmission';
 import { SkeletonTracking } from '@/components/skeletons/DashboardSkeleton';
-import { padId } from '@/lib/utils';
+import { formatToUSTimezone, padId } from '@/lib/utils';
 
 interface DashboardSubmissionStatusProps {
   isMoreItem?: boolean;
@@ -129,7 +129,7 @@ const DashboardSubmissionStatus: FC<DashboardSubmissionStatusProps> = ({
                 <td className="p-3">
                   <div className="flex items-center gap-1">
                     <CalendarIcon />
-                    <span>{dateFormat(submission.dateTime)}</span>
+                    <span>{formatToUSTimezone(submission.dateTime)}</span>
                   </div>
                 </td>
                 {/* <td className="p-3">{}</td> */}
