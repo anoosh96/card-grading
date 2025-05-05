@@ -8,7 +8,7 @@ import CustomDropdown from '@/components/common/CustomDropDown/CustomDropDown';
 import Link from '@/components/common/CustomLink/CustomLink';
 import { useRouter } from 'next/navigation';
 import CustomModal from '@/components/common/CustomModal';
-import { dateFormat, formatSubmissionStatus } from '@/app/(user)/lib/utils/helpers';
+import { formatSubmissionStatus } from '@/app/(user)/lib/utils/helpers';
 import { submissionSourceMap, submissionStatus } from '@/app/(user)/lib/utils/constants';
 import { useAdminSubmissions } from '@/hooks/useAdminSubmissions';
 import { Submission, SubmissionInfo } from '@/types';
