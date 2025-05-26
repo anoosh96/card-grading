@@ -126,7 +126,7 @@ export function DashboardSubmissionTracking({ showViewAll = false }: SubmissionT
                   <th className="text-left py-3 pl-4 lg:pl-16 pr-4 text-xs md:text-base">Track No</th>
                   <th className="text-left py-3 pl-4 lg:pl-16 pr-4 text-xs md:text-base">Date and Time</th>
                   <th className="text-left py-3 px-4 text-xs md:text-base">Card Name</th>
-                  <th className="text-left py-3 px-4 text-xs md:text-base">Submission Source</th>
+                  {/* <th className="text-left py-3 px-4 text-xs md:text-base">Submission Source</th> */}
                   <th className="text-left py-3 pl-4 pr-4 lg:pr-16 text-xs md:text-base">Card Status</th>
                   <th></th>
                 </tr>
@@ -155,7 +155,7 @@ export function DashboardSubmissionTracking({ showViewAll = false }: SubmissionT
                         <span className="text-sm text-dark-purple">{submission.card.cardName}</span>
                       </div>
                     </td>
-                    <td className="py-3 px-4 text-xs md:text-base">{submissionSourceMap[submission.submissionSource]}</td>
+                    {/* <td className="py-3 px-4 text-xs md:text-base">{submissionSourceMap[submission.submissionSource]}</td> */}
                     <td className="py-3 px-4 text-xs lg:text-base">
                       {getStatusBadge(submission.submissionStatus)}
                     </td>

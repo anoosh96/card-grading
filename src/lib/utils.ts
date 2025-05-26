@@ -41,3 +41,9 @@ export function formatToUSTimezone(utcDateStr: string, timeZone = 'America/New_Y
     hour12: true,
   }).format(date);
 }
+
+
+export function FormatCase(str: string): string {
+  const result = str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
+  return result
+}

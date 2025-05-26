@@ -7,12 +7,13 @@ import Link from "next/link";
 
 interface SubscriptionBoxProps {
   className?: string
-  data: Subscription
+  data: Subscription | null
 }
 
 export default function SubscriptionBox({ className, data }: SubscriptionBoxProps) {
-  const progress = data.status === 'ACTIVE' ? (data.cardsUsed / data.totalCards) * 100 : 0;
-
+  const progress = data?.status === 'ACTIVE' ? (data.cardsUsed / data.totalCards) * 100 : 0;
+  console.log(data)
+  
   return (
     <div className="w-full">
       <div className={cn(
@@ -23,15 +24,15 @@ export default function SubscriptionBox({ className, data }: SubscriptionBoxProp
           {data?.status == 'ACTIVE' ? `${capitalize(data.type)} Subscription` : 'Subscription Needed'}
         </h3>
         <div className="rounded-3xl bg-white text-primary px-6 sm:px-12 py-1 sm:py-2 text-sm sm:text-lg">
-          {capitalize(data.status)}
+          {data?.status == 'ACTIVE' ? `${capitalize(data.status)}` : 'Inactive'}
         </div>
       </div>
       {
-        data.status == 'ACTIVE' ?
+        data?.status == 'ACTIVE' ?
           <div className="p-4 border border-soft-grey">
             <div className="flex flex-col sm:flex-row justify-between items-center mb-4">
               <div className="flex flex-col mb-2 sm:mb-0">
-                <span className="text-neutral-grey text-sm">Subscription renews on</span>
+                <span className="text-neutral-grey text-sm">Subscription {data.cancelAtPeriodEnd ? 'Ends' : 'Renews'} on</span>
                 <span className="text-lg sm:text-xl">{formatDateToReadable(data.renewalDate)}</span>
               </div>
               <div>
@@ -53,7 +54,9 @@ export default function SubscriptionBox({ className, data }: SubscriptionBoxProp
           :
           <div className="p-4 sm:p-7 border border-soft-grey">
             <p className="text-sm">Your subscription is not active. Please activate a subscription to submit your card.</p>
-            <ButtonGradient size={'lg'} className="px-4 py-2 bg-custom-gradient-2 mt-4 text-sm sm:text-base">Activate Subscription</ButtonGradient>
+            <Link href={"/services-and-pricing"}>
+              <ButtonGradient size={'lg'} className="px-4 py-2 bg-custom-gradient-2 mt-4 text-sm sm:text-base">Activate Subscription</ButtonGradient>
+            </Link>
           </div>
       }
     </div>

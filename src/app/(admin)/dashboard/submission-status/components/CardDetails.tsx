@@ -11,6 +11,7 @@ import { useSubmissionStore } from "@/stores/submissionStore";
 import { useUpdateSubmission } from "@/hooks/useUpdateSubmission";
 import { FlexibleRecord } from "@/types";
 import { formatToUSTimezone, padId } from "@/lib/utils";
+import { Loader2 } from "lucide-react";
 
 export default function CardDetails() {
   const router = useRouter();
@@ -194,7 +195,14 @@ export default function CardDetails() {
           className="max-w-[8rem] w-full"
           disabled={updateSubmission.isPending}
         >
-          {updateSubmission.isPending ? "Updating..." : "Update"}
+          {updateSubmission.isPending ? (
+            <>
+              <Loader2 className="animate-spin w-5 h-5" />
+              Updating...
+            </>
+          ) : (
+            "Update"
+          )}
         </ButtonGradient>
       </div>
     </div>

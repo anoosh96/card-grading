@@ -10,7 +10,7 @@ import { ReactNode } from "react";
 
 export const dashboardSidebarItems: SidebarItemProps[] = [
   { href: "/user-dashboard", label: "Dashboard", Icon: DashboardSidebarIcon },
-  { href: "/user-dashboard/my-submissions", label: "My Submissions", Icon: DashboardSubmissionStatusIcon },
+  { href: "/user-dashboard/my-submissions/by-post-submission", label: "My Submissions", Icon: DashboardSubmissionStatusIcon },
   { href: "/user-dashboard/submission-status", label: "Submission Status", Icon: DashboardSubtrackingIcon },
   { href: "/user-dashboard/subscription", label: "Subscription", Icon: DashboardSubscriptionIcon },
   { href: "/user-dashboard/profile", label: "Profile", Icon: DashboardProfileIcon },

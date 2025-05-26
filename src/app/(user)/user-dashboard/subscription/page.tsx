@@ -6,10 +6,13 @@ import { ButtonGradient } from "@/components/common/ButtonGradient"
 import { useUserStore } from "@/stores/userStore";
 import Link from "next/link";
 import { SubscriptionBoxSkeleton } from "@/components/skeletons/DashboardSkeleton";
+import { useCancelSubscription } from "@/hooks/subscription/useCancelSubscription";
+import { Loader2 } from "lucide-react";
 
 
 export default function SubscriptionPage() {
   const { user } = useUserStore();
+  const cancelSubscription = useCancelSubscription()
 
   const subscriptionData = user?.subscription
     ? {
@@ -18,9 +21,14 @@ export default function SubscriptionPage() {
       totalCards: user.subscription.cardLimit,
       cardsUsed: user.subscription.cardsUsed,
       type: user.subscription.service?.name as string,
-      cardLimit: user.subscription.cardLimit
+      cardLimit: user.subscription.cardLimit,
+      cancelAtPeriodEnd: user.subscription.cancelAtPeriodEnd
     }
     : null;
+
+  const handleCancelSubscription = async () => {
+    await cancelSubscription.mutateAsync()
+  }
 
   return (
     <section className="bg-white rounded-lg p-7">
@@ -29,7 +37,7 @@ export default function SubscriptionPage() {
 
       <h2 className="text-2xl my-8 font-semibold">Current Subscription Details</h2>
 
-      {user?.id && subscriptionData? (
+      {user?.id && subscriptionData ? (
         <>
           <SubscriptionBox className="mt-6" data={subscriptionData} />
 
@@ -38,8 +46,17 @@ export default function SubscriptionPage() {
             <Button
               size={"lg"}
               className="h-auto font-semibold bg-soft-grey rounded-full text-pure-grey py-3 px-14 text-base hover:bg-soft-grey"
+              disabled={cancelSubscription.isPending || subscriptionData?.cancelAtPeriodEnd }
+              onClick={handleCancelSubscription}
             >
-              Cancel Subscription
+              {cancelSubscription.isPending ? (
+                <>
+                  <Loader2 className="animate-spin w-5 h-5" />
+                  Cancelling...
+                </>
+              ) : (
+                "Cancel"
+              )}
             </Button>
             <Link href={"/services-and-pricing"}>
               <ButtonGradient size={"lg"} className="py-3 px-14 h-auto" type="submit">
@@ -51,11 +68,10 @@ export default function SubscriptionPage() {
       ) : !user?.id ? (
         // <p className="mt-6 text-neutral-grey">No subscription information available.</p>
         <SubscriptionBoxSkeleton />
-      ) 
-       :
-        <p className="mt-6 text-neutral-grey">No subscription information available.</p>
-
-     }
+      )
+        :
+        <SubscriptionBox className="mt-6" data={null} />
+      }
     </section>
   )
 }

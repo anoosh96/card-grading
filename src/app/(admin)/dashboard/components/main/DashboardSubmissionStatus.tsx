@@ -114,7 +114,7 @@ const DashboardSubmissionStatus: FC<DashboardSubmissionStatusProps> = ({
               <th className="p-3">Order No</th>
               <th className="p-3">Date & Time</th>
               {/* <th className="p-3">Action</th> */}
-              <th className="p-3">Submission Source</th>
+              {/* <th className="p-3">Submission Source</th> */}
               <th className="p-3">Card Status</th>
               <th className="w-10 p-3"></th>
             </tr>
@@ -133,7 +133,7 @@ const DashboardSubmissionStatus: FC<DashboardSubmissionStatusProps> = ({
                   </div>
                 </td>
                 {/* <td className="p-3">{}</td> */}
-                <td className="p-3">{submissionSourceMap[submission.submissionSource]}</td>
+                {/* <td className="p-3">{submissionSourceMap[submission.submissionSource]}</td> */}
                 <td className="p-3">{getStatusBadge(submission.submissionStatus)}</td>
                 <td className="p-4">
                   <CustomDropdown

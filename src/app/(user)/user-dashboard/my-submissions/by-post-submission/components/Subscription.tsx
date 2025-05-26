@@ -30,7 +30,8 @@ export default function Subscription({ handleNext, handlePrevious }: FormStepPro
       totalCards: user.subscription.cardLimit,
       cardsUsed: user.subscription.cardsUsed,
       type: user.subscription.service?.name as string,
-      cardLimit: user.subscription.cardLimit
+      cardLimit: user.subscription.cardLimit,
+      cancelAtPeriodEnd: user.subscription.cancelAtPeriodEnd
     }
     : null;
 
@@ -79,11 +80,7 @@ export default function Subscription({ handleNext, handlePrevious }: FormStepPro
         shippingStatus: 'Pending'
       }} className="mt-6" />
 
-      {subscriptionData ? (
-        <SubscriptionBox className="mt-6" data={subscriptionData} />
-      ) : (
-        <p className="mt-6 text-neutral-grey">No subscription information available.</p>
-      )}
+      <SubscriptionBox className="mt-6" data={subscriptionData} />
 
 
       {/* Controlled Checkbox */}
@@ -103,7 +100,8 @@ export default function Subscription({ handleNext, handlePrevious }: FormStepPro
         >
           Back
         </Button>
-        <ButtonGradient size="lg" className="py-3 px-14 h-auto" onClick={handleSubmit} disabled={!isChecked || createSubmission.isPending}>
+        <ButtonGradient size="lg" className="py-3 px-14 h-auto" onClick={handleSubmit}
+          disabled={!isChecked || createSubmission.isPending || (!subscriptionData || subscriptionData.status !== 'ACTIVE')}>
           {createSubmission.isPending ? (
             <>
               <Loader2 className="animate-spin w-5 h-5" />

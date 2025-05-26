@@ -32,7 +32,7 @@ function DashboardSubmissionCard() {
         <h3 className="font-semibold text-xl text-charcol">Total Submissions</h3>
       </div>
 
-      <SubmissionSources byFormPercentage={data?.byFormPercentage} byPostPercentage={data?.byPostPercentage} />
+      {/* <SubmissionSources byFormPercentage={data?.byFormPercentage} byPostPercentage={data?.byPostPercentage} /> */}
     </div>
   );
 }

@@ -4,11 +4,21 @@ import Addons from "./components/Addons";
 import PricingTable from "./components/PricingTable";
 
 
-export default function ServicesAndPricingPage () {
+export default async function ServicesAndPricingPage () {
+  
+  const res = await fetch(`${process.env.API_URL}/api/subscription/plans`, {
+    cache: 'no-store' // optional: ensures fresh data on each request (SSR)
+  });
 
+  if (!res.ok) {
+    throw new Error("Failed to fetch subscription plans");
+  }
+
+  const plans = await res.json();
+  
   return (
     <Container>
-      <OurServices />
+      <OurServices services={plans.data} />
       <Addons />
       <PricingTable />
     </Container>

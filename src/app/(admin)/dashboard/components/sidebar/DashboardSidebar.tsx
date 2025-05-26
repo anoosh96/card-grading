@@ -10,6 +10,8 @@ import CustomModal from "@/components/common/CustomModal";
 import { useLogout } from "@/hooks/useLogout";
 import { cn } from "@/lib/utils";
 import { useSidebar } from "@/hooks/useSidebar";
+import Link from "next/link";
+import Image from "next/image";
 
 export function DashboardSidebar() {
   const pathname = usePathname();
@@ -72,7 +74,9 @@ export function DashboardSidebar() {
             <Menu className="w-6 h-6 text-primary" />
           </SheetTrigger>
           <SheetContent side="left" className="w-72 p-6">
-            <h1 className="text-xl font-bold mb-6">Logo</h1>
+            <Link href="/" className={cn("text-xl font-bold mb-4")}>
+              <Image src={"/assets/images/logo.png"} alt="logo" width={80} height={80} className="w-24 h-24" />
+            </Link>
             <nav className="space-y-5">
               {dashboardSidebarItems.map((item) =>
                 item.label === 'Logout' ? (
@@ -104,7 +108,9 @@ export function DashboardSidebar() {
           "duration-300" // Added transition for smooth animation
         )}>
           <div className={cn("p-6", isCollapsed ? "px-4" : "")}>
-            <h1 className={cn("text-xl font-bold", isCollapsed ? "hidden" : "block")}>Logo</h1>
+            <Link href="/" className={cn("text-xl font-bold", isCollapsed ? "hidden" : "block")}>
+              <Image src={"/assets/images/logo.png"} alt="logo" width={80} height={80} className="w-24 h-24" />
+            </Link>
           </div>
 
           <nav className="flex-1 mt-32 space-y-5 overflow-y-scroll">

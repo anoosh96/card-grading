@@ -30,55 +30,57 @@ export const SkeletonCard = () => {
       </div>
 
       {/* Submission Sources Card */}
-      <div className="bg-white w-full rounded-[1.25rem] p-6 shadow-sm">
-        {/* Header */}
-        <div className="flex flex-col items-start justify-between mb-3">
-          {/* Title placeholder */}
-          <div className="h-6 bg-gray-200 rounded w-48 mb-3"></div>
-          {/* Separator */}
-          <div className="w-full h-[1px] bg-gray-200 mt-3"></div>
-        </div>
+      {/*
+  <div className="bg-white w-full rounded-[1.25rem] p-6 shadow-sm">
+    <!-- Container with white background, rounded corners, padding, and shadow -->
 
-        {/* Filter badge */}
-        <div className="bg-gray-200 w-48 h-10 rounded-2xl"></div>
+    <!-- Header -->
+    <div className="flex flex-col items-start justify-between mb-3">
+      <!-- Title placeholder -->
+      <div className="h-6 bg-gray-200 rounded w-48 mb-3"></div>
 
-        <div className="w-full flex flex-col gap-5 lg:flex-row">
-          {/* Left side - percentages */}
-          <div className="flex justify-between items-center gap-6 mt-7 xl:mt-4 w-11/12">
-            <div className="space-y-8 w-full md:w-1/2 xl:w-1/3">
-              {/* By Post row */}
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  {/* Color indicator */}
-                  <div className="h-4 w-8 rounded-sm bg-gray-200"></div>
-                </div>
-                {/* Text placeholders */}
-                <div className="h-4 bg-gray-200 rounded w-14"></div>
-                <div className="h-4 bg-gray-200 rounded w-8"></div>
-              </div>
+      <!-- Separator -->
+      <div className="w-full h-[1px] bg-gray-200 mt-3"></div>
+    </div>
 
-              {/* By Form row */}
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  {/* Color indicator */}
-                  <div className="h-4 w-8 rounded-sm bg-gray-200"></div>
-                </div>
-                {/* Text placeholders */}
-                <div className="h-4 bg-gray-200 rounded w-14"></div>
-                <div className="h-4 bg-gray-200 rounded w-8"></div>
-              </div>
+    <!-- Filter badge placeholder -->
+    <div className="bg-gray-200 w-48 h-10 rounded-2xl"></div>
+
+    <div className="w-full flex flex-col gap-5 lg:flex-row">
+      <!-- Main content row -->
+
+      <!-- Left side - list of data rows -->
+      <div className="flex justify-between items-center gap-6 mt-7 xl:mt-4 w-11/12">
+        <div className="space-y-8 w-full md:w-1/2 xl:w-1/3">
+          <!-- By Post row -->
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <div className="h-4 w-8 rounded-sm bg-gray-200"></div>
             </div>
+            <div className="h-4 bg-gray-200 rounded w-14"></div>
+            <div className="h-4 bg-gray-200 rounded w-8"></div>
           </div>
 
-          {/* Right side - pie chart */}
-          <div className="flex items-center justify-center w-36 h-32">
-            {/* Pie chart placeholder */}
-            <div className="w-[120px] h-[120px] rounded-full border-8 border-gray-200 flex items-center justify-center">
-              <div className="w-[80px] h-[80px] rounded-full bg-white"></div>
+          <!-- By Form row -->
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <div className="h-4 w-8 rounded-sm bg-gray-200"></div>
             </div>
+            <div className="h-4 bg-gray-200 rounded w-14"></div>
+            <div className="h-4 bg-gray-200 rounded w-8"></div>
           </div>
         </div>
       </div>
+
+      <!-- Right side - pie chart placeholder -->
+      <div className="flex items-center justify-center w-36 h-32">
+        <div className="w-[120px] h-[120px] rounded-full border-8 border-gray-200 flex items-center justify-center">
+          <div className="w-[80px] h-[80px] rounded-full bg-white"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+*/}
     </div>
   );
 };
@@ -388,9 +390,8 @@ export function OrderDetailsSkeleton() {
                 {/* Insert Divider Before Last Two Items */}
                 {index === 7 && <div className="border-t border-gray-200 my-2"></div>}
 
-                <div className={`grid grid-cols-2 py-1 ${
-                  index >= 7 ? "text-[18px] font-medium" : ""
-                }`}>
+                <div className={`grid grid-cols-2 py-1 ${index >= 7 ? "text-[18px] font-medium" : ""
+                  }`}>
                   <div className="h-4 bg-gray-200 rounded w-32"></div>
                   <div className={`h-4 ${index === 8 ? "bg-gray-300" : "bg-gray-200"} rounded w-40`}></div>
                 </div>
@@ -417,7 +418,7 @@ export function ProgressTrackerSkeleton() {
         <div className="h-8 bg-gray-200 rounded w-48 mb-2 sm:mb-0"></div>
         <div className="h-8 bg-gray-200 rounded w-32 ml-0 sm:ml-auto"></div>
       </div>
-      
+
       {/* Overall Progress text */}
       <div className="h-6 bg-gray-200 rounded w-36"></div>
 
@@ -450,7 +451,7 @@ export function ProgressTrackerSkeleton() {
               <div className="h-4 bg-gray-200 rounded w-64"></div>
             </div>
           </div>
-          
+
           {/* Step 2 */}
           <div className="flex items-center gap-4 sm:gap-8">
             <div className="flex items-center justify-center rounded-full w-6 h-6 sm:w-8 sm:h-8 bg-gray-300">
@@ -461,7 +462,7 @@ export function ProgressTrackerSkeleton() {
               <div className="h-4 bg-gray-200 rounded w-64"></div>
             </div>
           </div>
-          
+
           {/* Step 3 */}
           <div className="flex items-center gap-4 sm:gap-8">
             <div className="flex items-center justify-center rounded-full w-6 h-6 sm:w-8 sm:h-8 bg-gray-300">
@@ -472,14 +473,14 @@ export function ProgressTrackerSkeleton() {
               <div className="h-4 bg-gray-200 rounded w-64"></div>
             </div>
           </div>
-          
+
           {/* Estimated completion box */}
           <div className="bg-gray-200 p-4 sm:p-8 flex items-center rounded-md">
             <div className="w-6 h-6 bg-gray-300 rounded-full"></div>
             <div className="h-6 bg-gray-300 rounded w-56 ml-2 sm:ml-6"></div>
           </div>
         </div>
-      </div>    
+      </div>
     </div>
   );
 };
@@ -490,10 +491,10 @@ export function OrderTrackingSkeleton() {
       {/* Header */}
       <div className="h-8 bg-gray-200 rounded w-40 mb-4"></div>
       <div className="h-5 bg-gray-200 rounded w-72 mt-4 mb-10"></div>
-      
+
       {/* Progress Tracker */}
       <ProgressTrackerSkeleton />
-      
+
       {/* Buttons */}
       <div className="flex gap-6 mt-8">
         <div className="h-12 bg-gray-200 rounded-full w-32"></div>

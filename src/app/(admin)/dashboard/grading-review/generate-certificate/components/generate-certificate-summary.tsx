@@ -76,10 +76,10 @@ export function GenerateCertificateSummary({
         {/* Submission Details */}
 
         <div className="text-lg font-medium">
-          <div className="flex items-center py-1 mt-2">
+          {/* <div className="flex items-center py-1 mt-2">
             <span className="flex-1 font-medium">Submission Type</span>
             <span className="flex-1">{submissionType}</span>
-          </div>
+          </div> */}
 
           <div className="flex items-center py-1">
             <span className="flex-1 font-medium">AI Analysis Summary</span>

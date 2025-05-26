@@ -8,7 +8,8 @@ const publicRoutes = [
   '/reset-password',
   '/about-us',
   '/grading',
-  '/services-and-pricing',
+  '/login',
+  // '/services-and-pricing',
   '/portfolio',
   '/contact-us',
 ];

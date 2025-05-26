@@ -5,9 +5,13 @@ import { DashboardSidebar } from "./components/DashboardSidebar";
 import { DashboardHeader } from "./components/DashboardHeader";
 import { DashboardSkeleton, SkeletonHeader, SkeletonSidebar } from "../../components/skeletons/DashboardSkeleton";
 import { useSidebar } from "@/hooks/useSidebar";
+import { useUser } from "@/hooks/useUser";
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   const { isCollapsed } = useSidebar();
+
+  const { refetch: refetchUser } = useUser();
+  refetchUser()
 
   return (
     <div className="min-h-screen flex">

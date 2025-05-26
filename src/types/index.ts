@@ -23,8 +23,9 @@ export interface FaqProps {
 
 export interface ServiceCardProps {
   name: string;
-  price: string;
+  price: number;
   features: string[];
+  onSubscribe: (type: string) => void;
 }
 
 export interface AddonProps {
@@ -44,6 +45,7 @@ export interface Service {
   pricePerCard: number;
   renewalPeriod: string;
   features: string[];
+  cardLimit: number;
 }
 
 export interface Subscription {
@@ -55,6 +57,7 @@ export interface Subscription {
   cardsUsed: number;
   serviceId?: string;
   service?: Service;
+  cancelAtPeriodEnd: boolean;
 }
 
 export interface UserProfile {

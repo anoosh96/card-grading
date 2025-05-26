@@ -102,13 +102,13 @@ const SubmissionSummary = ({
                     onClick={handleSave}
                     className="text-green-500 hover:text-green-700"
                   >
-                    <Check size={18} />
+                    <Check size={30} />
                   </button>
                   <button
                     onClick={handleCancel}
                     className="text-light-red hover:text-red-700"
                   >
-                    <X size={18} />
+                    <X size={30} />
                   </button>
                 </>
               ) : (
@@ -116,7 +116,7 @@ const SubmissionSummary = ({
                   onClick={() => setIsEditing(true)}
                   className="text-light-red hover:text-orange-700"
                 >
-                  <Pencil size={18} />
+                  <Pencil size={24} />
                 </button>
               )}
             </div>
@@ -164,7 +164,7 @@ const SubmissionSummary = ({
                       type="text"
                       value={value}
                       onChange={(e) => handleChange(key, e.target.value)}
-                      className="border border-gray-300 bg-white rounded px-2 py-1 w-full"
+                      className="border border-gray-300 bg-white rounded-lg p-4 w-full"
                     />
                   )
                 ) : (
