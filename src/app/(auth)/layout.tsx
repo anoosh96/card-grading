@@ -5,12 +5,12 @@ import Link from "next/link";
 export default function AuthLayout({ children }: { children: React.ReactNode }) {
   return (
     <section className="grid lg:grid-cols-2 overflow-hidden">
-      <div className="flex flex-col items-center justify-start lg:mt-44 z-30 mb-14 lg:mb-0">
+      <div className="flex flex-col items-center justify-start lg:mt-32 z-30 mb-14 lg:mb-0">
         <div className="p-10 lg:p-0 w-full md:w-[55%]">
-          <Link href="/" className="inline-block text-3xl mb-10 lg:mb-20 mt-10 lg:mt-0 font-bold">
-            Logo
+          <Link href="/" className="text-2xl font-semibold block mb-16">
+            <Image src={"/assets/images/logo.png"} alt="logo" width={80} height={80} className="w-28 h-28 -ml-[20px]" />
           </Link>
-          { children }
+          {children}
         </div>
       </div>
       <div className="h-screen">
