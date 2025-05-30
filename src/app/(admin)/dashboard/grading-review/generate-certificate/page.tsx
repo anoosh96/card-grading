@@ -5,9 +5,8 @@ import React, { useEffect, useMemo, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { ButtonGradient } from "@/components/common/ButtonGradient";
 import { useSubmissionStore } from "@/stores/submissionStore";
-import { formatToUSTimezone, padId } from "@/lib/utils";
+import { formatToUSTimezone } from "@/lib/utils";
 import CustomModal from "@/components/common/CustomModal";
-import { FlexibleRecord } from "@/types";
 import { submissionStatus } from "@/app/(user)/lib/utils/constants";
 import { useUpdateSubmission } from "@/hooks/useUpdateSubmission";
 import { useRouter } from "next/navigation";
@@ -138,7 +137,7 @@ const GenerateCertificate = () => {
     }
 
 
-    const data = await confirmGrade.mutateAsync({ ...gradingData, pdfFile: pdf, cardId: submission.cardId } as GradingData)
+    await confirmGrade.mutateAsync({ ...gradingData, pdfFile: pdf, cardId: submission.cardId } as GradingData)
     setIsConfirmDoc(true);
   };
 

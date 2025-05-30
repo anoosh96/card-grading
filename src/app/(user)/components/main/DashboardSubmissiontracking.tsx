@@ -9,7 +9,7 @@ import CustomDropdown from "@/components/common/CustomDropDown/CustomDropDown";
 import TrackIcon from "@/components/svgs/dashboard/TrackIcon";
 import { useRouter } from "next/navigation";
 import { useSubmissions } from "@/hooks/useSubmissions";
-import { submissionSourceMap, submissionStatus } from "../../lib/utils/constants";
+import { submissionStatus } from "../../lib/utils/constants";
 import { useDeleteSubmission } from "@/hooks/useDeleteSubmission";
 import { Submission } from "@/types";
 import { SkeletonTracking } from "@/components/skeletons/DashboardSkeleton";

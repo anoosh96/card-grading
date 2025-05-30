@@ -1,6 +1,6 @@
 "use client";
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import { useLayoutEffect, useState } from "react";
 import { ButtonGradient } from "./ButtonGradient";
 import { FaBars, FaTimes } from "react-icons/fa";

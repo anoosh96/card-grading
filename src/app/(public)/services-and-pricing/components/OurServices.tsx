@@ -3,7 +3,6 @@
 import Image from "next/image"
 import ServiceCard from "./ServiceCard"
 import { Service } from "@/types";
-import { useState } from "react";
 import { useCheckoutSession } from "@/hooks/useCheckoutSession";
 import { useUserStore } from "@/stores/userStore";
 import { useRouter } from "next/navigation";
@@ -24,7 +23,7 @@ import { useRouter } from "next/navigation";
 
 
 export default function OurServices({ services }: { services: Service[] }) {
-  const [subscriptionLoading, setSubscriptionLoading] = useState(false);
+  // const [subscriptionLoading, setSubscriptionLoading] = useState(false);
   const checkoutSession  = useCheckoutSession();
   const { isAuthenticated } = useUserStore()
   const router = useRouter()
@@ -37,7 +36,7 @@ export default function OurServices({ services }: { services: Service[] }) {
       return;
     }
 
-    setSubscriptionLoading(true);
+    // setSubscriptionLoading(true);
 
     try {
       const data = await checkoutSession.mutateAsync({ serviceType })
@@ -52,7 +51,7 @@ export default function OurServices({ services }: { services: Service[] }) {
       console.error('Error:', error);
       alert('Something went wrong. Please try again.');
     } finally {
-      setSubscriptionLoading(false);
+      // setSubscriptionLoading(false);
     }
   };
 

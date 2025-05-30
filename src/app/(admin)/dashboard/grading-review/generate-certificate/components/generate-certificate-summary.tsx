@@ -26,7 +26,6 @@ export function GenerateCertificateSummary({
   category,
   yearOfRelease,
   condition,
-  submissionType,
   aiAnalysisSummary,
   finalGrade,
 }: GenerateCertificateSummaryProps) {

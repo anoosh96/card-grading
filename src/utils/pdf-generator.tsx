@@ -443,7 +443,7 @@ const GradingReportPDF: React.FC<{ cardData: GradingData }> = ({ cardData }) => 
                 <Text style={styles.tableCellScore}>AI Score (out of 10)</Text>
                 <Text style={styles.tableCellComments}>Comments</Text>
               </View>
-              {conditionCategories.map((category, index) => {
+              {conditionCategories.map((category) => {
                 const data = cardData.condition_breakdown?.[
                   category.key as keyof typeof cardData.condition_breakdown
                 ];
