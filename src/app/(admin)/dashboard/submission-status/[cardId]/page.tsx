@@ -3,7 +3,7 @@
 import { submissionStatus } from "@/app/(user)/lib/utils/constants";
 import { useAdminSubmissionDetails } from "@/hooks/useAdminSubmissionDetails";
 import { useSubmissionStore } from "@/stores/submissionStore";
-import { useParams } from "next/navigation";
+import { useParams, useSearchParams } from "next/navigation";
 import { useEffect } from "react";
 import CardDetails from "../components/CardDetails";
 import OrderDetails from "../components/OrderDetails";
@@ -12,8 +12,12 @@ import { OrderDetailsSkeleton } from "@/components/skeletons/DashboardSkeleton";
 
 export default function SubmissionStatusPage() {
   const { cardId } = useParams();
+  const searchParams = useSearchParams();
   const { data, isLoading, isError } = useAdminSubmissionDetails(cardId as string);
   const { submission, setSubmission } = useSubmissionStore();
+
+  // Check if edit query param is true
+  const isEditMode = searchParams.get('edit') === 'true';
 
   useEffect(() => {
     if (data) {
@@ -52,10 +56,13 @@ export default function SubmissionStatusPage() {
         submissionDate: dateTime,
         email: user.email,
         grade: card?.grade?.grade,
-        aiRemarks: card?.grade?.aiRemarks || ''
+        aiRemarks: card?.grade?.aiRemarks || '',
+        cardId: card.id,
+        editing: isEditMode, // Set editing based on query param
+        gradeData: card.grade
       });
     }
-  }, [data, setSubmission]);
+  }, [data, setSubmission, isEditMode]); // Add isEditMode to dependency array
 
   if (isLoading) {
     return <OrderDetailsSkeleton />;

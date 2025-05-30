@@ -74,7 +74,7 @@ const DragDropImageUploader: FC<DragDropImageUploaderProps> = ({
           ${isDragging ? "bg-light-blue-75" : ""}
           transition-colors duration-200
           flex flex-col items-center justify-center
-          min-h-[250px] mx-auto
+          min-h-[300px] mx-auto
         `}
         // onDrop={handleDrop}
         onDragOver={handleDragOver}

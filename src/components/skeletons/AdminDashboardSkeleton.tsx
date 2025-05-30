@@ -42,6 +42,84 @@ export function DashboardSubmissionCardSkeleton() {
   );
 }
 
+export const SkeletonTracking = () => {
+  return (
+    <div className="bg-white rounded-lg shadow-sm animate-pulse">
+      {/* Header */}
+      <div className="flex items-center p-5 justify-between mb-4">
+        <div className="flex flex-col gap-1">
+          <div className="h-8 bg-gray-200 rounded w-40"></div>
+          <div className="h-4 bg-gray-200 rounded w-64 mt-1"></div>
+        </div>
+        <div className="h-4 bg-gray-200 rounded w-20"></div>
+      </div>
+
+      {/* Table */}
+      <div className="w-full overflow-x-auto md:max-w-full">
+        <table className="w-full min-w-[600px] md:min-w-[800px] lg:min-w-full">
+          <thead>
+            <tr className="border-b px-16">
+              <th className="text-left py-3 pl-4 lg:pl-16 pr-4">
+                <div className="h-4 bg-gray-200 rounded w-16"></div>
+              </th>
+              <th className="text-left py-3 pl-4 lg:pl-16 pr-4">
+                <div className="h-4 bg-gray-200 rounded w-24"></div>
+              </th>
+              {/* <th className="text-left py-3 px-4 invisible">
+                <div className="h-4 bg-gray-200 rounded w-20"></div>
+              </th>
+              <th className="text-left py-3 px-4 invisible">
+                <div className="h-4 bg-gray-200 rounded w-32"></div>
+              </th> */}
+              <th className="text-left py-3 pl-4 pr-4 lg:pr-16">
+                <div className="h-4 bg-gray-200 rounded w-20"></div>
+              </th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            {[...Array(5)].map((_, index) => (
+              <tr key={index} className="border-b last:border-0">
+                <td className="py-3 pl-4 lg:pl-16 pr-4">
+                  <div className="h-4 bg-gray-200 rounded w-16"></div>
+                </td>
+                <td className="py-3 pl-4 lg:pl-16 pr-4">
+                  <div className="flex gap-2 items-center">
+                    <div className="h-4 w-4 bg-gray-200 rounded-full"></div>
+                    <div className="h-4 bg-gray-200 rounded w-32"></div>
+                  </div>
+                </td>
+                {/* <td className="py-3 px-4 invisible">
+                  <div className="flex items-center gap-3">
+                    <div className="w-[35px] h-[40px] bg-gray-200 rounded"></div>
+                    <div className="h-4 bg-gray-200 rounded w-24"></div>
+                  </div>
+                </td>
+                <td className="py-3 px-4 invisible">
+                  <div className="h-4 bg-gray-200 rounded w-20"></div>
+                </td> */}
+                <td className="py-3 px-4">
+                  <div className="h-8 bg-gray-200 rounded-full w-full"></div>
+                </td>
+                <td className="py-3 px-4">
+                  <div className="h-4 w-4 bg-gray-200 rounded"></div>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+
+        {/* Pagination skeleton */}
+        <div className="flex justify-center items-center gap-4 mt-6 mb-8">
+          <div className="w-20 h-8 bg-gray-200 rounded"></div>
+          <div className="w-24 h-6 bg-gray-200 rounded"></div>
+          <div className="w-20 h-8 bg-gray-200 rounded"></div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 export default function CardImagesSkeleton() {
   return (
     <div className="animate-pulse">
@@ -154,3 +232,170 @@ export function SkeletonProfilePage() {
     </section>
   )
 }
+
+
+
+import React from 'react';
+
+// Skeleton Components
+const SkeletonBox = ({ className = "" }) => (
+  <div className={`bg-gray-200 animate-pulse rounded ${className}`}></div>
+);
+
+const SkeletonText = ({ className = "" }) => (
+  <div className={`bg-gray-200 animate-pulse rounded h-4 ${className}`}></div>
+);
+
+const SkeletonButton = ({ className = "" }) => (
+  <div className={`bg-gray-200 animate-pulse rounded-full h-12 ${className}`}></div>
+);
+
+// Grading Report Skeleton
+const GradingReportSkeleton = () => (
+  <div className="w-full bg-gray-50 rounded-md shadow-sm overflow-hidden">
+    {/* AI Card Grading Report Section */}
+    <div className="px-4 py-6 sm:px-6 md:px-10 border-b border-gray-200">
+      <div className="flex justify-between items-center mb-4">
+        <div className="flex items-center">
+          <SkeletonBox className="w-6 h-6 mr-4" />
+          <SkeletonText className="w-48 h-6" />
+        </div>
+        <SkeletonBox className="w-6 h-6" />
+      </div>
+      <div className="space-y-4">
+        {[1, 2, 3, 4].map((i) => (
+          <div key={i} className="grid sm:grid-cols-2 grid-cols-1 py-1 gap-2">
+            <SkeletonText className="w-24 h-5" />
+            <SkeletonText className="w-40 h-5" />
+          </div>
+        ))}
+      </div>
+    </div>
+
+    {/* Final Grade Section */}
+    <div className="px-4 py-6 sm:px-6 md:px-10 border-b border-gray-200">
+      <div className="flex justify-between items-center mb-4">
+        <div className="flex items-center">
+          <SkeletonBox className="w-6 h-6 mr-4" />
+          <SkeletonText className="w-32 h-6" />
+        </div>
+        <SkeletonBox className="w-6 h-6" />
+      </div>
+      <div className="space-y-4">
+        <div className="grid sm:grid-cols-2 grid-cols-1 py-1 gap-2">
+          <SkeletonText className="w-16 h-5" />
+          <div className="flex items-center space-x-1">
+            {[1, 2, 3, 4, 5].map((star) => (
+              <SkeletonBox key={star} className="w-6 h-6 rounded-full" />
+            ))}
+          </div>
+        </div>
+        <div className="grid sm:grid-cols-2 grid-cols-1 py-1 gap-2">
+          <SkeletonText className="w-20 h-5" />
+          <SkeletonText className="w-12 h-5" />
+        </div>
+        <div className="grid sm:grid-cols-2 grid-cols-1 py-1 gap-2">
+          <SkeletonText className="w-28 h-5" />
+          <SkeletonText className="w-60 h-5" />
+        </div>
+      </div>
+    </div>
+
+    {/* AI Grading Summary Section */}
+    <div className="px-4 py-6 sm:px-6 md:px-10 border-b border-gray-200">
+      <div className="flex justify-between items-center mb-4">
+        <div className="flex items-center">
+          <SkeletonBox className="w-6 h-6 mr-4" />
+          <SkeletonText className="w-44 h-6" />
+        </div>
+        <SkeletonBox className="w-6 h-6" />
+      </div>
+      <div className="space-y-2">
+        <SkeletonText className="w-full h-4" />
+        <SkeletonText className="w-4/5 h-4" />
+        <SkeletonText className="w-3/4 h-4" />
+      </div>
+    </div>
+
+    {/* Detailed Condition Breakdown Section */}
+    <div className="px-4 py-6 sm:px-6 md:px-10 border-b border-gray-200">
+      <div className="flex justify-between items-center mb-4">
+        <div className="flex items-center">
+          <SkeletonBox className="w-6 h-6 mr-4" />
+          <SkeletonText className="w-56 h-6" />
+        </div>
+        <SkeletonBox className="w-6 h-6" />
+      </div>
+      <div className="overflow-x-auto">
+        <table className="w-full text-left">
+          <thead>
+            <tr className="border-b border-gray-200">
+              <th className="py-2 px-2 sm:px-4">
+                <SkeletonText className="w-16 h-4" />
+              </th>
+              <th className="py-2 px-2 sm:px-4">
+                <SkeletonText className="w-32 h-4" />
+              </th>
+              <th className="py-2 px-2 sm:px-4">
+                <SkeletonText className="w-20 h-4" />
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            {['Corners', 'Edges', 'Surface', 'Centering'].map((category, index) => (
+              <tr key={index} className="border-b border-gray-200 last:border-b-0">
+                <td className="py-2 px-2 sm:px-4">
+                  <SkeletonText className="w-16 h-4" />
+                </td>
+                <td className="py-2 px-2 sm:px-4">
+                  <SkeletonText className="w-8 h-4" />
+                </td>
+                <td className="py-2 px-2 sm:px-4">
+                  <div className="space-y-1">
+                    <SkeletonText className="w-full h-4" />
+                    <SkeletonText className="w-3/4 h-4" />
+                  </div>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    {/* Final Grade Justification Section */}
+    <div className="px-4 py-6 sm:px-6 md:px-10">
+      <div className="flex justify-between items-center mb-4">
+        <div className="flex items-center">
+          <SkeletonBox className="w-6 h-6 mr-4" />
+          <SkeletonText className="w-48 h-6" />
+        </div>
+        <SkeletonBox className="w-6 h-6" />
+      </div>
+      <div className="space-y-2">
+        <SkeletonText className="w-full h-4" />
+        <SkeletonText className="w-5/6 h-4" />
+        <SkeletonText className="w-4/5 h-4" />
+        <SkeletonText className="w-2/3 h-4" />
+      </div>
+    </div>
+  </div>
+);
+
+
+// Main Page Skeleton
+export const ReportSkeleton = () => (
+  <div className="bg-white border-md px-4 py-4 rounded-md">
+    <div className="mb-4">
+      <SkeletonText className="w-80 h-8 mb-2" />
+    </div>
+
+    <GradingReportSkeleton />
+    <CardImagesSkeleton />
+
+    <div className="flex items-center gap-6 mt-4 ml-2 md:ml-4">
+      <SkeletonButton className="w-36" />
+      <SkeletonButton className="w-44" />
+    </div>
+  </div>
+);

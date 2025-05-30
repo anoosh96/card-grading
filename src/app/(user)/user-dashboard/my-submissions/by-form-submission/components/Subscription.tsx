@@ -29,7 +29,8 @@ export default function Subscription({ handleNext, handlePrevious }: FormStepPro
       totalCards: user.subscription.cardLimit,
       cardsUsed: user.subscription.cardsUsed,
       type: user.subscription.service?.name as string,
-      cardLimit: user.subscription.cardLimit
+      cardLimit: user.subscription.cardLimit,
+      cancelAtPeriodEnd: user.subscription.cancelAtPeriodEnd,
     }
     : null;
 

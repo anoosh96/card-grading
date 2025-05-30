@@ -3,12 +3,14 @@ import Image from "next/image";
 interface CardImagesProps {
   frontImage: string
   backImage: string
+  title?: string
+  classNames?: string
 }
 
-export default function CardImages({frontImage, backImage} : CardImagesProps) {
+export default function CardImages({frontImage, backImage, title, classNames} : CardImagesProps) {
   return(
-    <div>
-      <h2 className="text-2xl font-semibold">Card Images</h2>
+    <div className={`${classNames}`}>
+      <h2 className="text-2xl font-semibold">{ title ? title : 'Card Images' }</h2>
 
       <div className="relative flex justify-around mt-2 pb-8 border border-soft-grey">
         <div className="flex flex-col gap-4 items-center justify-center z-10">

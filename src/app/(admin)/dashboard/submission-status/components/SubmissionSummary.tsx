@@ -13,6 +13,8 @@ interface SubmissionSummaryProps {
   isEditable?: boolean;
   onSubmit: (updatedData: SubmissionData) => void;
   classNames?: string;
+  isEditing?: boolean;
+  setIsEditing?: (isEditing: boolean) => void;
 }
 
 const SubmissionSummary = ({
@@ -21,10 +23,10 @@ const SubmissionSummary = ({
   isEditable = false,
   onSubmit,
   classNames,
+  isEditing = false,
+  setIsEditing,
 }: SubmissionSummaryProps) => {
   const [formData, setFormData] = useState<SubmissionData>(data);
-  const [isEditing, setIsEditing] = useState(false);
-
   // Fetch enums for dropdown options
   const { data: enumData, isLoading } = useEnums();
 
@@ -41,12 +43,12 @@ const SubmissionSummary = ({
 
   const handleSave = () => {
     onSubmit(formData);
-    setIsEditing(false);
+    setIsEditing?.(false);
   };
 
   const handleCancel = () => {
     setFormData(data);
-    setIsEditing(false);
+    setIsEditing?.(false);
   };
 
   // Get dropdown options from enum data
@@ -113,7 +115,7 @@ const SubmissionSummary = ({
                 </>
               ) : (
                 <button
-                  onClick={() => setIsEditing(true)}
+                  onClick={() => setIsEditing?.(true)}
                   className="text-light-red hover:text-orange-700"
                 >
                   <Pencil size={24} />

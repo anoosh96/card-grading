@@ -14,7 +14,7 @@ export const dashboardSidebarItems: SidebarItemProps[] = [
     Icon: DashboardSubmissionStatusIcon,
   },
   {
-    href: "/dashboard/grading-review",
+    href: "/dashboard/grading-review/generate-certificate",
     label: "Grading Review",
     Icon: DashboardGradedCardIcon,
   },

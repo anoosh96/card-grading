@@ -62,6 +62,7 @@ export function DashboardSubmissionTracking({ showViewAll = false }: SubmissionT
           </div>
         );
       case submissionStatus.SUBMISSION_RECEIVED:
+      case submissionStatus.GRADING_IN_PROGRESS:
         return (
           <div className="text-center rounded-[1.4rem] md:rounded-full py-3 px-2 bg-[#fbf6e2] text-[#FFCC00] text-[0.6rem] md:text-xs lg:text-base">
             {formatSubmissionStatus(status)}

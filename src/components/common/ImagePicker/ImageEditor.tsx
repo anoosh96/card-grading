@@ -32,7 +32,7 @@ const ImageEditor: FC<ImageEditorProps> = ({
           onUpload={(file) => onAddImage(file)} // Handle single file
         />
       ) : (
-        <div className="flex justify-between relative min-h-[250px] h-[250px] flex-col sm:flex-row border-2 border-dashed rounded-md">
+        <div className="flex justify-between relative min-h-[250px] h-[300px] flex-col sm:flex-row border-2 border-dashed rounded-md">
           {/* Delete Button */}
           <div
             onClick={handleDelete}
@@ -42,7 +42,7 @@ const ImageEditor: FC<ImageEditorProps> = ({
           </div>
 
           {/* Display Image */}
-          <div className="mx-auto max-h-[220px] h-full p-2 bg-gray-50">
+          <div className="mx-auto max-h-[300px] h-full p-2 bg-gray-50">
             <Image
               src={image.url || "/placeholder.svg"}
               alt={image.alt || "Placeholder"}

@@ -115,9 +115,9 @@ export const SkeletonTracking = () => {
               <th className="text-left py-3 px-4">
                 <div className="h-4 bg-gray-200 rounded w-20"></div>
               </th>
-              <th className="text-left py-3 px-4">
+              {/* <th className="text-left py-3 px-4 invisible">
                 <div className="h-4 bg-gray-200 rounded w-32"></div>
-              </th>
+              </th> */}
               <th className="text-left py-3 pl-4 pr-4 lg:pr-16">
                 <div className="h-4 bg-gray-200 rounded w-20"></div>
               </th>
@@ -133,7 +133,7 @@ export const SkeletonTracking = () => {
                 <td className="py-3 pl-4 lg:pl-16 pr-4">
                   <div className="flex gap-2 items-center">
                     <div className="h-4 w-4 bg-gray-200 rounded-full"></div>
-                    <div className="h-4 bg-gray-200 rounded w-20"></div>
+                    <div className="h-4 bg-gray-200 rounded  w-32"></div>
                   </div>
                 </td>
                 <td className="py-3 px-4">
@@ -142,11 +142,11 @@ export const SkeletonTracking = () => {
                     <div className="h-4 bg-gray-200 rounded w-24"></div>
                   </div>
                 </td>
-                <td className="py-3 px-4">
+                {/* <td className="py-3 px-4 invisible">
                   <div className="h-4 bg-gray-200 rounded w-20"></div>
-                </td>
+                </td> */}
                 <td className="py-3 px-4">
-                  <div className="h-8 bg-gray-200 rounded-full w-24"></div>
+                  <div className="h-8 bg-gray-200 rounded-full w-28 md:w-52"></div>
                 </td>
                 <td className="py-3 px-4">
                   <div className="h-4 w-4 bg-gray-200 rounded"></div>

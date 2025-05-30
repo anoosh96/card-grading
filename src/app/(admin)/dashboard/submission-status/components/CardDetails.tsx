@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useMemo } from "react";
+import React, { useMemo, useState } from "react";
 import ImageEditor from "@/components/common/ImagePicker/ImageEditor";
 import { ButtonGradient } from "@/components/common/ButtonGradient";
 import { Button } from "@/components/ui/button";
@@ -16,13 +16,15 @@ import { Loader2 } from "lucide-react";
 export default function CardDetails() {
   const router = useRouter();
 
+  const [isEditing, setIsEditing] = useState(false);
+
   // pull the submission object and setter from the store
   const submission = useSubmissionStore((s) => s.submission);
   const setSubmission = useSubmissionStore((s) => s.setSubmission);
-  
+
   // Use our mutation hook
   const updateSubmission = useUpdateSubmission();
-  
+
   // Memoized preview URLs
   const frontImagePreview = useMemo(() => {
     if (!submission.frontImage) return undefined;
@@ -49,9 +51,9 @@ export default function CardDetails() {
   const handleUpdate = (updated: Partial<SubmissionData>) => {
     // Handle specific enum field transformations if needed
     const updatedData = { ...updated };
-    
+
     // Update the store with the transformed data
-    setSubmission({...updatedData, editing: true});
+    setSubmission({ ...updatedData, editing: true });
   };
 
   const handleSubmit = () => {
@@ -74,7 +76,7 @@ export default function CardDetails() {
         email: submission.email
       }
     };
-    
+
     // Call the mutation with our submission data
     updateSubmission.mutate({
       id: submission.id,
@@ -87,7 +89,7 @@ export default function CardDetails() {
         const updatedSubmission = data.data.submission;
         const updatedCard = data.data.card;
         const updatedUser = data.data.user;
-        
+
         // Update our local submission state
         setSubmission({
           trackingNumber: updatedSubmission.trackingNumber,
@@ -104,7 +106,7 @@ export default function CardDetails() {
           email: updatedUser?.email || submission.email,
           editing: false
         });
-        
+
         // Navigate to submission status page
         router.push(`/dashboard/submission-status/${submission.id}`);
       }
@@ -179,6 +181,8 @@ export default function CardDetails() {
             email: fields.email,
           })
         }
+        isEditing={isEditing}
+        setIsEditing={setIsEditing}
         classNames="mt-4"
       />
 
@@ -193,7 +197,7 @@ export default function CardDetails() {
         <ButtonGradient
           onClick={handleSubmit}
           className="max-w-[8rem] w-full"
-          disabled={updateSubmission.isPending}
+          disabled={updateSubmission.isPending || isEditing}
         >
           {updateSubmission.isPending ? (
             <>

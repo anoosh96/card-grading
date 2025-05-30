@@ -14,12 +14,15 @@ import { useUpdateSubmission } from "@/hooks/useUpdateSubmission";
 import { submissionStatus } from "@/app/(user)/lib/utils/constants";
 import { FlexibleRecord } from "@/types";
 import { formatToUSTimezone, padId } from "@/lib/utils";
+import { usePdfDownload } from "@/hooks/pdf/usePdfDownload";
+import { Loader2 } from "lucide-react";
 
 const OrderDetails = () => {
 
   const { submission, setSubmission } = useSubmissionStore()
   const router = useRouter()
   const updateSubmission = useUpdateSubmission()
+  const { downloadPdf, isGeneratingPDF } = usePdfDownload()
 
 
 
@@ -98,21 +101,49 @@ const OrderDetails = () => {
       />
 
       <div className="flex items-center gap-6 ml-2 sm:ml-6 mt-4">
-        <Button
-          onClick={updateStatus}
-          variant={"ghost"}
-          className="rounded-full text-light-grey-100 heading-secondary font-medium bg-[#E0E0E0] hover:bg-gray-300 hover:text-black"
-          disabled={updateSubmission.isPending || submission.submissionStatus == submissionStatus.SUBMISSION_REJECTED}
-          >
-            {updateSubmission.isPending ? "Updating..." : "Reject Submission"}
-        </Button>
-        <ButtonGradient
-          onClick={() => router.push(`/dashboard/grading-review`)}
-          className="max-w-[8rem] w-full"
-          disabled={submission.submissionStatus == submissionStatus.SUBMISSION_REJECTED}
-        >
-          Start Grading
-        </ButtonGradient>
+        {
+          submission.submissionStatus !== submissionStatus.GRADING_COMPLETE ?
+            <>
+              <Button
+                onClick={updateStatus}
+                variant={"ghost"}
+                className="rounded-full text-light-grey-100 heading-secondary font-medium bg-[#E0E0E0] hover:bg-gray-300 hover:text-black"
+                disabled={updateSubmission.isPending || submission.submissionStatus == submissionStatus.SUBMISSION_REJECTED}
+              >
+                {updateSubmission.isPending ? "Updating..." : "Reject Submission"}
+              </Button>
+              <ButtonGradient
+                onClick={() => router.push(`/dashboard/grading-review/generate-certificate`)}
+                className="max-w-[8rem] w-full"
+                disabled={submission.submissionStatus == submissionStatus.SUBMISSION_REJECTED}
+              >
+                Start Grading
+              </ButtonGradient>
+            </>
+            :
+            <>
+              <Button
+                onClick={() => router.push(`/dashboard/submission-status/${submission.id}?edit=true`)}
+                variant={"ghost"}
+                className="rounded-full text-light-grey-100 heading-secondary font-medium bg-[#E0E0E0] hover:bg-gray-300 hover:text-black"
+              >
+                Edit Submission
+              </Button>
+              <ButtonGradient
+                onClick={() => downloadPdf()}
+                className="max-w-[12rem] w-full"
+              >
+                {isGeneratingPDF ? (
+                  <>
+                    <Loader2 className="animate-spin w-5 h-5" />
+                    Downloading Report...
+                  </>
+                ) : (
+                  "Download Report"
+                )}
+              </ButtonGradient>
+            </>
+        }
       </div>
     </div>
   );

@@ -1,7 +1,7 @@
 'use client';
 
 import { FC, useState } from 'react';
-import { ChevronRight, Eye, MoreHorizontal, Trash2 } from 'lucide-react';
+import { ChevronRight, Eye, MoreHorizontal, Pencil, Trash2 } from 'lucide-react';
 import { CustomCheckbox } from '@/components/ui/checkbox';
 import CalendarIcon from '@/components/svgs/dashboard/CalendarIcon';
 import CustomDropdown from '@/components/common/CustomDropDown/CustomDropDown';
@@ -9,12 +9,12 @@ import Link from '@/components/common/CustomLink/CustomLink';
 import { useRouter } from 'next/navigation';
 import CustomModal from '@/components/common/CustomModal';
 import { formatSubmissionStatus } from '@/app/(user)/lib/utils/helpers';
-import { submissionSourceMap, submissionStatus } from '@/app/(user)/lib/utils/constants';
+import { submissionStatus } from '@/app/(user)/lib/utils/constants';
 import { useAdminSubmissions } from '@/hooks/useAdminSubmissions';
 import { Submission, SubmissionInfo } from '@/types';
 import { useAdminDeleteSubmission } from '@/hooks/useAdminDeleteSubmission';
-import { SkeletonTracking } from '@/components/skeletons/DashboardSkeleton';
 import { formatToUSTimezone, padId } from '@/lib/utils';
+import { SkeletonTracking } from '@/components/skeletons/AdminDashboardSkeleton';
 
 interface DashboardSubmissionStatusProps {
   isMoreItem?: boolean;
@@ -44,6 +44,11 @@ const DashboardSubmissionStatus: FC<DashboardSubmissionStatusProps> = ({
       setSelectedSubmissionId(null);
     }
   };
+
+  const handleEditClick = (submissionId: string) => {
+    const route = `/dashboard/submission-status/${submissionId}?edit=true`
+    router.push(route)
+  }
 
   const handleViewDetailClick = (submission: SubmissionInfo) => {
     const route = `/dashboard/submission-status/${submission.id}`
@@ -147,6 +152,11 @@ const DashboardSubmissionStatus: FC<DashboardSubmissionStatusProps> = ({
                         label: 'Delete',
                         icon: <Trash2 className="h-4 w-4" />,
                         onClick: () => handleDeleteClick(submission.id),
+                      },
+                      {
+                        label: 'Edit',
+                        icon: <Pencil className="h-4 w-4" />,
+                        onClick: () => handleEditClick(submission.id),
                       },
                     ]}
                     dropdownClassName="right-2"

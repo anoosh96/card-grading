@@ -1,5 +1,20 @@
+import { ConditionBreakdown } from "@/app/(admin)/dashboard/types";
 import { create } from "zustand";
 
+
+interface GradingData {
+  cardNumber: string;
+  grade: string;
+  finalScore: number;
+  conditionBreakdown: ConditionBreakdown;
+  overallJustification: string;
+  conditionTier: string;
+  aiSummary: string;
+  reportPdfUrl?: string;
+  cardId?: string;
+  createdAt?: string;
+  gradeDate?: string;
+}
 export interface SubmissionData {
   id: string;
   cardName: string;
@@ -24,6 +39,8 @@ export interface SubmissionData {
   editing?: boolean;
   grade?: number | null;
   aiRemarks?: string;
+  cardId?: string
+  gradeData?: GradingData | null | undefined
 }
 
 interface SubmissionStore {
@@ -56,7 +73,9 @@ export const useSubmissionStore = create<SubmissionStore>((set) => ({
     email: '',
     editing: false,
     grade: null,
-    aiRemarks: ''
+    aiRemarks: '',
+    cardId: '',
+    gradeData: null
   },
   setSubmission: (data) =>
     set((state) => ({
@@ -87,7 +106,9 @@ export const useSubmissionStore = create<SubmissionStore>((set) => ({
         email: '',
         editing: false,
         grade: null,
-        aiRemarks: ''
+        aiRemarks: '',
+        cardId: '',
+        gradeData: null
       },
     }),
 }));
