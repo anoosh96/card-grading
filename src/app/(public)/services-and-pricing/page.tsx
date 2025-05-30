@@ -6,7 +6,7 @@ import PricingTable from "./components/PricingTable";
 
 export default async function ServicesAndPricingPage () {
   
-  const res = await fetch(`${process.env.API_URL}/api/subscription/plans`, {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/subscription/plans`, {
     cache: 'no-store' // optional: ensures fresh data on each request (SSR)
   });
 
