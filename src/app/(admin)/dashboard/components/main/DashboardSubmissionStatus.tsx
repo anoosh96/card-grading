@@ -8,7 +8,7 @@ import CustomDropdown from '@/components/common/CustomDropDown/CustomDropDown';
 import Link from '@/components/common/CustomLink/CustomLink';
 import { useRouter } from 'next/navigation';
 import CustomModal from '@/components/common/CustomModal';
-import { formatSubmissionStatus } from '@/app/(user)/lib/utils/helpers';
+import { formatSubmissionStatus, getCardsSummary } from '@/app/(user)/lib/utils/helpers';
 import { submissionStatus } from '@/app/(user)/lib/utils/constants';
 import { useAdminSubmissions } from '@/hooks/useAdminSubmissions';
 import { Submission, SubmissionInfo } from '@/types';
@@ -51,7 +51,7 @@ const DashboardSubmissionStatus: FC<DashboardSubmissionStatusProps> = ({
   }
 
   const handleViewDetailClick = (submission: SubmissionInfo) => {
-    const route = `/dashboard/submission-status/${submission.id}`
+    const route = `/dashboard/submission-status/order-details?id=${submission.id}`
     router.push(route)
   }
 
@@ -60,41 +60,41 @@ const DashboardSubmissionStatus: FC<DashboardSubmissionStatusProps> = ({
   const totalPages = meta?.totalPages || 1;
   const currentPage = meta?.currentPage || 1;
 
-  const getStatusBadge = (status: string) => {
-    switch (status) {
-      case submissionStatus.GRADING_COMPLETE:
-        return (
-          <div className="text-center rounded-[1.4rem] md:rounded-full py-3 px-2 bg-green-100 text-[#3A974C] text-[0.6rem] md:text-xs lg:text-base">
-            {formatSubmissionStatus(status)}
-          </div>
-        );
-      case submissionStatus.SUBMISSION_PENDING:
-      case submissionStatus.SUBMISSION_REJECTED:
-        return (
-          <div className="text-center rounded-[1.4rem] md:rounded-full py-3 px-2 bg-[#fcebe7] text-[#E3350D] text-[0.6rem] md:text-xs lg:text-base">
-            {formatSubmissionStatus(status)}
-          </div>
-        );
-      case submissionStatus.SUBMISSION_RECEIVED:
-      case submissionStatus.GRADING_IN_PROGRESS:
-        return (
-          <div className="text-center rounded-[1.4rem] md:rounded-full py-3 px-2 bg-[#fbf6e2] text-[#FFCC00] text-[0.6rem] md:text-xs lg:text-base">
-            {formatSubmissionStatus(status)}
-          </div>
-        );
-      default:
-        return <div className="text-[0.6rem] md:text-xs lg:text-sm">{formatSubmissionStatus(status)}</div>;
-    }
-  };
+  // const getStatusBadge = (status: string) => {
+  //   switch (status) {
+  //     case submissionStatus.GRADING_COMPLETE:
+  //       return (
+  //         <div className="text-center rounded-[1.4rem] md:rounded-full py-3 px-2 bg-green-100 text-[#3A974C] text-[0.6rem] md:text-xs lg:text-base">
+  //           {formatSubmissionStatus(status)}
+  //         </div>
+  //       );
+  //     case submissionStatus.SUBMISSION_PENDING:
+  //     case submissionStatus.SUBMISSION_REJECTED:
+  //       return (
+  //         <div className="text-center rounded-[1.4rem] md:rounded-full py-3 px-2 bg-[#fcebe7] text-[#E3350D] text-[0.6rem] md:text-xs lg:text-base">
+  //           {formatSubmissionStatus(status)}
+  //         </div>
+  //       );
+  //     case submissionStatus.SUBMISSION_RECEIVED:
+  //     case submissionStatus.GRADING_IN_PROGRESS:
+  //       return (
+  //         <div className="text-center rounded-[1.4rem] md:rounded-full py-3 px-2 bg-[#fbf6e2] text-[#FFCC00] text-[0.6rem] md:text-xs lg:text-base">
+  //           {formatSubmissionStatus(status)}
+  //         </div>
+  //       );
+  //     default:
+  //       return <div className="text-[0.6rem] md:text-xs lg:text-sm">{formatSubmissionStatus(status)}</div>;
+  //   }
+  // };
 
   if (isLoading) return <SkeletonTracking />;
   if (isError) return <div className="p-5 text-red-500">Failed to load submissions.</div>;
 
   return (
     <div className="w-full mx-auto bg-white rounded-lg shadow-sm border">
-      <div className="p-4 flex justify-between items-center border-b">
+      <div className="p-6 flex justify-between items-center border-b">
         <div>
-          <h2 className="heading-primary font-bold">Submission Status</h2>
+          <h2 className="heading-primary font-bold mb-2">Submission Status</h2>
           <p className="heading-tertiary text-muted-foreground">
             Latest actions across the grading workflow
           </p>
@@ -109,7 +109,7 @@ const DashboardSubmissionStatus: FC<DashboardSubmissionStatusProps> = ({
         )}
       </div>
 
-      <div className="w-full overflow-x-auto">
+      <div className="w-full overflow-x-auto p-4">
         <table className="w-full min-w-[600px] md:min-w-[800px] lg:min-w-full table-auto">
           <thead className="text-sm font-medium text-left">
             <tr>
@@ -120,7 +120,8 @@ const DashboardSubmissionStatus: FC<DashboardSubmissionStatusProps> = ({
               <th className="p-3">Date & Time</th>
               {/* <th className="p-3">Action</th> */}
               {/* <th className="p-3">Submission Source</th> */}
-              <th className="p-3">Card Status</th>
+              <th className="p-3">Total Cards</th>
+              <th className="p-3">Cards Summary</th>
               <th className="w-10 p-3"></th>
             </tr>
           </thead>
@@ -139,7 +140,8 @@ const DashboardSubmissionStatus: FC<DashboardSubmissionStatusProps> = ({
                 </td>
                 {/* <td className="p-3">{}</td> */}
                 {/* <td className="p-3">{submissionSourceMap[submission.submissionSource]}</td> */}
-                <td className="p-3">{getStatusBadge(submission.submissionStatus)}</td>
+                <td className="p-3">{ submission.numberOfCards }</td>
+                <td className="p-3">{ getCardsSummary(submission.cards, submission.numberOfCards) }</td>
                 <td className="p-4">
                   <CustomDropdown
                     items={[
@@ -152,12 +154,7 @@ const DashboardSubmissionStatus: FC<DashboardSubmissionStatusProps> = ({
                         label: 'Delete',
                         icon: <Trash2 className="h-4 w-4" />,
                         onClick: () => handleDeleteClick(submission.id),
-                      },
-                      {
-                        label: 'Edit',
-                        icon: <Pencil className="h-4 w-4" />,
-                        onClick: () => handleEditClick(submission.id),
-                      },
+                      }
                     ]}
                     dropdownClassName="right-2"
                     position='left'

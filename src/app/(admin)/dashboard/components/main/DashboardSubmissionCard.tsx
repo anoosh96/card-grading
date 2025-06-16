@@ -1,33 +1,79 @@
-import DashboardTotalCardsIcon from "@/components/svgs/DashboardTotalCardsIcons";
-import React from "react";
-import { SubmissionSources } from "./SubmissionSources";
+'use client'
+
+import React, { useState, useEffect } from "react";
+import { SkeletonCard } from "@/components/skeletons/DashboardSkeleton"; // Assuming this handles a single card skeleton
+import Image from "next/image";
 import { useAdminSubmissionAnalysis } from "@/hooks/useAdminSubmissionAnalysis";
-import { DashboardSubmissionCardSkeleton } from "@/components/skeletons/AdminDashboardSkeleton";
+import { CountingCard } from "@/app/(user)/components/main/DashboardSubmissionCard";
+
+// Generic Counting Card Component
 
 function DashboardSubmissionCard() {
-  const { data, isLoading } = useAdminSubmissionAnalysis()
+  const { data, isLoading, isError } = useAdminSubmissionAnalysis();
 
-    if (isLoading) return <DashboardSubmissionCardSkeleton />;
-  
+  if (isLoading) {
+    // Render 3 skeleton cards if still loading
+    return (
+      <div className="flex items-stretch flex-col lg:flex-row gap-5">
+        <SkeletonCard />
+        <SkeletonCard />
+        <SkeletonCard />
+      </div>
+    );
+  }
+
+  // Handle error state for all cards
+  if (isError) {
+    return (
+      <div className="flex items-stretch flex-col lg:flex-row gap-5">
+        <CountingCard
+          icon={<Image src={'/icons/cards-graded.svg'} width={55} height={55} alt="icon" />}
+          value="Error"
+          unit="Cards"
+          label="Total"
+        />
+        <CountingCard
+          icon={<Image src={'/icons/in-progress.svg'} width={55} height={55} alt="icon" />}
+          value="Error"
+          unit="Cards"
+          label="In Progress"
+        />
+        <CountingCard
+          icon={<Image src={'/icons/turnaround-time.svg'} width={55} height={55} alt="icon" />}
+          value="Error"
+          unit="Days"
+          label="Avg. Turnaround Time"
+          decimalPlaces={1} // Example for decimal places
+        />
+      </div>
+    );
+  }
 
   return (
     <div className="flex items-stretch flex-col lg:flex-row gap-5">
-      <div className="bg-white w-full lg:w-2/5 rounded-[1.25rem] p-7 shadow-sm">
-        <div className="flex flex-col items-start  gap-6 mb-4">
-          <div className="bg-golden-amber p-3 rounded-lg">
-            <DashboardTotalCardsIcon className="h-6 w-6 text-primary" />
-          </div>
-          <div>
-            <div className="flex items-end">
-              <h2 className="text-[2rem] text-charcol font-bold">{data?.totalSubmissions}</h2>
-              <p className="text-base text-charcol px-2 mb-1">Cards</p>
-            </div>
-          </div>
-        </div>
-        <h3 className="font-medium text-xl text-charcol">Total Cards</h3>
-      </div>
+      {/* Graded This Month Card */}
+      <CountingCard
+        icon={<Image src={'/icons/cards-graded.svg'} width={55} height={55} alt="icon" />}
+        value={data?.totalCards ?? 0} // Assuming your API returns this field
+        unit="Cards"
+        label="Total Cards"
+      />
 
-      <SubmissionSources inProcessing={data?.inProcessingCount} />
+      {/* In Progress Card */}
+      <CountingCard
+        icon={<Image src={'/icons/turnaround-time.svg'} width={55} height={55} alt="icon" />}
+        value={data?.inProcessingCount ?? 0} // Assuming your API returns this field
+        unit="Cards"
+        label="Cards in Process"
+      />
+
+      {/* Avg. Turnaround Time Card */}
+      <CountingCard
+        icon={<Image src={'/icons/shipments.svg'} width={55} height={55} alt="icon" />}
+        value={data?.totalPendingCards ?? 0} // Assuming your API returns this field (e.g., in days)
+        unit="Shipments"
+        label="Pending Shipments"
+      />
     </div>
   );
 }

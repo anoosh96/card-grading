@@ -4,7 +4,7 @@ import axiosClient from '@/lib/axiosClient';
 import { handleRequestError, showToast } from '@/lib/toast';
 
 interface UpdateSubmissionInput {
-  id: string;
+  id: number;
   values: Record<string, string | number | undefined | null | object>;
   frontImage?: File;
   backImage?: File;
@@ -55,11 +55,16 @@ export const useUpdateSubmission = () => {
 
   return useMutation({
     mutationFn: updateSubmission,
-    onSuccess: () => {
+    onSuccess: (data, variables) => {
+      queryClient.invalidateQueries({
+        queryKey: ['card-details', variables.id.toString(), variables.values.cardId?.toString()],
+      })
       queryClient.invalidateQueries({ queryKey: ['admin-submissions'] });
       queryClient.invalidateQueries({ queryKey: ['admin-submission'] });
-    //   queryClient.invalidateQueries({ queryKey: ['submission-analysis'] });
-      showToast('Submission updated successfully!', { variant: 'success' });
+      queryClient.invalidateQueries({ queryKey: ['admin-submission-analysis'] });
+
+
+      //   queryClient.invalidateQueries({ queryKey: ['submission-analysis'] });
     },
     onError: handleRequestError,
   });

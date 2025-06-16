@@ -27,7 +27,6 @@ export const confirmGrade = async (gradeData: GradingData) => {
     },
   };
 
-  // Append primitive fields
   const basicFields = [
     'card_name',
     'card_number',
@@ -44,7 +43,12 @@ export const confirmGrade = async (gradeData: GradingData) => {
   basicFields.forEach((key) => {
     const value = gradeData[key];
     if (value !== undefined && value !== null) {
-      formData.append(key, key === 'final_score' ? String(Number(value)) : value);
+      if (key === 'final_score') {
+        formData.append(key, String(Number(value)));
+      } else {
+        // Ensure other values are also explicitly treated as strings if they could potentially be numbers
+        formData.append(key, String(value)); // Use String(value) for all other keys too
+      }
     }
   });
 
@@ -71,13 +75,15 @@ export const confirmGrade = async (gradeData: GradingData) => {
 
 export const useConfirmGrade = () => {
   const queryClient = useQueryClient();
-  
+
   return useMutation({
     mutationFn: confirmGrade,
     onError: handleRequestError,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['admin-submissions'] });
       queryClient.invalidateQueries({ queryKey: ['admin-submission'] });
+      queryClient.invalidateQueries({ queryKey: ['admin-submission-analysis'] });
+      queryClient.invalidateQueries({ queryKey: ['card-details'] });
     }
   });
 };

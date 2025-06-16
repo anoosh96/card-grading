@@ -44,77 +44,77 @@ export function DashboardSubmissionCardSkeleton() {
 
 export const SkeletonTracking = () => {
   return (
-    <div className="bg-white rounded-lg shadow-sm animate-pulse">
+    <div className="w-full mx-auto bg-white rounded-lg shadow-sm border animate-pulse">
       {/* Header */}
-      <div className="flex items-center p-5 justify-between mb-4">
-        <div className="flex flex-col gap-1">
-          <div className="h-8 bg-gray-200 rounded w-40"></div>
-          <div className="h-4 bg-gray-200 rounded w-64 mt-1"></div>
+      <div className="p-6 flex justify-between items-center border-b">
+        <div>
+          <div className="h-7 bg-gray-200 rounded w-48 mb-2"></div> {/* heading-primary */}
+          <div className="h-4 bg-gray-200 rounded w-64"></div> {/* heading-tertiary */}
         </div>
-        <div className="h-4 bg-gray-200 rounded w-20"></div>
+        {/* Only show 'View all' skeleton if it might be rendered */}
+        {/* Assuming isMoreItem is true to render this part of skeleton */}
+        <div className="h-4 bg-gray-200 rounded w-24"></div> {/* View all link */}
       </div>
 
       {/* Table */}
-      <div className="w-full overflow-x-auto md:max-w-full">
-        <table className="w-full min-w-[600px] md:min-w-[800px] lg:min-w-full">
-          <thead>
-            <tr className="border-b px-16">
-              <th className="text-left py-3 pl-4 lg:pl-16 pr-4">
-                <div className="h-4 bg-gray-200 rounded w-16"></div>
+      <div className="w-full overflow-x-auto p-4">
+        <table className="w-full min-w-[600px] md:min-w-[800px] lg:min-w-full table-auto">
+          <thead className="text-sm font-medium text-left">
+            <tr>
+              <th className="w-10 p-3">
+                <div className="h-4 bg-gray-200 rounded w-4"></div> {/* CustomCheckbox */}
               </th>
-              <th className="text-left py-3 pl-4 lg:pl-16 pr-4">
-                <div className="h-4 bg-gray-200 rounded w-24"></div>
+              <th className="p-3">
+                <div className="h-4 bg-gray-200 rounded w-20"></div> {/* Order No */}
               </th>
-              {/* <th className="text-left py-3 px-4 invisible">
-                <div className="h-4 bg-gray-200 rounded w-20"></div>
+              <th className="p-3">
+                <div className="h-4 bg-gray-200 rounded w-28"></div> {/* Date & Time */}
               </th>
-              <th className="text-left py-3 px-4 invisible">
-                <div className="h-4 bg-gray-200 rounded w-32"></div>
-              </th> */}
-              <th className="text-left py-3 pl-4 pr-4 lg:pr-16">
-                <div className="h-4 bg-gray-200 rounded w-20"></div>
+              <th className="p-3">
+                <div className="h-4 bg-gray-200 rounded w-24"></div> {/* Total Cards */}
               </th>
-              <th></th>
+              <th className="p-3">
+                <div className="h-4 bg-gray-200 rounded w-36"></div> {/* Cards Summary */}
+              </th>
+              <th className="w-10 p-3"></th> {/* For the MoreHorizontal icon */}
             </tr>
           </thead>
-          <tbody>
-            {[...Array(5)].map((_, index) => (
-              <tr key={index} className="border-b last:border-0">
-                <td className="py-3 pl-4 lg:pl-16 pr-4">
-                  <div className="h-4 bg-gray-200 rounded w-16"></div>
+          <tbody className="divide-y">
+            {[...Array(5)].map((_, index) => ( // Render 5 rows for example
+              <tr key={index} className="hover:bg-light-grey-50">
+                <td className="p-3">
+                  <div className="h-4 bg-gray-200 rounded w-4"></div> {/* CustomCheckbox */}
                 </td>
-                <td className="py-3 pl-4 lg:pl-16 pr-4">
-                  <div className="flex gap-2 items-center">
-                    <div className="h-4 w-4 bg-gray-200 rounded-full"></div>
-                    <div className="h-4 bg-gray-200 rounded w-32"></div>
+                <td className="p-3 font-medium">
+                  <div className="h-4 bg-gray-200 rounded w-20"></div> {/* Order No value */}
+                </td>
+                <td className="p-3">
+                  <div className="flex items-center gap-1">
+                    <div className="h-4 w-4 bg-gray-200 rounded-full"></div> {/* CalendarIcon */}
+                    <div className="h-4 bg-gray-200 rounded w-32"></div> {/* Date & Time value */}
                   </div>
                 </td>
-                {/* <td className="py-3 px-4 invisible">
-                  <div className="flex items-center gap-3">
-                    <div className="w-[35px] h-[40px] bg-gray-200 rounded"></div>
-                    <div className="h-4 bg-gray-200 rounded w-24"></div>
-                  </div>
+                <td className="p-3">
+                  <div className="h-4 bg-gray-200 rounded w-16"></div> {/* Total Cards value */}
                 </td>
-                <td className="py-3 px-4 invisible">
-                  <div className="h-4 bg-gray-200 rounded w-20"></div>
-                </td> */}
-                <td className="py-3 px-4">
-                  <div className="h-8 bg-gray-200 rounded-full w-full"></div>
+                <td className="p-3">
+                  <div className="h-4 bg-gray-200 rounded w-48"></div> {/* Cards Summary value */}
                 </td>
-                <td className="py-3 px-4">
-                  <div className="h-4 w-4 bg-gray-200 rounded"></div>
+                <td className="p-4">
+                  <div className="h-6 w-6 bg-gray-200 rounded-full"></div> {/* MoreHorizontal icon */}
                 </td>
               </tr>
             ))}
           </tbody>
         </table>
+      </div>
 
-        {/* Pagination skeleton */}
-        <div className="flex justify-center items-center gap-4 mt-6 mb-8">
-          <div className="w-20 h-8 bg-gray-200 rounded"></div>
-          <div className="w-24 h-6 bg-gray-200 rounded"></div>
-          <div className="w-20 h-8 bg-gray-200 rounded"></div>
-        </div>
+      {/* Pagination skeleton */}
+      {/* Assuming totalPages > 1 and !isMoreItem is true to render this part of skeleton */}
+      <div className="flex justify-center items-center gap-4 mt-6 mb-8">
+        <div className="h-10 w-24 bg-gray-200 rounded"></div> {/* Previous button */}
+        <div className="h-6 w-32 bg-gray-200 rounded"></div> {/* Page X of Y text */}
+        <div className="h-10 w-24 bg-gray-200 rounded"></div> {/* Next button */}
       </div>
     </div>
   );
@@ -173,9 +173,8 @@ export function OrderDetailsSkeleton() {
                 {/* Insert Divider Before Last Two Items */}
                 {index === 7 && <div className="border-t border-gray-200 my-2"></div>}
 
-                <div className={`grid grid-cols-2 py-1 ${
-                  index >= 7 ? "text-[18px] font-medium" : ""
-                }`}>
+                <div className={`grid grid-cols-2 py-1 ${index >= 7 ? "text-[18px] font-medium" : ""
+                  }`}>
                   <div className="h-4 bg-gray-200 rounded w-32"></div>
                   <div className={`h-4 ${index === 8 ? "bg-gray-300" : "bg-gray-200"} rounded w-40`}></div>
                 </div>

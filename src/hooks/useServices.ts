@@ -6,8 +6,8 @@ export const useServices = () => {
   return useQuery({
     queryKey: ['services'],
     queryFn: async () => {
-      const res = await axiosClient.get('/api/subscription/plans');
-      return res.data.data;
+      const res = await axiosClient.get('/api/service');
+      return res.data.data?.services;
     },
   });
 };

@@ -8,9 +8,9 @@ import React from "react";
 
 export const SkeletonCard = () => {
   return (
-    <div className="flex items-stretch flex-col lg:flex-row gap-5 animate-pulse">
+    <div className="w-full">
       {/* Total Submissions Card */}
-      <div className="bg-white w-full lg:w-2/5 rounded-[1.25rem] p-7 shadow-sm">
+      <div className="bg-white w-full rounded-[1.25rem] p-7 shadow-sm">
         <div className="flex flex-col items-start gap-6 mb-4">
           {/* Icon placeholder */}
           <div className="bg-gray-200 p-3 rounded-lg w-12 h-12"></div>
@@ -93,7 +93,7 @@ export const SkeletonTracking = () => {
   return (
     <div className="bg-white rounded-lg shadow-sm animate-pulse">
       {/* Header */}
-      <div className="flex items-center p-5 justify-between mb-4">
+      <div className="flex items-center p-5 justify-between mb-8">
         <div className="flex flex-col gap-1">
           <div className="h-8 bg-gray-200 rounded w-40"></div>
           <div className="h-4 bg-gray-200 rounded w-64 mt-1"></div>
@@ -112,7 +112,7 @@ export const SkeletonTracking = () => {
               <th className="text-left py-3 pl-4 lg:pl-16 pr-4">
                 <div className="h-4 bg-gray-200 rounded w-24"></div>
               </th>
-              <th className="text-left py-3 px-4">
+              <th className="text-left py-3 lg:pl-16  px-4">
                 <div className="h-4 bg-gray-200 rounded w-20"></div>
               </th>
               {/* <th className="text-left py-3 px-4 invisible">
@@ -127,28 +127,25 @@ export const SkeletonTracking = () => {
           <tbody>
             {[...Array(5)].map((_, index) => (
               <tr key={index} className="border-b last:border-0">
-                <td className="py-3 pl-4 lg:pl-16 pr-4">
+                <td className="py-5 pl-4 lg:pl-16 pr-4">
                   <div className="h-4 bg-gray-200 rounded w-16"></div>
                 </td>
-                <td className="py-3 pl-4 lg:pl-16 pr-4">
+                <td className="py-4 pl-4 lg:pl-16 pr-4">
                   <div className="flex gap-2 items-center">
                     <div className="h-4 w-4 bg-gray-200 rounded-full"></div>
                     <div className="h-4 bg-gray-200 rounded  w-32"></div>
                   </div>
                 </td>
-                <td className="py-3 px-4">
-                  <div className="flex items-center gap-3">
-                    <div className="w-[35px] h-[40px] bg-gray-200 rounded"></div>
-                    <div className="h-4 bg-gray-200 rounded w-24"></div>
-                  </div>
+                <td className="py-4 pl-4 lg:pl-16 pr-4">
+                  <div className="h-4 bg-gray-200 rounded w-16"></div>
                 </td>
                 {/* <td className="py-3 px-4 invisible">
                   <div className="h-4 bg-gray-200 rounded w-20"></div>
                 </td> */}
-                <td className="py-3 px-4">
-                  <div className="h-8 bg-gray-200 rounded-full w-28 md:w-52"></div>
+                 <td className="py-4 pl-4 pr-4">
+                  <div className="h-4 bg-gray-200 rounded w-16"></div>
                 </td>
-                <td className="py-3 px-4">
+                <td className="py-4 px-4">
                   <div className="h-4 w-4 bg-gray-200 rounded"></div>
                 </td>
               </tr>
@@ -503,3 +500,173 @@ export function OrderTrackingSkeleton() {
     </section>
   );
 };
+
+// components/skeletons/SubmissionCardsListSkeleton.tsx
+
+export function SubmissionCardsListSkeleton() {
+  return (
+    <section className="bg-gray-50 min-h-screen animate-pulse">
+      {/* Header Section */}
+      <div className="bg-white p-7 mb-6">
+        {/* Title */}
+        <div className="h-8 bg-gray-200 rounded w-48 mb-6"></div>
+
+        {/* Submission Info Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
+          {/* Name */}
+          <div>
+            <div className="h-4 bg-gray-200 rounded w-1/3 mb-2"></div>
+            <div className="h-5 bg-gray-200 rounded w-2/3"></div>
+          </div>
+
+          {/* Email */}
+          <div>
+            <div className="h-4 bg-gray-200 rounded w-1/4 mb-2"></div>
+            <div className="h-5 bg-gray-200 rounded w-3/4"></div>
+          </div>
+
+          {/* Submission Type */}
+          <div>
+            <div className="h-4 bg-gray-200 rounded w-1/2 mb-2"></div>
+            <div className="h-5 bg-gray-200 rounded w-2/3"></div>
+          </div>
+
+          {/* Turnaround Time */}
+          <div>
+            <div className="h-4 bg-gray-200 rounded w-2/5 mb-2"></div>
+            <div className="h-5 bg-gray-200 rounded w-1/2"></div>
+          </div>
+        </div>
+      </div>
+
+      {/* Cards Content */}
+      <div className="px-7 pb-7">
+        {/* Search and Filter Bar Skeleton */}
+        <div className="bg-white rounded-lg p-6 mb-6 flex flex-col sm:flex-row gap-4 items-center">
+          <div className="flex-grow w-full">
+            <div className="h-12 bg-gray-200 rounded-md w-full"></div> {/* Search Input */}
+          </div>
+          <div className="w-full sm:w-auto">
+            <div className="h-12 bg-gray-200 rounded-md w-40"></div> {/* Status Select */}
+          </div>
+          <div className="w-full sm:w-auto">
+            <div className="h-10 bg-gray-200 rounded-md w-24"></div> {/* Clear Filters Button */}
+          </div>
+        </div>
+
+        {/* Existing Cards Section Skeleton */}
+        <div className="bg-white rounded-lg p-6 mb-6">
+          <div className="h-6 bg-gray-200 rounded w-64 mb-6"></div> {/* "Existing Cards" title */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+            {/* Generate 6 skeleton cards */}
+            {[...Array(6)].map((_, index) => (
+              <SkeletonCardItem key={index} />
+            ))}
+          </div>
+          {/* Pagination Controls Skeleton */}
+          <div className="flex justify-center items-center gap-2 mt-8">
+            <div className="h-10 bg-gray-200 rounded-md w-24"></div> {/* Previous Button */}
+            <div className="h-10 bg-gray-200 rounded-md w-10"></div> {/* Page 1 Button */}
+            <div className="h-10 bg-gray-200 rounded-md w-10"></div> {/* Page 2 Button */}
+            <div className="h-10 bg-gray-200 rounded-md w-10"></div> {/* Page 3 Button */}
+            <div className="h-10 bg-gray-200 rounded-md w-24"></div> {/* Next Button */}
+          </div>
+        </div>
+
+        {/* New Bulk Card Input Form Section Skeleton (if applicable, assuming it's usually shown) */}
+        <div className="bg-white rounded-lg p-6 mb-6">
+          <div className="flex justify-between items-center mb-6">
+            <div className="h-6 bg-gray-200 rounded w-48"></div> {/* "Add New Cards" title */}
+            <div className="flex items-center gap-4">
+              <div className="h-5 bg-gray-200 rounded w-40"></div> {/* Card count text */}
+              <div className="h-10 bg-gray-200 rounded-md w-32"></div> {/* Add New Card Slot Button */}
+            </div>
+          </div>
+
+          {/* Skeleton for New Card input fields (one row) */}
+          <div className="hidden lg:block bg-light-grey rounded-lg overflow-hidden shadow-sm border border-gray-200">
+            <div className="grid grid-cols-[2fr_1.5fr_1fr_0.5fr] gap-4 p-4 bg-gradient-to-r from-gray-50 to-gray-100 border-b border-gray-200">
+              <div className="h-6 bg-gray-200 rounded w-2/3"></div>
+              <div className="h-6 bg-gray-200 rounded w-1/2"></div>
+              <div className="h-6 bg-gray-200 rounded w-1/3"></div>
+              <div className="h-6 bg-gray-200 rounded w-1/4 mx-auto"></div>
+            </div>
+            <div className="grid grid-cols-[2fr_1.5fr_1fr_0.5fr] items-start gap-4 p-4 border-b border-gray-100 bg-white">
+              <div className="h-14 bg-gray-100 rounded-md w-full"></div>
+              <div className="h-14 bg-gray-100 rounded-md w-full"></div>
+              <div className="h-14 bg-gray-100 rounded-md w-full"></div>
+              <div className="h-8 bg-gray-100 rounded-full w-8 mx-auto"></div>
+            </div>
+          </div>
+          {/* Mobile version of new card skeleton (one card) */}
+          <div className="lg:hidden space-y-4">
+            <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4">
+              <div className="flex justify-between items-center mb-4 pb-2 border-b border-gray-100">
+                <div className="h-6 bg-gray-200 rounded w-24"></div>
+                <div className="h-8 bg-gray-200 rounded-full w-8"></div>
+              </div>
+              <div className="space-y-4">
+                <div>
+                  <div className="h-4 bg-gray-200 rounded w-1/3 mb-1"></div>
+                  <div className="h-10 bg-gray-100 rounded-md w-full"></div>
+                </div>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div>
+                    <div className="h-4 bg-gray-200 rounded w-1/2 mb-1"></div>
+                    <div className="h-10 bg-gray-100 rounded-md w-full"></div>
+                  </div>
+                  <div>
+                    <div className="h-4 bg-gray-200 rounded w-1/4 mb-1"></div>
+                    <div className="h-10 bg-gray-100 rounded-md w-full"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Action Buttons */}
+        <div className="flex gap-6">
+          <div className="h-12 bg-gray-200 rounded-full w-32"></div> {/* Back button */}
+          <div className="h-12 bg-gray-200 rounded-full w-48"></div> {/* Save New Cards button */}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+// Individual card skeleton component
+export function SkeletonCardItem() {
+  return (
+    <div className="bg-white rounded-lg p-6 border border-gray-200">
+      {/* Card Header */}
+      <div className="flex justify-between items-start mb-4">
+        {/* Card Name */}
+        <div className="h-6 bg-gray-200 rounded w-40"></div>
+        {/* Status Badge */}
+        <div className="h-6 bg-gray-200 rounded-full w-24"></div>
+      </div>
+      
+      {/* Card Details */}
+      <div className="space-y-3">
+        {/* Category Row */}
+        <div className="flex justify-between">
+          <div className="h-4 bg-gray-200 rounded w-16"></div>
+          <div className="h-4 bg-gray-200 rounded w-24"></div>
+        </div>
+        
+        {/* Year Row */}
+        <div className="flex justify-between">
+          <div className="h-4 bg-gray-200 rounded w-10"></div>
+          <div className="h-4 bg-gray-200 rounded w-16"></div>
+        </div>
+        
+        {/* Service Row */}
+        <div className="flex justify-between">
+          <div className="h-4 bg-gray-200 rounded w-14"></div>
+          <div className="h-4 bg-gray-200 rounded w-28"></div>
+        </div>
+      </div>
+    </div>
+  );
+}

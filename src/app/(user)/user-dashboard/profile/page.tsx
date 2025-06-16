@@ -206,7 +206,7 @@ export default function ProfilePage() {
               {form.errors.confirmPassword && <p className="text-red-500 mt-1 text-sm">{form.errors.confirmPassword}</p>}
             </div>
 
-            <div className="col-span-1 sm:col-span-2">
+            {/* <div className="col-span-1 sm:col-span-2">
               <label className="block font-semibold mb-1 sm:mb-2">Payment Method</label>
               <CustomSelect
                 options={['Card', 'Paypal']}
@@ -218,7 +218,7 @@ export default function ProfilePage() {
                 className="relative"
               />
               {form.errors.paymentMethod && <p className="text-red-500 mt-1 text-sm">{form.errors.paymentMethod}</p>}
-            </div>
+            </div> */}
 
             <div className="flex flex-col sm:flex-row gap-4 mt-4 sm:mt-6 col-span-1 sm:col-span-2">
               <Button

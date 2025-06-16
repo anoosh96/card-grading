@@ -1,3 +1,5 @@
+import { GradingData } from "@/app/(admin)/dashboard/types";
+
 export interface SvgIconProps extends React.SVGProps<SVGSVGElement> {
   width?: string | number;
   height?: string | number;
@@ -40,12 +42,14 @@ export interface FormStepProps {
 }
 
 export interface Service {
-  id: string;
+  id: number;
   name: string;
+  turnAroundTime: string;
   pricePerCard: number;
-  renewalPeriod: string;
-  features: string[];
-  cardLimit: number;
+  renewalPeriod?: string;
+  features?: string[];
+  cardLimit?: number;
+  maxCardValue?: number;
 }
 
 export interface Subscription {
@@ -78,7 +82,7 @@ export interface DialogProps {
 
 
 export interface User {
-  id: string;
+  id: number;
   email: string;
   emailVerified: boolean;
   fullName: string | null;
@@ -98,10 +102,15 @@ export interface Card {
   category: string;
   cardType: string;
   yearOfRelease: number | null;
-  conditionEstimate: string;
-  serviceType: string;
   frontImage: string | undefined;
   backImage: string | undefined;
+  status: string;
+  cardValue: number | null;
+  serviceId: number | null;
+  service?: Service | null;
+  id: number;
+  grade?: GradingData | null;
+  submissionId?: number | null;
 }
 
 export interface Submission {
@@ -111,8 +120,9 @@ export interface Submission {
   overallProgress: number;
   estimatedCompletion: string;
   submissionStatus: string;
-  card: Card
+  cards: Card[]
   dateTime: string;
+  numberOfCards: number;
 }
 
 export interface SubmissionInfo {

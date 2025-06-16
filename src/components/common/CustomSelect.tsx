@@ -11,6 +11,7 @@ interface CustomDropdownProps {
   className?: string;
   borderColor?: string;
   bg?: string;
+  disabled?: boolean;
 }
 
 const CustomSelect: React.FC<CustomDropdownProps> = ({
@@ -21,6 +22,7 @@ const CustomSelect: React.FC<CustomDropdownProps> = ({
   borderColor = "border-red-500",
   bg = "bg-white",
   optionIcons = [],
+  disabled = false
 }: CustomDropdownProps) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [dropdownPosition, setDropdownPosition] = useState<{
@@ -108,7 +110,7 @@ const CustomSelect: React.FC<CustomDropdownProps> = ({
           ref={buttonRef}
           type="button"
           onClick={() => {
-            setIsOpen((prev) => !prev);
+            if(!disabled) setIsOpen((prev) => !prev);
           }}
           className={`w-full flex justify-between items-center border-2 ${borderColor} rounded-lg p-4 ${bg} text-left focus:ring focus:ring-red-300`}
         >

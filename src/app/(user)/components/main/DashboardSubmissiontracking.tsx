@@ -1,7 +1,7 @@
 'use client'
 
 import Image from "next/image";
-import { formatSubmissionStatus } from "@/app/(user)/lib/utils/helpers";
+import { formatSubmissionStatus, getCardsSummary } from "@/app/(user)/lib/utils/helpers";
 import { useState } from "react";
 import CustomModal from "@/components/common/CustomModal";
 import { Eye, MoreHorizontal, Trash2 } from "lucide-react";
@@ -13,7 +13,7 @@ import { submissionStatus } from "../../lib/utils/constants";
 import { useDeleteSubmission } from "@/hooks/useDeleteSubmission";
 import { Submission } from "@/types";
 import { SkeletonTracking } from "@/components/skeletons/DashboardSkeleton";
-import { formatToUSTimezone } from "@/lib/utils";
+import { formatToUSTimezone, padId } from "@/lib/utils";
 
 interface SubmissionTrackingProps {
   showViewAll?: boolean;
@@ -45,44 +45,40 @@ export function DashboardSubmissionTracking({ showViewAll = false }: SubmissionT
       setSelectedSubmissionId(null);
     }
   };
+  
 
-  const getStatusBadge = (status: string) => {
-    switch (status) {
-      case submissionStatus.GRADING_COMPLETE:
-        return (
-          <div className="text-center rounded-[1.4rem] md:rounded-full py-3 px-2 bg-green-100 text-[#3A974C] text-[0.6rem] md:text-xs lg:text-base">
-            {formatSubmissionStatus(status)}
-          </div>
-        );
-      case submissionStatus.SUBMISSION_PENDING:
-      case submissionStatus.SUBMISSION_REJECTED:
-        return (
-          <div className="text-center rounded-[1.4rem] md:rounded-full py-3 px-2 bg-[#fcebe7] text-[#E3350D] text-[0.6rem] md:text-xs lg:text-base">
-            {formatSubmissionStatus(status)}
-          </div>
-        );
-      case submissionStatus.SUBMISSION_RECEIVED:
-      case submissionStatus.GRADING_IN_PROGRESS:
-        return (
-          <div className="text-center rounded-[1.4rem] md:rounded-full py-3 px-2 bg-[#fbf6e2] text-[#FFCC00] text-[0.6rem] md:text-xs lg:text-base">
-            {formatSubmissionStatus(status)}
-          </div>
-        );
-      default:
-        return <div className="text-[0.6rem] md:text-xs lg:text-sm">{formatSubmissionStatus(status)}</div>;
-    }
-  };
+  // const getStatusBadge = (status: string) => {
+  //   switch (status) {
+  //     case submissionStatus.GRADING_COMPLETE:
+  //       return (
+  //         <div className="text-center rounded-[1.4rem] md:rounded-full py-3 px-2 bg-green-100 text-[#3A974C] text-[0.6rem] md:text-xs lg:text-base">
+  //           {formatSubmissionStatus(status)}
+  //         </div>
+  //       );
+  //     case submissionStatus.SUBMISSION_PENDING:
+  //     case submissionStatus.SUBMISSION_REJECTED:
+  //       return (
+  //         <div className="text-center rounded-[1.4rem] md:rounded-full py-3 px-2 bg-[#fcebe7] text-[#E3350D] text-[0.6rem] md:text-xs lg:text-base">
+  //           {formatSubmissionStatus(status)}
+  //         </div>
+  //       );
+  //     case submissionStatus.SUBMISSION_RECEIVED:
+  //     case submissionStatus.GRADING_IN_PROGRESS:
+  //       return (
+  //         <div className="text-center rounded-[1.4rem] md:rounded-full py-3 px-2 bg-[#fbf6e2] text-[#FFCC00] text-[0.6rem] md:text-xs lg:text-base">
+  //           {formatSubmissionStatus(status)}
+  //         </div>
+  //       );
+  //     default:
+  //       return <div className="text-[0.6rem] md:text-xs lg:text-sm">{formatSubmissionStatus(status)}</div>;
+  //   }
+  // };
 
   const dropdownItems = (submissionId: string) => [
     {
       label: "View Detail",
       icon: <Eye className="h-4 w-4" />,
       onClick: () => router.push(`/user-dashboard/submission-status/order-details?id=${submissionId}`),
-    },
-    {
-      label: "View Tracking",
-      icon: <TrackIcon className="h-4 w-4" />,
-      onClick: () => router.push(`/user-dashboard/submission-status/order-tracking?id=${submissionId}`),
     },
     {
       label: "Delete",
@@ -124,18 +120,18 @@ export function DashboardSubmissionTracking({ showViewAll = false }: SubmissionT
             <table className="w-full min-w-[600px] md:min-w-[800px] lg:min-w-full table-auto">
               <thead>
                 <tr className="border-b">
-                  <th className="text-left py-3 pl-4 lg:pl-16 pr-4 text-xs md:text-base">Track No</th>
+                  <th className="text-left py-3 pl-4 lg:pl-16 pr-4 text-xs md:text-base">Order No</th>
                   <th className="text-left py-3 pl-4 lg:pl-16 pr-4 text-xs md:text-base">Date and Time</th>
-                  <th className="text-left py-3 px-4 text-xs md:text-base">Card Name</th>
+                  <th className="text-left py-3 px-4 text-xs md:text-base">Total Cards</th>
                   {/* <th className="text-left py-3 px-4 text-xs md:text-base">Submission Source</th> */}
-                  <th className="text-left py-3 pl-4 pr-4 lg:pr-16 text-xs md:text-base">Card Status</th>
+                  <th className="text-left py-3 pl-4 pr-4 lg:pr-16 text-xs md:text-base">Cards Summary</th>
                   <th></th>
                 </tr>
               </thead>
               <tbody>
                 {submissions.map((submission: Submission) => (
                   <tr key={submission.id} className="border-b last:border-0">
-                    <td className="py-3 pl-4 lg:pl-16 pr-4 text-xs md:text-base">#{submission.trackingNumber}</td>
+                    <td className="py-5 pl-4 lg:pl-16 pr-4 text-xs md:text-base">#{padId(submission.id)}</td>
                     <td className="py-3 pl-4 lg:pl-16 pr-4 text-xs md:text-base">
                       <div className="flex gap-2">
                         <Image src={"/icons/calendar.svg"} alt="Calendar Icon" width={15} height={15} />
@@ -143,22 +139,11 @@ export function DashboardSubmissionTracking({ showViewAll = false }: SubmissionT
                       </div>
                     </td>
                     <td className="py-3 px-4 text-xs md:text-base">
-                      <div className="flex items-center gap-3">
-                        {submission.card?.frontImage &&
-                          <Image
-                            src={submission.card.frontImage as string}
-                            alt={submission.card.cardName}
-                            width={35}
-                            height={40}
-                            className="object-fill"
-                          />
-                        }
-                        <span className="text-sm text-dark-purple">{submission.card.cardName}</span>
-                      </div>
+                      { submission.numberOfCards }
                     </td>
                     {/* <td className="py-3 px-4 text-xs md:text-base">{submissionSourceMap[submission.submissionSource]}</td> */}
                     <td className="py-3 px-4 text-xs lg:text-base">
-                      {getStatusBadge(submission.submissionStatus)}
+                      {getCardsSummary(submission.cards, submission.numberOfCards)}
                     </td>
                     <td className="py-3 px-4">
                       <CustomDropdown items={dropdownItems(submission.id)} dropdownClassName="right-2">

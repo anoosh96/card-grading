@@ -11,13 +11,14 @@ export interface FieldFormData {
 }
 
 export type SubmissionData = {
-  name: string;
-  email: string;
+  name?: string;
+  email?: string;
   orderId: string;
   cardName: string;
   category: string;
   yearOfRelease: string;
-  condition: string;
-  submissionDate: string;
+  condition?: string;
+  submissionDate?: string;
   status: string;
+  service: string;
 };

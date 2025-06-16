@@ -19,6 +19,6 @@ export interface GradingData {
   frontImage: string;
   backImage: string;
   pdfFile?: Blob | null;
-  cardId?: string;
+  cardId?: number;
   createdAt?: string;
 }

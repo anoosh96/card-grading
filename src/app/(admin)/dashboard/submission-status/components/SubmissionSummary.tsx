@@ -6,6 +6,7 @@ import { Pencil, Check, X } from "lucide-react";
 import { SubmissionData } from "../add-post/add-post-types";
 import CustomSelect from "@/components/common/CustomSelect";
 import { useEnums } from "@/hooks/useEnums";
+import { cardStatusMap } from "@/app/(user)/lib/utils/helpers";
 
 interface SubmissionSummaryProps {
   title: string;
@@ -63,8 +64,7 @@ const SubmissionSummary = ({
   };
 
   const getStatusOptions = () => {
-    return enumData?.submissionStatusOptions ||
-      ["SUBMISSION_PENDING", "SUBMISSION_RECEIVED", "GRADING_IN_PROGRESS", "GRADING_COMPLETE"];
+    return Object.keys(cardStatusMap);
   };
 
   const fields = Object.keys(data).map((key) => ({
@@ -87,6 +87,10 @@ const SubmissionSummary = ({
     if (key === "status") return getStatusOptions();
     return [];
   };
+
+  const isReadOnly = (key: string) => {
+    return key === "service" || key === "orderId"
+  }
 
   return (
     <div
@@ -165,8 +169,10 @@ const SubmissionSummary = ({
                     <input
                       type="text"
                       value={value}
+                      readOnly={ isReadOnly(key) }
+                      disabled={ isReadOnly(key) }
                       onChange={(e) => handleChange(key, e.target.value)}
-                      className="border border-gray-300 bg-white rounded-lg p-4 w-full"
+                      className={`border border-gray-300 bg-white rounded-lg p-4 w-full ${isReadOnly(key) ? '!bg-[#E0E0E0]': ''}`}
                     />
                   )
                 ) : (

@@ -1,16 +1,23 @@
 'use client'
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import ProgressBar from "@/app/(user)/components/ProgressBar"
 import ShippingInstruction from "./components/ShippingInstruction";
 import ShippingInformation from "./components/ShippingInformation";
-import Subscription from "./components/Subscription";
-import Tracking from "../by-form-submission/components/Tracking";
+import Payment from "./components/Payment";
+import { useSubmissionStore } from "@/stores/submissionStore";
+import { useSearchParams } from "next/navigation";
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
 
-const steps = ['Shipping Instruction', 'Shipping Info', 'Subscription'];
-
+const steps = ['Shipping Instruction', 'Shipping Info', 'Review Payment'];
 
 export default function ByFormSubmissionPage() {
+  const { submission, _hasHydrated, resetSubmission } = useSubmissionStore()
+  const searchParams = useSearchParams();
+
+  const isSuccess = searchParams?.get("success") === "true";
+
   const [step, setStep] = useState(1)
 
   const handleNext = () => {
@@ -21,17 +28,71 @@ export default function ByFormSubmissionPage() {
     setStep(prev => prev - 1)
   }
 
+
+  useEffect(() => {
+    if (isSuccess) {
+      resetSubmission()
+    }
+  }, [isSuccess])
+
+
+  useEffect(() => {
+    if (_hasHydrated && submission.step) {
+      setStep(isSuccess ? 3 : Number(submission.step))
+    }
+  }, [_hasHydrated, submission.step])
+
+  // Don't render anything until store has been hydrated
+  if (!_hasHydrated) {
+    return (
+      <section className="py-2 px-7 bg-white">
+        <div className="mb-20">
+          <div className="flex items-center justify-between mb-4">
+            {steps.map((_, index) => (
+              <div key={index} className="flex items-center">
+                <div className="w-12 h-12 rounded-full bg-gray-200 animate-pulse"></div>
+                {index < steps.length - 1 && (
+                  <div className="w-24 h-1 bg-gray-200 animate-pulse mx-4"></div>
+                )}
+              </div>
+            ))}
+          </div>
+          <div className="flex justify-between">
+            {steps.map((_, index) => (
+              <div key={index} className="w-24 h-4 bg-gray-200 rounded animate-pulse"></div>
+            ))}
+          </div>
+        </div>
+      </section>
+    )
+  }
+
   return (
     <section className="p-7 bg-white">
       <div className="mb-20">
         <ProgressBar currentStep={step == 4 ? 3 : step} steps={steps} />
       </div>
 
-      { step == 1 && <ShippingInstruction handleNext={handleNext} /> }
-      { step == 2 && <ShippingInformation handleNext={handleNext} handlePrevious={handlePrevious}/> }
-      { step == 3 && <Subscription handleNext={handleNext} handlePrevious={handlePrevious} /> }
-      { step == 4 &&  <Tracking handleNext={handleNext} handlePrevious={handlePrevious}/> }
+      {
+        isSuccess &&
+        <section className="bg-white py-16 text-center">
+          <h1 className="text-3xl font-bold text-green-600">Payment Successful</h1>
+          <p className="mt-4 text-lg text-gray-700">
+            Thank you! Your submission has been Created.
+          </p>
+          <Link href={"/user-dashboard/submission-status"}>
+            <Button
+              className="mt-8 px-10 py-3 rounded-full bg-primary text-white text-base font-medium"
+            >
+              Continue
+            </Button>
+          </Link>
+        </section>
+      }
 
+      {step == 1 && <ShippingInstruction handleNext={handleNext} />}
+      {step == 2 && <ShippingInformation handleNext={handleNext} handlePrevious={handlePrevious} />}
+      {!isSuccess && step == 3 && <Payment handleNext={handleNext} handlePrevious={handlePrevious} />}
     </section>
   )
 }

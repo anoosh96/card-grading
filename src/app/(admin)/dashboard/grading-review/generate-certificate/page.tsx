@@ -1,15 +1,14 @@
 "use client";
 
-import CardImages from "@/app/(user)/user-dashboard/submission-status/order-details/CardImages";
+import CardImages from "@/app/(user)/user-dashboard/submission-status/card-details/CardImages";
 import React, { useEffect, useMemo, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { ButtonGradient } from "@/components/common/ButtonGradient";
-import { useSubmissionStore } from "@/stores/submissionStore";
+import { CardData as SubmissionCardData } from "@/stores/submissionStore";
 import { formatToUSTimezone } from "@/lib/utils";
 import CustomModal from "@/components/common/CustomModal";
-import { submissionStatus } from "@/app/(user)/lib/utils/constants";
-import { useUpdateSubmission } from "@/hooks/useUpdateSubmission";
-import { useRouter } from "next/navigation";
+import { cardStatus } from "@/app/(user)/lib/utils/constants"; // Assuming cardStatus comes from here
+import { useRouter, useSearchParams } from "next/navigation";
 import { Loader2 } from "lucide-react";
 import { useGradingRecommendation } from "@/hooks/grading/useGradingRecommendation";
 import { useUserStore } from "@/stores/userStore";
@@ -18,45 +17,60 @@ import { GradingData } from "../../types";
 import { reactPDFGenerator } from "@/utils/pdf-generator";
 import { ReportSkeleton } from "@/components/skeletons/AdminDashboardSkeleton";
 import { useConfirmGrade } from "@/hooks/grading/useConfirmGrade";
-
+// import { useAdminSubmissionDetails } from "@/hooks/useAdminSubmissionDetails"; // REMOVE THIS IMPORT
+import { useCardDetails } from "@/hooks/useCardDetails"; // IMPORT THE NEW HOOK
 
 const GenerateCertificate = () => {
-  const [isConfirmDoc, setIsConfirmDoc] = useState(false);
-  const { submission } = useSubmissionStore();
-  const { user } = useUserStore();
-  const updateSubmission = useUpdateSubmission();
   const router = useRouter();
-  const { mutateAsync: gradingRecommendation, isPending, error } = useGradingRecommendation()
-  // const { mutateAsync: generateReport, isPending: isReportPending, error: reportError } = useGenerateReport()
-  const confirmGrade = useConfirmGrade()
+  const searchParams = useSearchParams();
+  const submissionId = searchParams.get('submissionId') as string;
+  const cardId = searchParams.get('cardId') as string;
+
+  // Use the new useCardDetails hook to fetch the specific card
+  const { data: currentCard, isLoading: isCardLoading, isError: isCardError } = useCardDetails(submissionId, cardId);
+
+  const { user } = useUserStore();
+  const { mutateAsync: gradingRecommendation, isPending: isGradingPending, error: gradingError } = useGradingRecommendation();
+  const confirmGrade = useConfirmGrade();
+
+  const [isConfirmDoc, setIsConfirmDoc] = useState(false);
   const [isGeneratingPDF, setIsGeneratingPDF] = useState(false);
   const [isGeneratingPDFBackground, setIsGeneratingPDFBackground] = useState(false);
   const [isEditingReport, setIsEditingReport] = useState(false);
 
-  const getInitialGradingData = () => {
-    if (submission.gradeData) {
-      return {
-        graded_by: 'Prescision Grading™',
-        grade: submission.gradeData.grade,
-        condition_tier: submission.gradeData.conditionTier || "Not Graded",
-        ai_summary: submission.gradeData.aiSummary,
-        condition_breakdown: submission.gradeData.conditionBreakdown,
-        frontImage: submission.frontImage as string,
-        backImage: submission.backImage as string,
-        final_score: String(submission.gradeData.finalScore),
-        overall_justification: submission.gradeData.overallJustification,
-        card_name: submission.cardName,
-        card_number: submission.gradeData.cardNumber,
-        grading_date: formatToUSTimezone(submission.gradeData.gradeDate as string)
-      };
-    }
-
-    return null
-  }
-
-
-  const [gradingData, setGradingData] = useState<GradingData | null | undefined>(getInitialGradingData())
+  // Initialize gradingData based on currentCard (now directly from useCardDetails)
+  const [gradingData, setGradingData] = useState<GradingData | null | undefined>(null);
   const [pdfFile, setPdfFile] = useState<Blob | null>(null);
+  
+
+  // Effect to initialize gradingData if it exists on the fetched card
+  useEffect(() => {
+    if (currentCard?.grade) {
+      setGradingData({
+        graded_by: 'Prescision Grading™',
+        grade: currentCard.grade?.grade,
+        condition_tier: currentCard.grade.conditionTier || "Not Graded",
+        ai_summary: currentCard.grade.aiSummary,
+        condition_breakdown: currentCard.grade.conditionBreakdown,
+        frontImage: currentCard.frontImage as string,
+        backImage: currentCard.backImage as string,
+        final_score: String(currentCard.grade.finalScore),
+        overall_justification: currentCard.grade.overallJustification,
+        card_name: currentCard.cardName,
+        card_number: currentCard.grade.cardNumber,
+        grading_date: formatToUSTimezone(currentCard.grade.gradeDate as string)
+      });
+    }
+  }, [currentCard]); // Depend on currentCard
+
+  // Effect to fetch grading recommendation if card images are available and no grading data exists
+  useEffect(() => {
+    // Only fetch if currentCard is loaded, has images, and gradingData is not already set
+    if (currentCard && currentCard.frontImage && currentCard.backImage && !gradingData && !currentCard.grade) {
+      fetchGradingRecommendation();
+    }
+  }, [currentCard, gradingData]); // Depend on currentCard and gradingData state
+
 
   const getGradeInfo = (score: number) => {
     if (score >= 9.5) {
@@ -90,44 +104,57 @@ const GenerateCertificate = () => {
         stars: "★★☆☆☆"
       };
     }
-  }
-
-
+  };
 
   const fetchGradingRecommendation = async () => {
-    const data = await gradingRecommendation({ frontImage: submission.frontImage as string, backImage: submission.backImage as string, userId: user?.id as string })
-    console.log(data.data.card_details)
-    const gradeInfo = getGradeInfo(data.data.card_details.final_score);
-    setGradingData({
-      ...data.data.card_details, graded_by: 'Prescision Grading™',
-      grading_date: formatToUSTimezone(new Date().toISOString()), grade: gradeInfo.grade, condition_tier: gradeInfo.tier,
-      ai_summary: `Our AI-powered grading engine evaluates each card using ultra-high resolution imaging and precision scoring across four key areas: Corners, Edges, Surface, and Centering.`,
-      frontImage: submission.frontImage as string,
-      backImage: submission.backImage as string
-    });
-  }
-
-  useEffect(() => {
-    if (submission.frontImage && submission.backImage && !gradingData && !submission.gradeData) {
-      fetchGradingRecommendation();
+    if (!currentCard || !currentCard.frontImage || !currentCard.backImage || !user?.id) {
+      // console.warn("Missing currentCard, images, or user ID for grading recommendation.");
+      return;
     }
-  }, [submission.frontImage, submission.backImage]);
+    try {
+      const data = await gradingRecommendation({
+        frontImage: currentCard.frontImage as string,
+        backImage: currentCard.backImage as string,
+        userId: user.id.toString() // Ensure userId is string if expected
+      });
+      console.log(data.data.card_details);
+      const gradeInfo = getGradeInfo(data.data.card_details.final_score);
 
+      setGradingData({
+        ...data.data.card_details,
+        graded_by: 'Prescision Grading™',
+        grading_date: formatToUSTimezone(new Date().toISOString()),
+        grade: gradeInfo.grade,
+        condition_tier: gradeInfo.tier,
+        ai_summary: `Our AI-powered grading engine evaluates each card using ultra-high resolution imaging and precision scoring across four key areas: Corners, Edges, Surface, and Centering.`,
+        frontImage: currentCard.frontImage as string,
+        backImage: currentCard.backImage as string,
+        card_name: currentCard.cardName,
+      });
+    } catch (err) {
+      console.error("Error fetching grading recommendation:", err);
+      // Handle the error (e.g., show a toast)
+    }
+  };
 
-  // Memoized preview URLs
+  // Memoized preview URLs for the current card
   const frontImagePreview = useMemo(() => {
-    if (!submission.frontImage) return undefined;
-    if (typeof submission.frontImage === 'string') return submission.frontImage;
-    return URL.createObjectURL(submission.frontImage as File);
-  }, [submission.frontImage]);
+    if (!currentCard?.frontImage) return "/assets/images/default-front.png";
+    if (typeof currentCard.frontImage === 'string') return currentCard.frontImage;
+    return URL.createObjectURL(currentCard.frontImage as File);
+  }, [currentCard?.frontImage]);
 
   const backImagePreview = useMemo(() => {
-    if (!submission.backImage) return undefined;
-    if (typeof submission.backImage === 'string') return submission.backImage;
-    return URL.createObjectURL(submission.backImage as File);
-  }, [submission.backImage]);
+    if (!currentCard?.backImage) return "/assets/images/default-back.png";
+    if (typeof currentCard.backImage === 'string') return currentCard.backImage;
+    return URL.createObjectURL(currentCard.backImage as File);
+  }, [currentCard?.backImage]);
 
   const updateStatus = async () => {
+    if (!gradingData || !currentCard?.id) {
+      console.error("Grading data or card ID is missing for confirmation.");
+      return;
+    }
 
     let pdf = pdfFile;
     if (!pdf) {
@@ -136,49 +163,76 @@ const GenerateCertificate = () => {
       setIsGeneratingPDFBackground(false);
     }
 
-
-    await confirmGrade.mutateAsync({ ...gradingData, pdfFile: pdf, cardId: submission.cardId } as GradingData)
+    await confirmGrade.mutateAsync({
+      ...gradingData,
+      pdfFile: pdf,
+      cardId: currentCard.id,
+      submissionId: parseInt(submissionId)
+    } as GradingData);
     setIsConfirmDoc(true);
   };
 
   const handleReportGeneration = async () => {
+    if (!gradingData) {
+      console.error("No grading data available to generate PDF.");
+      return;
+    }
     setIsGeneratingPDF(true);
 
     try {
       const pdf = await reactPDFGenerator.generatePDF(gradingData as GradingData, undefined, true);
-      setPdfFile(pdf)
-      // PDF will be automatically downloaded
+      setPdfFile(pdf);
     } catch (error) {
       console.error('Failed to generate PDF:', error);
-      // Handle error (show toast, etc.)
-    }
-    finally {
+    } finally {
       setIsGeneratingPDF(false);
     }
   };
 
   const handleSubmit = (formdata: GradingData) => {
     setGradingData(formdata);
+  };
+
+  // --- Loading and Error States ---
+  if (!submissionId || !cardId) {
+    <p className="mt-6 text-neutral-grey">No grading data available for this card yet.</p>
   }
 
-  if (isPending) {
-    return (<ReportSkeleton />)
+  // Use isCardLoading now for the primary data fetching state
+  if (isCardLoading || isGradingPending) {
+    return (<ReportSkeleton />);
   }
 
-  if (error) {
+  // Handle errors from fetching the card or grading recommendation
+  if (isCardError || gradingError) {
     return (
-      <div>
-        <p className="mt-6 text-neutral-grey mb-4">Failed to Grade Card.</p>
+      <div className="p-5 text-red-500">
+        <p className="mt-6 text-neutral-grey mb-4">
+          {isCardError ? "Failed to load card details." : "Failed to Grade Card."}
+        </p>
+        {!isCardError && ( // Only show retry button if grading failed, not if card loading failed
+          <ButtonGradient
+            onClick={fetchGradingRecommendation}
+            disabled={isGradingPending}
+          >
+            Retry Grading
+          </ButtonGradient>
+        )}
+      </div>
+    );
+  }
 
-        <ButtonGradient
-          // onClick={() => router.back()}
-          disabled={isPending}
-          onClick={() => fetchGradingRecommendation() }
-        >
-          Retry Grading
-        </ButtonGradient>
+  // Fallback if currentCard is null despite checks (should not happen often with `enabled` query)
+  if (!currentCard) {
+    return (
+      <div className="bg-white border-md px-4 py-4 rounded-md">
+        <h1 className="heading-primary font-bold mb-1">
+          Official Card Grading Certificate
+        </h1>
+        <p className="mt-6 text-neutral-grey">No grading data available.</p>
       </div>
     )
+
   }
 
   return (
@@ -187,17 +241,14 @@ const GenerateCertificate = () => {
         <h1 className="heading-primary font-bold mb-1">
           Official Card Grading Certificate
         </h1>
-        {/* <p className="heading-tertiary text-muted-foreground">
-          Certificate ID: #{submission.trackingNumber}
-        </p> */}
+        <p className="heading-tertiary text-muted-foreground">
+          Card: {currentCard.cardName} (ID: {currentCard.id})
+        </p>
       </div>
 
-      {!submission.id || submission.submissionStatus == submissionStatus.SUBMISSION_PENDING ?
-        <p className="mt-6 text-neutral-grey">No Submission Selected for Grading Review.</p>
-        :
+      {currentCard.status !== cardStatus.CARD_PENDING ? ( // Check currentCard status directly
         <>
-
-          {gradingData &&
+          {gradingData ? (
             <GradingReport
               data={gradingData as GradingData}
               isEditable={true}
@@ -205,36 +256,40 @@ const GenerateCertificate = () => {
               classNames=""
               setEditing={setIsEditingReport}
             />
-          }
+          ) : (
+            <p className="mt-6 text-neutral-grey">No grading data available for this card yet.</p>
+          )}
 
           <CardImages
-            frontImage={frontImagePreview || "/assets/images/default-front.png"}
-            backImage={backImagePreview || "/assets/images/default-back.png"}
+            frontImage={frontImagePreview}
+            backImage={backImagePreview}
             classNames="mt-4 p-4"
             title="Card Scan Reference"
           />
 
           <div className="flex items-center gap-6 mt-4 ml-2 md:ml-4">
             <Button
-              // onClick={() => router.back()}
               variant={"ghost"}
               className="rounded-full heading-secondary bg-[#E0E0E0] hover:bg-gray-300 hover:text-black"
-              disabled={isEditingReport}
+              disabled={isEditingReport || isGeneratingPDF || !gradingData}
               onClick={handleReportGeneration}
             >
               {isGeneratingPDF ? (
                 <>
-                  <Loader2 className="animate-spin w-5 h-5" />
+                  <Loader2 className="animate-spin w-5 h-5 mr-2" />
                   Generating Report...
                 </>
               ) : (
                 "Download Pdf"
               )}
             </Button>
-            <ButtonGradient onClick={updateStatus} disabled={updateSubmission.isPending || isEditingReport}>
+            <ButtonGradient
+              onClick={updateStatus}
+              disabled={confirmGrade.isPending || isGeneratingPDFBackground || isEditingReport || !gradingData}
+            >
               {confirmGrade.isPending || isGeneratingPDFBackground ? (
                 <>
-                  <Loader2 className="animate-spin w-5 h-5" />
+                  <Loader2 className="animate-spin w-5 h-5 mr-2" />
                   Confirming...
                 </>
               ) : (
@@ -247,10 +302,10 @@ const GenerateCertificate = () => {
             isOpen={isConfirmDoc}
             icon_url="/icons/success.svg"
             title="Card has been graded"
-            message="User has been Notified about the Grading Decision."
+            message={`User has been Notified about the Grading Decision for Card ID: ${currentCard.id}.`}
             onConfirm={() => {
               setIsConfirmDoc(false);
-              router.push("/dashboard");
+              router.push(`/dashboard/submission-status/${submissionId}?cardId=${currentCard.id}`);
             }}
             onCancel={() => setIsConfirmDoc(false)}
             cn="!p-16 !rounded-2xl"
@@ -261,8 +316,9 @@ const GenerateCertificate = () => {
             icon_w={60}
           />
         </>
-
-      }
+      ) : (
+        <p className="mt-6 text-neutral-grey">This card is not yet ready for grading. Please check its status.</p>
+      )}
     </div>
   );
 };

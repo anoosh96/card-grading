@@ -7,19 +7,19 @@ import { useCheckoutSession } from "@/hooks/useCheckoutSession";
 import { useUserStore } from "@/stores/userStore";
 import { useRouter } from "next/navigation";
 
-// const SERVICES = [
-//   {
-//     name: 'Standard',
-//     price: 'X',
-//     features: ['Submit card details online', 'Ship cards to us', 'AI grading process', 'Cards returned within 3-4 weeks']
-//   },
+const SERVICES = [
+  {
+    name: 'Standard',
+    price: 'X',
+    features: ['Submit card details online', 'Ship cards to us', 'AI grading process', 'Cards returned within 3-4 weeks']
+  },
 
-//   {
-//     name: 'Premium',
-//     price: 'X',
-//     features: ['Express grading for faster results', 'High-resolution scans for detailed review', 'Optional authentication check', 'Return shipment via premium courier']
-//   }
-// ]
+  {
+    name: 'Premium',
+    price: 'X',
+    features: ['Express grading for faster results', 'High-resolution scans for detailed review', 'Optional authentication check', 'Return shipment via premium courier']
+  }
+]
 
 
 export default function OurServices({ services }: { services: Service[] }) {
@@ -38,21 +38,21 @@ export default function OurServices({ services }: { services: Service[] }) {
 
     // setSubscriptionLoading(true);
 
-    try {
-      const data = await checkoutSession.mutateAsync({ serviceType })
-      console.log(data)
-      if (data?.data.url) {
-        // Redirect to Stripe Checkout
-        window.location.href = data.data.url;
-      } else {
-        alert(data.message || 'Error creating checkout session');
-      }
-    } catch (error) {
-      console.error('Error:', error);
-      alert('Something went wrong. Please try again.');
-    } finally {
-      // setSubscriptionLoading(false);
-    }
+    // try {
+    //   const data = await checkoutSession.mutateAsync({ serviceType })
+    //   console.log(data)
+    //   if (data?.data.url) {
+    //     // Redirect to Stripe Checkout
+    //     window.location.href = data.data.url;
+    //   } else {
+    //     alert(data.message || 'Error creating checkout session');
+    //   }
+    // } catch (error) {
+    //   console.error('Error:', error);
+    //   alert('Something went wrong. Please try again.');
+    // } finally {
+    //   // setSubscriptionLoading(false);
+    // }
   };
 
   return (

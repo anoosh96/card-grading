@@ -1,132 +1,149 @@
 "use client";
 
-import React, { useMemo, useState } from "react";
+import React, { useMemo, useState, useEffect } from "react";
 import ImageEditor from "@/components/common/ImagePicker/ImageEditor";
 import { ButtonGradient } from "@/components/common/ButtonGradient";
 import { Button } from "@/components/ui/button";
 import SubmissionSummary from "../components/SubmissionSummary";
-import { SubmissionData } from "@/stores/submissionStore";
-import { useRouter } from "next/navigation";
-import { useSubmissionStore } from "@/stores/submissionStore";
+import { CardData } from "@/stores/submissionStore"; // Still need CardData type
+import { useRouter } from "next/navigation"; // No longer need useParams, useSearchParams for cardId here
 import { useUpdateSubmission } from "@/hooks/useUpdateSubmission";
 import { FlexibleRecord } from "@/types";
-import { formatToUSTimezone, padId } from "@/lib/utils";
 import { Loader2 } from "lucide-react";
+import { padId } from "@/lib/utils"; // Assuming padId is still used for summary
+import { serviceType } from "@/app/(user)/lib/utils/constants";
 
-export default function CardDetails() {
+// Define props interface for CardDetails
+interface CardDetailsProps {
+  currentCard: CardData; // The specific card data passed as a prop
+}
+
+export default function CardDetails({ currentCard: initialCard }: CardDetailsProps) {
   const router = useRouter();
 
-  const [isEditing, setIsEditing] = useState(false);
+  // Local state to manage the card data being edited
+  // This is initialized with the prop but can be updated locally.
+  const [cardBeingEdited, setCardBeingEdited] = useState<CardData>(initialCard);
 
-  // pull the submission object and setter from the store
-  const submission = useSubmissionStore((s) => s.submission);
-  const setSubmission = useSubmissionStore((s) => s.setSubmission);
+  // Sync local state when the initialCard prop changes (e.g., from a re-fetch in parent)
+  useEffect(() => {
+    setCardBeingEdited(initialCard);
+  }, [initialCard]);
+
+  const [isEditingSummary, setIsEditingSummary] = useState(false); // Renamed to avoid conflict with `isEditing` prop usage in the previous version
 
   // Use our mutation hook
   const updateSubmission = useUpdateSubmission();
 
-  // Memoized preview URLs
+  // Memoized preview URLs for current card being edited
   const frontImagePreview = useMemo(() => {
-    if (!submission.frontImage) return undefined;
-    if (typeof submission.frontImage === 'string') return submission.frontImage;
-    return URL.createObjectURL(submission.frontImage as File);
-  }, [submission.frontImage]);
+    if (!cardBeingEdited.frontImage) return undefined;
+    if (typeof cardBeingEdited.frontImage === 'string') return cardBeingEdited.frontImage;
+    return URL.createObjectURL(cardBeingEdited.frontImage as File);
+  }, [cardBeingEdited.frontImage]);
 
   const backImagePreview = useMemo(() => {
-    if (!submission.backImage) return undefined;
-    if (typeof submission.backImage === 'string') return submission.backImage;
-    return URL.createObjectURL(submission.backImage as File);
-  }, [submission.backImage]);
+    if (!cardBeingEdited.backImage) return undefined;
+    if (typeof cardBeingEdited.backImage === 'string') return cardBeingEdited.backImage;
+    return URL.createObjectURL(cardBeingEdited.backImage as File);
+  }, [cardBeingEdited.backImage]);
 
-  // when a new file is dropped, update both preview and store
+  // Handle image uploads locally
   const handleUploadImage = (type: "frontImage" | "backImage", file: File) => {
-    setSubmission({ [type]: file });
+    setCardBeingEdited(prevCard => ({
+      ...prevCard,
+      [type]: file
+    }));
   };
 
+  // Handle image removal locally
   const handleRemoveImage = (type: "frontImage" | "backImage") => {
-    setSubmission({ [type]: null });
+    setCardBeingEdited(prevCard => ({
+      ...prevCard,
+      [type]: null // Or undefined, depending on your CardData type's nullable image fields
+    }));
   };
 
-  // pass updated summary data back to store when changed in Summary
-  const handleUpdate = (updated: Partial<SubmissionData>) => {
-    // Handle specific enum field transformations if needed
-    const updatedData = { ...updated };
-
-    // Update the store with the transformed data
-    setSubmission({ ...updatedData, editing: true });
+  // Update summary data locally
+  const handleUpdateSummary = (updated: Partial<CardData>) => {
+    setCardBeingEdited(prevCard => ({
+      ...prevCard,
+      cardName: updated.cardName ?? prevCard.cardName, // Use nullish coalescing for better handling of empty strings
+      category: updated.category ?? prevCard.category,
+      yearOfRelease: updated.yearOfRelease ?? prevCard.yearOfRelease,
+      status: updated.status ?? prevCard.status,
+      // Add other card-specific fields as needed
+    }));
   };
 
   const handleSubmit = () => {
-    // Ensure we have an ID to work with
-    if (!submission.id) {
-      alert("Missing submission ID");
+    // Ensure we have a submissionId and card data to work with
+    if (!cardBeingEdited.id) {
+      alert("Missing submission ID or card ID for update.");
       return;
     }
 
-    // Prepare the values object for the API
+    // Prepare the values object for the API - now card-specific from local state
     const values: FlexibleRecord = {
-      cardName: submission.cardName,
-      category: submission.category,
-      yearOfRelease: submission.yearOfRelease,
-      conditionEstimate: submission.conditionEstimate,
-      serviceType: submission.serviceType,
-      submissionStatus: submission.submissionStatus,
-      user: {
-        name: submission.fullName,
-        email: submission.email
-      }
+      cardName: cardBeingEdited.cardName,
+      category: cardBeingEdited.category,
+      yearOfRelease: cardBeingEdited.yearOfRelease,
+      status: cardBeingEdited.status,
+      cardId: cardBeingEdited.id // Use id from cardBeingEdited
     };
 
-    // Call the mutation with our submission data
+    // Call the mutation with our data
     updateSubmission.mutate({
-      id: submission.id,
+      id: Number(cardBeingEdited.submissionId), // Use submissionId from props
       values,
-      frontImage: submission.frontImage instanceof File ? submission.frontImage : undefined,
-      backImage: submission.backImage instanceof File ? submission.backImage : undefined
+      frontImage: cardBeingEdited.frontImage instanceof File ? cardBeingEdited.frontImage : undefined,
+      backImage: cardBeingEdited.backImage instanceof File ? cardBeingEdited.backImage : undefined
     }, {
       onSuccess: (data) => {
-        // Update the submission store with the response data
-        const updatedSubmission = data.data.submission;
-        const updatedCard = data.data.card;
-        const updatedUser = data.data.user;
+        // No longer setting submission state in store here.
+        // The parent component (SubmissionStatusPage) would be responsible
+        // for re-fetching the updated card data if needed, which it does automatically
+        // when currentCard prop changes, triggering the useEffect in this component.
 
-        // Update our local submission state
-        setSubmission({
-          trackingNumber: updatedSubmission.trackingNumber,
-          overallProgress: updatedSubmission.overallProgress,
-          estimatedCompletion: updatedSubmission.estimatedCompletion,
-          submissionStatus: updatedSubmission.submissionStatus,
-          frontImage: updatedCard?.frontImage || submission.frontImage,
-          backImage: updatedCard?.backImage || submission.backImage,
-          cardName: updatedCard?.cardName || submission.cardName,
-          category: updatedCard?.category || submission.category,
-          yearOfRelease: updatedCard?.yearOfRelease || submission.yearOfRelease,
-          conditionEstimate: updatedCard?.conditionEstimate || submission.conditionEstimate,
-          fullName: updatedUser?.fullName || submission.fullName,
-          email: updatedUser?.email || submission.email,
-          editing: false
-        });
-
-        // Navigate to submission status page
-        router.push(`/dashboard/submission-status/${submission.id}`);
+        // Navigate back to submission status page, passing current cardId
+        router.push(`/dashboard/submission-status/${cardBeingEdited.submissionId}?cardId=${cardBeingEdited.id}`);
+      },
+      onError: (error) => {
+        console.error("Failed to update card details:", error);
+        alert("Failed to update card details. Please try again.");
       }
     });
   };
 
-  // Prepare data for the SubmissionSummary component
+  // Prepare data for the SubmissionSummary component using local card data
   const summaryData = useMemo(() => {
+    if (!cardBeingEdited) return null;
+
     return {
-      cardName: submission.cardName,
-      category: submission.category,
-      yearOfRelease: submission.yearOfRelease?.toString() || "",
-      condition: submission.conditionEstimate,
-      submissionDate: formatToUSTimezone(submission.submissionDate || ""),
-      status: submission.submissionStatus,
-      name: submission.fullName as string,
-      email: submission.email as string,
-      orderId: padId(submission.id)
+      orderId: padId(cardBeingEdited.submissionId as number), // Use submissionId from props
+      cardName: cardBeingEdited.cardName,
+      category: cardBeingEdited.category,
+      yearOfRelease: cardBeingEdited.yearOfRelease?.toString() || "",
+      status: cardBeingEdited.status as string,
+      service: cardBeingEdited.service?.name || serviceType.BULK_SUBMISSION,
+      // Removed submission-specific fields like name, email, submissionDate
+      // as they are not available directly on the card or in this component's scope
     };
-  }, [submission]);
+  }, [cardBeingEdited]);
+
+  // Render loading/error/not found states based on the currentCard prop coming from parent
+  // These checks are usually done in the parent component that fetches the data.
+  // We keep a basic check here if `initialCard` itself is null or `summaryData` can't be formed.
+  if (!initialCard || !summaryData) { // Check initialCard as a safeguard
+    return (
+      <div className="bg-white border-md px-4 py-4 rounded-md">
+        <h2 className="heading-primary font-bold">Card Not Available</h2>
+        <p className="heading-tertiary text-muted-foreground">
+          Card details could not be loaded.
+        </p>
+      </div>
+    );
+  }
 
   return (
     <div className="bg-white border-md px-4 py-4 rounded-md">
@@ -135,7 +152,7 @@ export default function CardDetails() {
           Update Card Details
         </h1>
         <p className="heading-tertiary text-muted-foreground">
-          Modify information about the submitted card
+          Modify information about {cardBeingEdited.cardName || 'the submitted card'}
         </p>
       </div>
 
@@ -171,18 +188,15 @@ export default function CardDetails() {
         data={summaryData}
         isEditable={true}
         onSubmit={(fields) =>
-          handleUpdate({
+          handleUpdateSummary({
             cardName: fields.cardName,
             category: fields.category,
             yearOfRelease: Number(fields.yearOfRelease),
-            conditionEstimate: fields.condition,
-            submissionStatus: fields.status,
-            fullName: fields.name,
-            email: fields.email,
+            status: fields.status,
           })
         }
-        isEditing={isEditing}
-        setIsEditing={setIsEditing}
+        isEditing={isEditingSummary} // Use the local state for editing summary
+        setIsEditing={setIsEditingSummary}
         classNames="mt-4"
       />
 
@@ -197,7 +211,7 @@ export default function CardDetails() {
         <ButtonGradient
           onClick={handleSubmit}
           className="max-w-[8rem] w-full"
-          disabled={updateSubmission.isPending || isEditing}
+          disabled={updateSubmission.isPending || isEditingSummary} // Disable if updating or summary is being edited
         >
           {updateSubmission.isPending ? (
             <>

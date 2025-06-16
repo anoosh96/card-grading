@@ -12,7 +12,7 @@ export const dashboardSidebarItems: SidebarItemProps[] = [
   { href: "/user-dashboard", label: "Dashboard", Icon: DashboardSidebarIcon },
   { href: "/user-dashboard/my-submissions/by-post-submission", label: "My Submissions", Icon: DashboardSubmissionStatusIcon },
   { href: "/user-dashboard/submission-status", label: "Submission Status", Icon: DashboardSubtrackingIcon },
-  { href: "/user-dashboard/subscription", label: "Subscription", Icon: DashboardSubscriptionIcon },
+  // { href: "/user-dashboard/subscription", label: "Subscription", Icon: DashboardSubscriptionIcon },
   { href: "/user-dashboard/profile", label: "Profile", Icon: DashboardProfileIcon },
   { href: "", label: "Logout", Icon: DashboardLogoutIcon, isBtn: true },
 ];
@@ -47,4 +47,18 @@ export const paymentMethodMap: FlexibleRecord = {
 export const submissionSourceMap: {[key: string]: ReactNode} = {
   'BY_POST': 'By Post',
   'BY_FORM': 'By Form'
+}
+
+export const cardStatus = {
+  CARD_PENDING: 'CARD_PENDING',
+  CARD_RECEIVED: 'CARD_RECEIVED',
+  GRADING_IN_PROGRESS: 'GRADING_IN_PROGRESS',
+  GRADING_COMPLETE: 'GRADING_COMPLETE',
+  SUBMISSION_REJECTED: 'CARD_REJECTED',
+  CARD_REJECTED: 'CARD_REJECTED',
+}
+
+export const serviceType = {
+  STANDARD: 'Standard Submission',
+  BULK_SUBMISSION: 'Bulk Submission'
 }

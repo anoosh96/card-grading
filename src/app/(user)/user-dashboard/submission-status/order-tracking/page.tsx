@@ -4,43 +4,70 @@ import { Button } from "@/components/ui/button";
 import ProgressTracker from "./ProgressTracker";
 import { ButtonGradient } from "@/components/common/ButtonGradient";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useSubmissionById } from "@/hooks/useSubmissionById";
-import { Suspense } from "react";
+// import { useSubmissionById } from "@/hooks/useSubmissionById"; // REMOVE THIS IMPORT
+import { useCardDetailsUser } from "@/hooks/useCardDetailsUser"; // IMPORT THE NEW HOOK
+import { Suspense } from "react"; // Removed useMemo as selectedCard logic changes
 import { OrderTrackingSkeleton } from "@/components/skeletons/DashboardSkeleton";
-
+import { cardStatusMap, getTurnaroundTime } from "@/app/(user)/lib/utils/helpers"; // submissionStatusMap will no longer be directly applicable for a single card
 
 function OrderTracking() {
-  const router = useRouter()
-  const params = useSearchParams()
+  const router = useRouter();
+  const params = useSearchParams();
   const submissionId = params.get('id') as string;
-  const { data, isLoading, isError } = useSubmissionById(submissionId);
+  const cardId = params.get('cardId') as string; // Ensure cardId is always string for hook usage
 
-  if (!submissionId) {
-    return <div className="p-5 text-red-500">Missing submission ID.</div>;
+  // Use the useCardDetailsUser hook to fetch the specific card
+  const { data: selectedCard, isLoading, isError } = useCardDetailsUser(submissionId, cardId);
+
+  // We are now exclusively in "card view" in this component's logic if cardId is provided
+  // Removed isCardView boolean as it's implied by presence of cardId
+  
+  if (!submissionId || !cardId) {
+    return <div className="p-5 text-red-500">Missing **submission ID** or **card ID**. This page is designed to track a specific card.</div>;
   }
 
   if (isLoading) {
     return <OrderTrackingSkeleton />;
   }
 
-  if (isError || !data?.data) {
-    return <div className="p-5 text-red-500">Failed to load order details.</div>;
+  // Check for error or if selectedCard is null/undefined after loading
+  if (isError || !selectedCard) {
+    return <div className="p-5 text-red-500">Failed to load **card details** or card not found.</div>;
   }
 
-  const submission = data.data
-
+  // Determine tracking parameters directly from selectedCard
   const trackingParams = {
-    trackingNumber: submission.trackingNumber,
-    overallProgress: submission.overallProgress,
-    estimatedCompletion: submission.estimatedCompletion,
-    submissionStatus: submission.submissionStatus
-  }
+    trackingNumber: selectedCard.trackingNumber as string,
+    overallProgress: selectedCard.overallProgress as number,
+    estimatedCompletion: selectedCard.estimatedCompletion as string,
+    submissionStatus: cardStatusMap[selectedCard.status as string],
+    turnAroundTime: selectedCard.service?.turnAroundTime || '10d'
+  };
 
+  const handleBackClick = () => {
+    router.back();
+  };
+
+  const handleDoneClick = () => {
+    // If tracking a specific card, typically go back to the submission's cards list
+    router.push(`/user-dashboard/submission-status?id=${submissionId}`); // Assuming this is the path to view all cards in a submission
+  };
 
   return (
     <section className="p-7 bg-white">
-      <h1 className="heading-primary font-bold">Order Tracking</h1>
-      <p className="mt-4 mb-10">Monitor the progress of your card grading</p>
+      <div className="flex items-center justify-between mb-4">
+        {/* Always display 'Card Tracking' as we are focused on a single card */}
+        <h1 className="heading-primary font-bold">Card Tracking</h1>
+        {/* The "Card X of Y" display needs total cards from the submission, 
+            which we no longer fetch. You might remove this or fetch submission 
+            details if this specific feature is critical. 
+            For now, I'm removing it.
+        */}
+      </div>
+      
+      <p className="mt-4 mb-10">
+        Monitor the progress of your card: **{selectedCard?.cardName}**
+      </p>
 
       <ProgressTracker {...trackingParams} />
 
@@ -48,12 +75,14 @@ function OrderTracking() {
         <Button
           size={"lg"}
           className="h-auto font-semibold bg-soft-grey rounded-full text-pure-grey py-3 px-14 text-base hover:bg-soft-grey"
-          onClick={() => router.back()}
+          onClick={handleBackClick}
         >
           Back
         </Button>
-        <ButtonGradient size={"lg"} className="py-3 px-14 h-auto" 
-          onClick={() => router.back()}
+        <ButtonGradient 
+          size={"lg"} 
+          className="py-3 px-14 h-auto" 
+          onClick={handleDoneClick}
         >
           Done
         </ButtonGradient>
