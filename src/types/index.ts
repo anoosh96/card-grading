@@ -5,6 +5,7 @@ export interface SvgIconProps extends React.SVGProps<SVGSVGElement> {
   height?: string | number;
   className?: string;
   hover?: boolean;
+  fill?: string;
   setHover?: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
@@ -50,6 +51,7 @@ export interface Service {
   features?: string[];
   cardLimit?: number;
   maxCardValue?: number;
+  colorClass?: string;
 }
 
 export interface Subscription {

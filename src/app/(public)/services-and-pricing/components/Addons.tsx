@@ -17,7 +17,7 @@ const ADDONS = [
 
 export default function Addons(){
   return (
-    <section className="p-10 lg:pr-40">
+    <section className="p-10">
       <div className="flex items-cetner gap-4">
         <Image  src={"/icons/checkbox.svg"} width={30} height={30} alt="checbox filled icon" />
         <h2 className="text-charcol heading-primary font-bold">Addons</h2>
