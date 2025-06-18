@@ -2,7 +2,8 @@ import Hexagon from "@/components/svgs/Hexagon";
 import { BulkCardProps } from "./OurServices";
 
 
-export default function BulkCard({price, turnAroundTime, color, cards, className}: BulkCardProps ) {
+export default function BulkCard({price, turnAroundTime, color, cards, className, bg}: BulkCardProps ) {
+
   return (
     <div className={`mb-28 ${className}`}> {/* Add relative positioning to the common parent */}
       <div className="relative w-full lg:w-[800px] flex items-center justify-end" style={{  filter: 'drop-shadow(-1px 2px 10px rgba(50, 50, 0, 0.23))'}}>
@@ -29,7 +30,7 @@ export default function BulkCard({price, turnAroundTime, color, cards, className
 
         {/* Inner Hexagon (absolute positioned to break out) */}
         <div
-          className={`absolute right-0 top-1/2 -translate-y-1/2 w-[220px] h-[200px] bg-[${color}] flex items-center justify-center text-center text-4xl font-bold shadow-lg`}
+          className={`absolute right-0 top-1/2 -translate-y-1/2 w-[220px] h-[200px] ${bg} flex items-center justify-center text-center text-4xl font-bold shadow-lg`}
           style={{
             clipPath: 'polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%)',
             zIndex: 2, /* Ensure it's above the outer shape */
@@ -43,7 +44,7 @@ export default function BulkCard({price, turnAroundTime, color, cards, className
         </div>
 
         <div
-          className={`absolute right-[125px] -top-[7px] -translate-y-1/2 w-[25px] h-[25px] bg-[${color}] shadow-lg`}
+          className={`absolute right-[125px] -top-[7px] -translate-y-1/2 w-[25px] h-[25px] ${bg} shadow-lg`}
           style={{
             clipPath: 'polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%)',
             zIndex: 10, /* Ensure it's above the outer shape */

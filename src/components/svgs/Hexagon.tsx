@@ -7,8 +7,8 @@ export default function Hexagon({ width, height, fill }: SvgIconProps) {
         <path d="M17.5666 54.25L4.1333 31L17.5666 7.75H44.4333L57.8666 31L44.4333 54.25H17.5666ZM20.5375 49.0833H41.4625L51.8604 31L41.4625 12.9167H20.5375L10.075 31L20.5375 49.0833Z" fill={fill} />
       </g>
       <defs>
-        <filter id="filter0_d_1659_3330" x="-4" y="0" width="70" height="70" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
-          <feFlood flood-opacity="0" result="BackgroundImageFix" />
+        <filter id="filter0_d_1659_3330" x="-4" y="0" width="70" height="70" filterUnits="userSpaceOnUse" colorInterpolationFilters="sRGB">
+          <feFlood floodOpacity="0" result="BackgroundImageFix" />
           <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha" />
           <feOffset dy="4" />
           <feGaussianBlur stdDeviation="2" />

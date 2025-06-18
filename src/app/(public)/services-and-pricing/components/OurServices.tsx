@@ -21,6 +21,7 @@ export interface BulkService {
   color: string;
   cards: string;
   className?: string
+  bg?: string
 }
 
 export type ServiceCardProps = Service; // This simplifies things as ServiceCard takes all Service properties
@@ -81,21 +82,24 @@ const BULK_SERVICES = [
     turnAroundTime: '10 days',
     price: '13',
     cards: '10',
-    color: '#FF9067'
+    color: '#FF9067',
+    bg: 'bg-[#FF9067]'
   },
 
   {
     turnAroundTime: '10 days',
     price: '12',
     cards: '25',
-    color: '#FD88AD'
+    color: '#FD88AD',
+    bg: 'bg-[#FD88AD]'
   },
 
   {
     turnAroundTime: '10 days',
     price: '10',
     cards: '50',
-    color: '#A1CBFC'
+    color: '#A1CBFC',
+    bg: 'bg-[#A1CBFC]'
   }
 ]
 

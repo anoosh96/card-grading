@@ -4,21 +4,20 @@ import CardImages from "@/app/(user)/user-dashboard/submission-status/card-detai
 import React, { useEffect, useMemo, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { ButtonGradient } from "@/components/common/ButtonGradient";
-import { CardData as SubmissionCardData } from "@/stores/submissionStore";
 import { formatToUSTimezone } from "@/lib/utils";
 import CustomModal from "@/components/common/CustomModal";
-import { cardStatus } from "@/app/(user)/lib/utils/constants"; // Assuming cardStatus comes from here
+import { cardStatus } from "@/app/(user)/lib/utils/constants";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Loader2 } from "lucide-react";
 import { useGradingRecommendation } from "@/hooks/grading/useGradingRecommendation";
 import { useUserStore } from "@/stores/userStore";
 import GradingReport from "./components/grading-report";
-import { GradingData } from "../../types";
+import { GradingData } from "../../types"; // Ensure this type is comprehensive for gradingData
 import { reactPDFGenerator } from "@/utils/pdf-generator";
 import { ReportSkeleton } from "@/components/skeletons/AdminDashboardSkeleton";
 import { useConfirmGrade } from "@/hooks/grading/useConfirmGrade";
-// import { useAdminSubmissionDetails } from "@/hooks/useAdminSubmissionDetails"; // REMOVE THIS IMPORT
-import { useCardDetails } from "@/hooks/useCardDetails"; // IMPORT THE NEW HOOK
+import { useCardDetails } from "@/hooks/useCardDetails";
+import { useGenerateLabel } from '@/hooks/grading/useGenerateLabel'; // Adjust the path as necessary
 
 const GenerateCertificate = () => {
   const router = useRouter();
@@ -26,24 +25,21 @@ const GenerateCertificate = () => {
   const submissionId = searchParams.get('submissionId') as string;
   const cardId = searchParams.get('cardId') as string;
 
-  // Use the new useCardDetails hook to fetch the specific card
   const { data: currentCard, isLoading: isCardLoading, isError: isCardError } = useCardDetails(submissionId, cardId);
 
   const { user } = useUserStore();
   const { mutateAsync: gradingRecommendation, isPending: isGradingPending, error: gradingError } = useGradingRecommendation();
   const confirmGrade = useConfirmGrade();
+  const generateLabel = useGenerateLabel();
 
   const [isConfirmDoc, setIsConfirmDoc] = useState(false);
   const [isGeneratingPDF, setIsGeneratingPDF] = useState(false);
   const [isGeneratingPDFBackground, setIsGeneratingPDFBackground] = useState(false);
   const [isEditingReport, setIsEditingReport] = useState(false);
 
-  // Initialize gradingData based on currentCard (now directly from useCardDetails)
   const [gradingData, setGradingData] = useState<GradingData | null | undefined>(null);
   const [pdfFile, setPdfFile] = useState<Blob | null>(null);
-  
 
-  // Effect to initialize gradingData if it exists on the fetched card
   useEffect(() => {
     if (currentCard?.grade) {
       setGradingData({
@@ -61,15 +57,13 @@ const GenerateCertificate = () => {
         grading_date: formatToUSTimezone(currentCard.grade.gradeDate as string)
       });
     }
-  }, [currentCard]); // Depend on currentCard
+  }, [currentCard]);
 
-  // Effect to fetch grading recommendation if card images are available and no grading data exists
   useEffect(() => {
-    // Only fetch if currentCard is loaded, has images, and gradingData is not already set
     if (currentCard && currentCard.frontImage && currentCard.backImage && !gradingData && !currentCard.grade) {
       fetchGradingRecommendation();
     }
-  }, [currentCard, gradingData]); // Depend on currentCard and gradingData state
+  }, [currentCard, gradingData]);
 
 
   const getGradeInfo = (score: number) => {
@@ -108,14 +102,13 @@ const GenerateCertificate = () => {
 
   const fetchGradingRecommendation = async () => {
     if (!currentCard || !currentCard.frontImage || !currentCard.backImage || !user?.id) {
-      // console.warn("Missing currentCard, images, or user ID for grading recommendation.");
       return;
     }
     try {
       const data = await gradingRecommendation({
         frontImage: currentCard.frontImage as string,
         backImage: currentCard.backImage as string,
-        userId: user.id.toString() // Ensure userId is string if expected
+        userId: user.id.toString()
       });
       console.log(data.data.card_details);
       const gradeInfo = getGradeInfo(data.data.card_details.final_score);
@@ -133,11 +126,9 @@ const GenerateCertificate = () => {
       });
     } catch (err) {
       console.error("Error fetching grading recommendation:", err);
-      // Handle the error (e.g., show a toast)
     }
   };
 
-  // Memoized preview URLs for the current card
   const frontImagePreview = useMemo(() => {
     if (!currentCard?.frontImage) return "/assets/images/default-front.png";
     if (typeof currentCard.frontImage === 'string') return currentCard.frontImage;
@@ -161,15 +152,22 @@ const GenerateCertificate = () => {
       setIsGeneratingPDFBackground(true);
       pdf = await reactPDFGenerator.generatePDF(gradingData as GradingData);
       setIsGeneratingPDFBackground(false);
+      if (!pdf) {
+        return;
+      }
     }
 
-    await confirmGrade.mutateAsync({
-      ...gradingData,
-      pdfFile: pdf,
-      cardId: currentCard.id,
-      submissionId: parseInt(submissionId)
-    } as GradingData);
-    setIsConfirmDoc(true);
+    try {
+      await confirmGrade.mutateAsync({
+        ...gradingData,
+        pdfFile: pdf,
+        cardId: currentCard.id,
+        submissionId: parseInt(submissionId)
+      } as GradingData);
+      setIsConfirmDoc(true);
+    } catch (error) {
+      console.error("Error confirming grade:", error);
+    }
   };
 
   const handleReportGeneration = async () => {
@@ -189,28 +187,47 @@ const GenerateCertificate = () => {
     }
   };
 
+  // Modified: Pass the relevant gradingData to the mutate function
+  const handleLabelGeneration = async () => {
+    if (!cardId || !gradingData) {
+      console.error("Card ID or grading data missing for label generation.");
+      return;
+    }
+
+    // Construct the payload with the desired fields
+    const payload = {
+      cardId: cardId,
+      year: currentCard?.yearOfRelease?.toString(),
+      name: gradingData.card_name,
+      grade: gradingData.final_score?.toString(),
+      conditionBreakdown: {
+        centering: { score: gradingData.condition_breakdown?.centering?.score || 0 },
+        corners: { score: gradingData.condition_breakdown?.corners?.score || 0 },
+        edges: { score: gradingData.condition_breakdown?.edges?.score || 0 },
+        surface: { score: gradingData.condition_breakdown?.surface?.score || 0 },
+      },
+    };
+
+    // Call the mutate function with the constructed payload
+    generateLabel.mutate(payload);
+  };
+
+
   const handleSubmit = (formdata: GradingData) => {
     setGradingData(formdata);
   };
 
-  // --- Loading and Error States ---
-  if (!submissionId || !cardId) {
-    <p className="mt-6 text-neutral-grey">No grading data available for this card yet.</p>
-  }
-
-  // Use isCardLoading now for the primary data fetching state
   if (isCardLoading || isGradingPending) {
-    return (<ReportSkeleton />);
+    return <ReportSkeleton />;
   }
 
-  // Handle errors from fetching the card or grading recommendation
   if (isCardError || gradingError) {
     return (
       <div className="p-5 text-red-500">
         <p className="mt-6 text-neutral-grey mb-4">
           {isCardError ? "Failed to load card details." : "Failed to Grade Card."}
         </p>
-        {!isCardError && ( // Only show retry button if grading failed, not if card loading failed
+        {!isCardError && (
           <ButtonGradient
             onClick={fetchGradingRecommendation}
             disabled={isGradingPending}
@@ -222,8 +239,7 @@ const GenerateCertificate = () => {
     );
   }
 
-  // Fallback if currentCard is null despite checks (should not happen often with `enabled` query)
-  if (!currentCard) {
+  if (!currentCard || !submissionId || !cardId) {
     return (
       <div className="bg-white border-md px-4 py-4 rounded-md">
         <h1 className="heading-primary font-bold mb-1">
@@ -231,8 +247,7 @@ const GenerateCertificate = () => {
         </h1>
         <p className="mt-6 text-neutral-grey">No grading data available.</p>
       </div>
-    )
-
+    );
   }
 
   return (
@@ -246,7 +261,7 @@ const GenerateCertificate = () => {
         </p>
       </div>
 
-      {currentCard.status !== cardStatus.CARD_PENDING ? ( // Check currentCard status directly
+      {currentCard.status !== cardStatus.CARD_PENDING ? (
         <>
           {gradingData ? (
             <GradingReport
@@ -267,7 +282,7 @@ const GenerateCertificate = () => {
             title="Card Scan Reference"
           />
 
-          <div className="flex items-center gap-6 mt-4 ml-2 md:ml-4">
+          <div className="flex flex-col md:flex-row items-center gap-6 mt-4 ml-2 md:ml-4">
             <Button
               variant={"ghost"}
               className="rounded-full heading-secondary bg-[#E0E0E0] hover:bg-gray-300 hover:text-black"
@@ -280,9 +295,27 @@ const GenerateCertificate = () => {
                   Generating Report...
                 </>
               ) : (
-                "Download Pdf"
+                "Download Report"
               )}
             </Button>
+
+            <Button
+              variant={"ghost"}
+              className="rounded-full heading-secondary bg-[#E0E0E0] hover:bg-gray-300 hover:text-black"
+              disabled={isEditingReport || generateLabel.isPending || !cardId || !gradingData} // Disable if gradingData is null
+              onClick={handleLabelGeneration}
+            >
+              {generateLabel.isPending ? (
+                <>
+                  <Loader2 className="animate-spin w-5 h-5 mr-2" />
+                  Generating Label...
+                </>
+              ) : (
+                "Print Label"
+              )}
+            </Button>
+
+
             <ButtonGradient
               onClick={updateStatus}
               disabled={confirmGrade.isPending || isGeneratingPDFBackground || isEditingReport || !gradingData}

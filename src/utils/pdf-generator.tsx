@@ -104,7 +104,7 @@ const styles = StyleSheet.create({
 
   // Final Grade Section
   finalGradeSection: {
-    backgroundColor: '#fff9e6',
+    backgroundColor: '#f8f8f8',
     borderBottom: '1px solid #cccccc',
   },
   sectionTitle: {
@@ -154,7 +154,7 @@ const styles = StyleSheet.create({
 
   // AI Grading Summary Section
   summarySection: {
-    backgroundColor: '#fff0ff',
+    backgroundColor: '#f8f8f8',
   },
   summaryText: {
     fontSize: 11,
@@ -164,7 +164,7 @@ const styles = StyleSheet.create({
 
   // Table Section
   tableSection: {
-    backgroundColor: '#f0f8ff',
+    backgroundColor: '#f8f8f8',
   },
   table: {
     width: '100%',
@@ -217,7 +217,7 @@ const styles = StyleSheet.create({
 
   // Card Scan Section
   scanSection: {
-    backgroundColor: '#f0f8ff',
+    backgroundColor: '#f8f8f8',
   },
   scanNote: {
     fontSize: 10,
@@ -228,7 +228,7 @@ const styles = StyleSheet.create({
 
   // Authentication Section
   authSection: {
-    backgroundColor: '#fff9e6',
+    backgroundColor: '#f8f8f8',
     borderTop: '1px solid #cccccc',
     padding: 15,
   },

@@ -15,10 +15,8 @@ export default function Header() {
   useLayoutEffect(() => {
     const handleScroll = () => {
       if (window.scrollY > 0) {
-        console.log(true)
         setScrolled(true);
       } else {
-        console.log(false)
         setScrolled(false);
       }
     };
