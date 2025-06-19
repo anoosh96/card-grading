@@ -37,7 +37,7 @@ export const CountingCard: React.FC<CountingCardProps> = ({
         const progress = (timestamp - startTime) / duration;
 
         if (progress < 1) {
-          let animatedValue = start + progress * (end - start);
+          const animatedValue = start + progress * (end - start);
           setCurrentValue(parseFloat(animatedValue.toFixed(decimalPlaces)));
           requestAnimationFrame(animateCount);
         } else {

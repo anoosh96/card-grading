@@ -79,10 +79,6 @@ export default function CardDetails({ currentCard: initialCard }: CardDetailsPro
 
   const handleSubmit = () => {
     // Ensure we have a submissionId and card data to work with
-    if (!cardBeingEdited.id) {
-      alert("Missing submission ID or card ID for update.");
-      return;
-    }
 
     // Prepare the values object for the API - now card-specific from local state
     const values: FlexibleRecord = {
@@ -112,7 +108,6 @@ export default function CardDetails({ currentCard: initialCard }: CardDetailsPro
       },
       onError: (error) => {
         console.error("Failed to update card details:", error);
-        alert("Failed to update card details. Please try again.");
       }
     });
   };

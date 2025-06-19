@@ -14,6 +14,13 @@ export default function SubmissionStatusPage() {
   const isEditMode = searchParams.get('edit') === 'true';
   const cardIdParam = searchParams.get('cardId'); // Get cardId from URL params
 
+   // --- Fetch Specific Card Details Directly ---
+   const { 
+    data: currentCard, // Direct assignment: data is now currentCard
+    isLoading, 
+    isError 
+  } = useCardDetails(subId as string, cardIdParam as string);
+
   // --- Input Validation ---
   if (!subId || !cardIdParam) {
     return (
@@ -25,13 +32,6 @@ export default function SubmissionStatusPage() {
       </div>
     );
   }
-
-  // --- Fetch Specific Card Details Directly ---
-  const { 
-    data: currentCard, // Direct assignment: data is now currentCard
-    isLoading, 
-    isError 
-  } = useCardDetails(subId as string, cardIdParam as string);
 
   // --- Loading, Error, and No Data States ---
   if (isLoading) {

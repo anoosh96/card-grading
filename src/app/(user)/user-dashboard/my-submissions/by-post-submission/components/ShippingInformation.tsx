@@ -12,7 +12,6 @@ import { CardData, useSubmissionStore } from "@/stores/submissionStore";
 import { Trash2 } from "lucide-react";
 import { useServices } from "@/hooks/useServices";
 import { getTurnaroundTime } from "@/app/(user)/lib/utils/helpers";
-import { FlexibleRecord } from "@/types"; // Make sure FlexibleRecord is imported
 
 export default function ShippingInformation({ handleNext, handlePrevious }: FormStepProps) {
   const { data: enumsData, isLoading, isError, error } = useEnums();

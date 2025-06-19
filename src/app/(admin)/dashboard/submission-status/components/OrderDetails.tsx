@@ -3,7 +3,7 @@
 
 import React, { useMemo, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { CardData, useSubmissionStore } from "@/stores/submissionStore";
+import { CardData } from "@/stores/submissionStore";
 import SubmissionSummary from "./SubmissionSummary";
 import CardImages from "@/app/(user)/user-dashboard/submission-status/card-details/CardImages";
 import { ButtonGradient } from "@/components/common/ButtonGradient";
@@ -190,7 +190,7 @@ const OrderDetails = ({ currentCard }: OrderDetailsProp) => {
           className="w-full sm:max-w-[8rem]"
           disabled={currentCardStatus == cardStatus.CARD_REJECTED || updateSubmission.isPending}
         >
-          {currentCardStatus == cardStatus.CARD_RECEIVED ? 'Start Grading' : 'Edit Grade'}
+          {!currentCard.grade ? 'Start Grading' : 'Edit Grade'}
         </ButtonGradient>
 
         {

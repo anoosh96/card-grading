@@ -11,7 +11,7 @@ import { Loader2 } from "lucide-react";
 import ReviewSubmissionTable from "./ReviewSubmissionTable";
 import { useCheckoutSession } from "@/hooks/useCheckoutSession";
 
-export default function Payment({ handleNext, handlePrevious }: FormStepProps) {
+export default function Payment({ handlePrevious }: FormStepProps) {
   const [isChecked, setIsChecked] = useState(false);
   const { submission, setSubmission } = useSubmissionStore();
   const { user } = useUserStore();

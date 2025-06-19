@@ -1,15 +1,13 @@
 'use client';
 
 import { FC, useState } from 'react';
-import { ChevronRight, Eye, MoreHorizontal, Pencil, Trash2 } from 'lucide-react';
-import { CustomCheckbox } from '@/components/ui/checkbox';
+import { ChevronRight, Eye, MoreHorizontal, Trash2 } from 'lucide-react';
 import CalendarIcon from '@/components/svgs/dashboard/CalendarIcon';
 import CustomDropdown from '@/components/common/CustomDropDown/CustomDropDown';
 import Link from '@/components/common/CustomLink/CustomLink';
 import { useRouter } from 'next/navigation';
 import CustomModal from '@/components/common/CustomModal';
-import { formatSubmissionStatus, getCardsSummary } from '@/app/(user)/lib/utils/helpers';
-import { submissionStatus } from '@/app/(user)/lib/utils/constants';
+import { getCardsSummary } from '@/app/(user)/lib/utils/helpers';
 import { useAdminSubmissions } from '@/hooks/useAdminSubmissions';
 import { Submission, SubmissionInfo } from '@/types';
 import { useAdminDeleteSubmission } from '@/hooks/useAdminDeleteSubmission';
@@ -45,10 +43,10 @@ const DashboardSubmissionStatus: FC<DashboardSubmissionStatusProps> = ({
     }
   };
 
-  const handleEditClick = (submissionId: string) => {
-    const route = `/dashboard/submission-status/${submissionId}?edit=true`
-    router.push(route)
-  }
+  // const handleEditClick = (submissionId: string) => {
+  //   const route = `/dashboard/submission-status/${submissionId}?edit=true`
+  //   router.push(route)
+  // }
 
   const handleViewDetailClick = (submission: SubmissionInfo) => {
     const route = `/dashboard/submission-status/order-details?id=${submission.id}`

@@ -8,7 +8,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { useCardDetailsUser } from "@/hooks/useCardDetailsUser"; // IMPORT THE NEW HOOK
 import { Suspense } from "react"; // Removed useMemo as selectedCard logic changes
 import { OrderTrackingSkeleton } from "@/components/skeletons/DashboardSkeleton";
-import { cardStatusMap, getTurnaroundTime } from "@/app/(user)/lib/utils/helpers"; // submissionStatusMap will no longer be directly applicable for a single card
+import { cardStatusMap } from "@/app/(user)/lib/utils/helpers"; // submissionStatusMap will no longer be directly applicable for a single card
 
 function OrderTracking() {
   const router = useRouter();

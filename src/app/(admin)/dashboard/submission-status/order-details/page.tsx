@@ -44,8 +44,7 @@ function AdminSubmissionDetailsContent() {
   const {
     data: submissionDetails,
     isLoading,
-    isError,
-    refetch
+    isError
   } = useAdminSubmissionDetails(
     submissionId,
     currentPage,
@@ -128,6 +127,7 @@ function AdminSubmissionDetailsContent() {
     }
   };
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const updateBulkCard = (cardId: string | number, field: keyof CardData, value: any) => {
     if (field === 'serviceId' && services) {
       const service = services.find((s: Service) => s.name === value);
@@ -226,6 +226,7 @@ function AdminSubmissionDetailsContent() {
       setBulkCards([])
     }
     catch(err){
+      console.error(err)
      //
     }
   };
@@ -340,7 +341,7 @@ function AdminSubmissionDetailsContent() {
           ) : (
             <>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
-                {cards.map((card: CardData, index: number) => (
+                {cards.map((card: CardData) => (
                   <div key={card.id} className="relative group">
                     <CardItem
                       card={card}

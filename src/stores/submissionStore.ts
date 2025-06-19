@@ -108,7 +108,7 @@ const initialSubmission: SubmissionData = {
 
 export const useSubmissionStore = create<SubmissionStore>()(
   persist(
-    (set, get) => ({
+    (set) => ({
       submission: initialSubmission,
       _hasHydrated: false,
 

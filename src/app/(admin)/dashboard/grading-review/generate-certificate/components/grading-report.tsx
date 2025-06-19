@@ -288,6 +288,7 @@ const GradingReport = ({
     const newErrors: { [key: string]: string } = {};
 
     sectionRequiredFields.forEach(field => {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       let value: any;
       let validationKey: string;
       let type: string;
