@@ -670,3 +670,76 @@ export function SkeletonCardItem() {
     </div>
   );
 }
+
+interface ProgressBarSkeletonProps {
+  className?: string;
+  // You can pass a `stepsCount` prop if you want to dynamically control
+  // how many skeleton steps are rendered. Defaulting to 4 for example.
+  stepsCount?: number;
+}
+
+export const ProgressBarSkeleton: React.FC<ProgressBarSkeletonProps> = ({ className, stepsCount = 4 }) => {
+  // Create a dummy array to map over for the number of steps
+  const skeletonSteps = Array.from({ length: stepsCount });
+
+  // A fixed width for the "progress" part of the bar in the skeleton
+  // This simulates some progress without dynamic calculation
+  const skeletonProgressWidth = 'w-3/4'; // Example: 75% progress for the skeleton
+
+  return (
+    <div className={cn("relative h-2 rounded-2xl w-full", className)}>
+      {/* Background track */}
+      <div className="absolute h-2 top-0 w-full bg-gray-200 rounded-2xl"></div>
+
+      {/* Pulsing progress bar */}
+      <div
+        className={cn(
+          "absolute h-2 top-0 rounded-2xl bg-gray-300 animate-pulse",
+          skeletonProgressWidth
+        )}
+      ></div>
+
+      {/* Step indicators and labels */}
+      <div className={`absolute -top-5 left-0 right-0 w-full flex justify-between`}>
+        {skeletonSteps.map((_, i) => {
+          // Determine alignment for first, middle, and last step labels
+          const itemsAlignment =
+            i === 0
+              ? 'items-start'
+              : i === skeletonSteps.length - 1
+              ? 'items-end'
+              : 'items-center';
+
+          // Adjust margin for the first label to align with the circle
+          const firstLabelMargin = i === 0 ? '-ml-[10px]' : '';
+
+          // Calculate an appropriate width for the skeleton text label
+          // Adjust 'w-16' (small) to 'w-24' (larger) or similar based on typical label length
+          const labelWidth = 'w-16 sm:w-24'; // Example: 16 units on small, 24 on sm+
+
+          return (
+            <div
+              key={i}
+              className={`flex flex-col gap-1 justify-center ${itemsAlignment}`}
+            >
+              {/* Pulsing circle for step indicator */}
+              <div
+                className={`rounded-full bg-gray-200 h-12 w-12 flex justify-center items-center animate-pulse`}
+              >
+                {/* No content inside skeleton circle */}
+              </div>
+              {/* Pulsing rectangle for step label */}
+              <span
+                className={cn(
+                  `h-4 bg-gray-200 rounded animate-pulse`,
+                  labelWidth,
+                  firstLabelMargin // Apply the specific margin only for the first label
+                )}
+              ></span>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+};

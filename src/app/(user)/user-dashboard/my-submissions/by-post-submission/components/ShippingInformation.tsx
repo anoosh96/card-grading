@@ -56,6 +56,14 @@ export default function ShippingInformation({ handleNext, handlePrevious }: Form
     }
   };
 
+  const filteredServices = (value: number) => {
+    return services?.filter((service: Service) => !service.maxCardValue || (service.maxCardValue > (value || 0)))
+      .map((service: Service) => (service.name)) || []
+  }
+
+
+
+
   const updateCard = (cardId: number, field: keyof CardData, value: string) => {
     if (field === 'serviceId') {
       value = services.find((service: Service) => service.name === value)?.id;
@@ -504,8 +512,8 @@ export default function ShippingInformation({ handleNext, handlePrevious }: Form
           <div
             ref={cardDetailsRef}
             className={`transition-all duration-500 ease-in-out transform ${showCardDetails && numberOfCards > 0
-                ? 'opacity-100 translate-y-0'
-                : 'opacity-0 -translate-y-4 overflow-hidden'
+              ? 'opacity-100 translate-y-0'
+              : 'opacity-0 -translate-y-4 overflow-hidden'
               }`}
           >
             {/* Individual Card Details (≤ 10 cards) */}
@@ -535,8 +543,8 @@ export default function ShippingInformation({ handleNext, handlePrevious }: Form
                     <div
                       key={card.id}
                       className={`grid grid-cols-6 gap-4 p-6 border-b border-gray-100 last:border-b-0 bg-white transition-all duration-300 ease-out transform ${showCardDetails
-                          ? 'opacity-100 translate-x-0'
-                          : 'opacity-0 translate-x-4'
+                        ? 'opacity-100 translate-x-0'
+                        : 'opacity-0 translate-x-4'
                         }`}
                       style={{
                         transitionDelay: `${index * 100}ms`,
@@ -607,7 +615,7 @@ export default function ShippingInformation({ handleNext, handlePrevious }: Form
                       {/* Service Level */}
                       <div className="relative">
                         <CustomSelect
-                          options={services?.filter((service: Service) => !service.maxCardValue || (service.maxCardValue > (card.cardValue || 0))).map((service: Service) => (service.name)) || []}
+                          options={filteredServices(card.cardValue as number)}
                           selectedOption={
                             services?.find((service: Service) => service.id === card.serviceId)?.name || "Service"
                           }
@@ -675,8 +683,8 @@ export default function ShippingInformation({ handleNext, handlePrevious }: Form
                     <div
                       key={card.id}
                       className={`bg-white rounded-lg shadow-sm border border-gray-200 p-4 transition-all duration-300 ease-out transform ${showCardDetails
-                          ? 'opacity-100 translate-y-0'
-                          : 'opacity-0 translate-y-4'
+                        ? 'opacity-100 translate-y-0'
+                        : 'opacity-0 translate-y-4'
                         }`}
                       style={{
                         transitionDelay: `${index * 100}ms`,
@@ -750,6 +758,7 @@ export default function ShippingInformation({ handleNext, handlePrevious }: Form
                               id={`year-${card.id}-mobile`}
                               name={`year-${card.id}-mobile`}
                               placeholder="Year"
+                              type="number"
                               className={`w-full p-3 text-sm transition-all duration-200 focus:ring-2 focus:ring-blue-200 focus:border-blue-400 ${cardErrors[card.id]?.yearOfRelease ? 'error-class' : ''}`}
                               value={card.yearOfRelease as string}
                               onChange={(e) => updateCard(card.id, 'yearOfRelease', e.target.value)}
@@ -771,14 +780,15 @@ export default function ShippingInformation({ handleNext, handlePrevious }: Form
                           <div className="relative">
                             <label className="block text-sm font-medium text-gray-700 mb-1">Service Level</label>
                             <CustomSelect
-                              options={services?.map((service: Service) => (service.name)) || []}
+                              options={filteredServices(card.cardValue as number)}
                               selectedOption={
                                 services?.find((service: Service) => service.id === card.serviceId)?.name || "Service"
                               }
                               borderColor={`border-gray-200 ${cardErrors[card.id]?.serviceId ? 'error-class-border' : ''}`}
-                              bg="bg-white"
-                              setSelectedOption={(value) => updateCard(card.id, 'serviceId', value as string)}
+                              bg={`bg-white ${card.cardValue === null || card.cardValue === undefined || card.cardValue <= 0 ? 'opacity-50 cursor-not-allowed' : ''}`}
+                              disabled={card.cardValue === null || card.cardValue === undefined || card.cardValue <= 0}
                               className="relative text-sm w-full"
+                              setSelectedOption={(value) => updateCard(card.id, 'serviceId', value as string)}
                             />
                             {cardErrors[card.id]?.serviceId && (
                               <div className="absolute top-0 right-0 transform -translate-y-full z-10 animate-fade-in-slide-down">

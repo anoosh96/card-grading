@@ -28,7 +28,8 @@ export default function Payment({ handlePrevious }: FormStepProps) {
 
   const totalSubmission =
     submission.cards?.reduce((acc, card) => {
-      const { pricePerCard } = getService(card.serviceId as number) as Service;
+      const service = getService(card.serviceId as number) as Service;
+      const pricePerCard = service?.pricePerCard || 0
       return acc + pricePerCard;
     }, 0) || (getPricePerCard(submission.numberOfCards || 0) * (submission.numberOfCards || 0));
 
@@ -72,7 +73,7 @@ export default function Payment({ handlePrevious }: FormStepProps) {
         onChange={setIsChecked}
       />
 
-      <div className="flex gap-6 mt-8">
+      <div className="flex flex-col sm:flex-row gap-6 mt-8">
         <Button
           size="lg"
           className="h-auto font-semibold bg-soft-grey rounded-full text-pure-grey py-3 px-14 text-base hover:bg-soft-grey"

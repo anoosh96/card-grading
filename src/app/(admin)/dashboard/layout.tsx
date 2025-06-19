@@ -13,7 +13,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
       <DashboardSidebar />
       <div className="flex flex-col w-full ">
         <DashboardHeader />
-        <main className={`p-5 bg-light-grey ml-0 md:ml-20 ${isCollapsed ? 'md:ml-20' : 'md:ml-72'} h-full transition-all duration-300`}>{children}</main>
+        <main className={`p-5 bg-light-grey ml-0 md:ml-20 ${isCollapsed ? 'lg:ml-20' : 'lg:ml-72'} h-full transition-all duration-300`}>{children}</main>
       </div>
     </div>
   );

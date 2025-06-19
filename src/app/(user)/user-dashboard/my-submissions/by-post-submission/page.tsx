@@ -9,6 +9,7 @@ import { useSubmissionStore } from "@/stores/submissionStore";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import { ProgressBarSkeleton } from "@/components/skeletons/DashboardSkeleton";
 
 const steps = ['Shipping Instruction', 'Shipping Info', 'Review Payment'];
 
@@ -44,27 +45,7 @@ export default function ByFormSubmissionPage() {
 
   // Don't render anything until store has been hydrated
   if (!_hasHydrated) {
-    return (
-      <section className="py-2 px-7 bg-white">
-        <div className="mb-20">
-          <div className="flex items-center justify-between mb-4">
-            {steps.map((_, index) => (
-              <div key={index} className="flex items-center">
-                <div className="w-12 h-12 rounded-full bg-gray-200 animate-pulse"></div>
-                {index < steps.length - 1 && (
-                  <div className="w-24 h-1 bg-gray-200 animate-pulse mx-4"></div>
-                )}
-              </div>
-            ))}
-          </div>
-          <div className="flex justify-between">
-            {steps.map((_, index) => (
-              <div key={index} className="w-24 h-4 bg-gray-200 rounded animate-pulse"></div>
-            ))}
-          </div>
-        </div>
-      </section>
-    )
+    return(<ProgressBarSkeleton className="mt-6 md:mt-10" stepsCount={3} />)
   }
 
   return (
