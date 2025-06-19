@@ -9,7 +9,7 @@ const publicRoutes = [
   '/about-us',
   '/grading',
   '/login',
-  // '/services-and-pricing',
+  '/services-and-pricing',
   '/portfolio',
   '/contact-us',
 ];

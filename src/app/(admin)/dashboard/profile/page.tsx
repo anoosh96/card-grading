@@ -126,7 +126,7 @@ export default function ProfilePage() {
       setImage(user.profileImageUrl)
 
       if (!user.emailVerified) {
-        router.push('/verfication-code')
+        router.push('/verification-code')
       }
     }
   }, [user])

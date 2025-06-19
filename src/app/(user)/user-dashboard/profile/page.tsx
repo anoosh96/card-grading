@@ -79,7 +79,7 @@ export default function ProfilePage() {
 
     // Email validation
     const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-    if (!form.values.email) {
+    if (user?.email && !form.values.email) {
       form.setError("email", "Email is required");
       isValid = false;
     } else if (!emailRegex.test(form.values.email)) {
@@ -88,12 +88,12 @@ export default function ProfilePage() {
     }
 
     // Basic validation for shipping address and phone number (add more complex validation if needed)
-    if (!form.values.shippingAddress) {
+    if (user?.shippingAddress && !form.values.shippingAddress) {
       form.setError("shippingAddress", "Shipping address is required");
       isValid = false;
     }
 
-    if (!form.values.phoneNumber) {
+    if (user?.phoneNumber && !form.values.phoneNumber) {
       form.setError("phoneNumber", "Phone number is required");
       isValid = false;
     }
@@ -137,7 +137,7 @@ export default function ProfilePage() {
       setImage(user.profileImageUrl)
 
       if (!user.emailVerified) {
-        router.push('/verfication-code')
+        router.push('/verification-code')
       }
     }
   }, [user])

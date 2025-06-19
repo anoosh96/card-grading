@@ -17,6 +17,40 @@ type FormState<T extends object> = {
 
 // Helper for deep comparison of two objects
 function areObjectsEqual<T extends object>(obj1: T, obj2: T): boolean {
+  // 1. Handle strict equality for primitives and null/undefined
+  if (obj1 === obj2) {
+    return true;
+  }
+
+  // 2. Check if both are objects (and not null)
+  // typeof null is 'object', so explicitly check for null
+  if (typeof obj1 !== 'object' || obj1 === null || typeof obj2 !== 'object' || obj2 === null) {
+    return false;
+  }
+
+  // 3. Handle Arrays
+  // Check if both are arrays
+  if (Array.isArray(obj1) && Array.isArray(obj2)) {
+    if (obj1.length !== obj2.length) {
+      return false;
+    }
+    for (let i = 0; i < obj1.length; i++) {
+      // Recursively compare array elements
+      // Cast to 'any' for the recursive call to handle mixed types in arrays
+      // For stricter typing, you might need to refine your T
+      if (!areObjectsEqual(obj1[i] as any, obj2[i] as any)) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  // 4. Handle Objects (non-arrays)
+  // Ensure both are indeed objects and not one is an array and the other isn't
+  if (Array.isArray(obj1) !== Array.isArray(obj2)) {
+    return false; // One is array, other is object
+  }
+
   const keys1 = Object.keys(obj1) as Array<keyof T>;
   const keys2 = Object.keys(obj2) as Array<keyof T>;
 
@@ -24,12 +58,21 @@ function areObjectsEqual<T extends object>(obj1: T, obj2: T): boolean {
     return false;
   }
 
+  // Iterate over keys and recursively compare values
   for (const key of keys1) {
-    // Treat undefined and null as equivalent for comparison if needed, or strictly compare
-    if (obj1[key] !== obj2[key]) {
+    if (!Object.prototype.hasOwnProperty.call(obj2, key)) {
+      return false; // obj2 doesn't have the key present in obj1
+    }
+
+    // Recursively compare values.
+    // Need to cast to any because TypeScript doesn't know the exact type
+    // of obj1[key] at this point for the recursive call.
+    // For more robust typing, consider type guards or a more complex T.
+    if (!areObjectsEqual(obj1[key] as any, obj2[key] as any)) {
       return false;
     }
   }
+
   return true;
 }
 

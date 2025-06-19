@@ -9,6 +9,7 @@ import { useResendVerification } from "@/hooks/useResendVerification";
 import { AxiosError } from "axios";
 import { useUserStore } from "@/stores/userStore";
 import { User } from "@/types";
+import { useLogout } from "@/hooks/useLogout";
 
 export default function VerificationCodePage() {
   const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
@@ -18,6 +19,9 @@ export default function VerificationCodePage() {
   const { values, setValue, errors, resetForm, handleApiValidationError } = useFormState({
     code: ['', '', '', '', '', ''],
   });
+
+  const { mutateAsync: logoutMutateAsync } = useLogout();
+
 
   const verifyCodeMutation = useVerifyEmail();
   const resendCodeMutation = useResendVerification();
@@ -38,6 +42,11 @@ export default function VerificationCodePage() {
     if (e.key === "Backspace" && !values.code[index] && index > 0) {
       inputRefs.current[index - 1]?.focus();
     }
+  };
+
+  const handleLogout = async () => {
+    await logoutMutateAsync();
+    router.push('/');
   };
 
   const handleSubmit = useCallback(async () => {
@@ -73,7 +82,7 @@ export default function VerificationCodePage() {
   return (
     <div className="container mx-auto mt-4">
       <h1 className="text-xl md:text-3xl font-medium text-pure-grey mb-2">Verification Code</h1>
-      <p className="text-charcol text-sm mb-4">We have sent a code to you email address, please enter the code.</p>
+      <p className="text-charcol text-sm mb-4">We have sent a code to your email address, please enter the code.</p>
       <div className="w-full flex-col mb-6">
         <label htmlFor="code" className="block text-lg font-medium text-gray-700 mb-2">
           Enter Code
@@ -120,6 +129,15 @@ export default function VerificationCodePage() {
             disabled={resendCodeMutation.isPending}
           >
             {resendCodeMutation.isPending ? 'Resending...' : 'Resend Code!'}
+          </button>
+          <span className="mx-2">Or</span>
+          <button
+            className="text-light-red underline"
+            type="button"
+            onClick={handleLogout}
+            disabled={resendCodeMutation.isPending}
+          >
+            Logout
           </button>
         </span>
       </div>
