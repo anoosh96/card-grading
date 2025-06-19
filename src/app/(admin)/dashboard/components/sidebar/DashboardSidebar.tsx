@@ -16,7 +16,6 @@ import Image from "next/image";
 export function DashboardSidebar() {
   const pathname = usePathname();
   const [isMobile, setIsMobile] = useState(true);
-  const router = useRouter();
   const { isCollapsed, setIsCollapsed } = useSidebar();
 
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -45,7 +44,6 @@ export function DashboardSidebar() {
   const confirmLogout = async () => {
     try {
       await logoutMutateAsync();
-      router.push('/')
       setIsModalOpen(false);
     } catch (error) {
       console.error("Logout failed", error);

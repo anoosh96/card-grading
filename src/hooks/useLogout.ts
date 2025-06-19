@@ -4,6 +4,7 @@ import { useUserStore } from '@/stores/userStore';
 import { showToast } from '@/lib/toast';
 import { ApiResponse } from '@/types';
 import { useSubmissionStore } from '@/stores/submissionStore';
+import { useRouter } from 'next/navigation';
 
 // Logout function
 const logoutUser = async (): Promise<ApiResponse<null>> => {
@@ -15,6 +16,7 @@ export const useLogout = () => {
   const { clearUser } = useUserStore(); // assuming you have a resetUser() to clear user/token state
   const { resetSubmission } = useSubmissionStore();
   const queryClient = useQueryClient();
+  const router = useRouter()
 
   return useMutation({
     mutationFn: logoutUser,
@@ -33,8 +35,8 @@ export const useLogout = () => {
           .replace(/=.*/, `=;expires=${new Date(0).toUTCString()};path=/`);
       });
 
+      router.push('/')
       queryClient.clear()
-
 
       showToast('Logged out successfully!', { variant: 'success' });
     },

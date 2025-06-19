@@ -49,7 +49,6 @@ export function DashboardHeader() {
 
   const handleLogout = async () => {
     await logoutMutateAsync();
-    router.push('/');
     setIsMenuOpen(false); // Close menu
   };
 
