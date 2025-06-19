@@ -22,7 +22,7 @@ Font.register({
       fontWeight: 'normal',
     },
     {
-      src: '/fonts/Aptos/aptos-Bold.ttf',
+      src: '/fonts/Aptos/aptos-bold.ttf',
       fontWeight: 'bold',
     },
     {
