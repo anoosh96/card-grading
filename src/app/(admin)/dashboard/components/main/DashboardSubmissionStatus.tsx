@@ -43,11 +43,6 @@ const DashboardSubmissionStatus: FC<DashboardSubmissionStatusProps> = ({
     }
   };
 
-  // const handleEditClick = (submissionId: string) => {
-  //   const route = `/dashboard/submission-status/${submissionId}?edit=true`
-  //   router.push(route)
-  // }
-
   const handleViewDetailClick = (submission: SubmissionInfo) => {
     const route = `/dashboard/submission-status/order-details?id=${submission.id}`
     router.push(route)
@@ -57,33 +52,6 @@ const DashboardSubmissionStatus: FC<DashboardSubmissionStatusProps> = ({
   const meta = data?.data?.meta;
   const totalPages = meta?.totalPages || 1;
   const currentPage = meta?.currentPage || 1;
-
-  // const getStatusBadge = (status: string) => {
-  //   switch (status) {
-  //     case submissionStatus.GRADING_COMPLETE:
-  //       return (
-  //         <div className="text-center rounded-[1.4rem] md:rounded-full py-3 px-2 bg-green-100 text-[#3A974C] text-[0.6rem] md:text-xs lg:text-base">
-  //           {formatSubmissionStatus(status)}
-  //         </div>
-  //       );
-  //     case submissionStatus.SUBMISSION_PENDING:
-  //     case submissionStatus.SUBMISSION_REJECTED:
-  //       return (
-  //         <div className="text-center rounded-[1.4rem] md:rounded-full py-3 px-2 bg-[#fcebe7] text-[#E3350D] text-[0.6rem] md:text-xs lg:text-base">
-  //           {formatSubmissionStatus(status)}
-  //         </div>
-  //       );
-  //     case submissionStatus.SUBMISSION_RECEIVED:
-  //     case submissionStatus.GRADING_IN_PROGRESS:
-  //       return (
-  //         <div className="text-center rounded-[1.4rem] md:rounded-full py-3 px-2 bg-[#fbf6e2] text-[#FFCC00] text-[0.6rem] md:text-xs lg:text-base">
-  //           {formatSubmissionStatus(status)}
-  //         </div>
-  //       );
-  //     default:
-  //       return <div className="text-[0.6rem] md:text-xs lg:text-sm">{formatSubmissionStatus(status)}</div>;
-  //   }
-  // };
 
   if (isLoading) return <SkeletonTracking />;
   if (isError) return <div className="p-5 text-red-500">Failed to load submissions.</div>;
@@ -107,94 +75,93 @@ const DashboardSubmissionStatus: FC<DashboardSubmissionStatusProps> = ({
         )}
       </div>
 
-      <div className="w-full overflow-x-auto p-4">
-        <table className="w-full min-w-[600px] md:min-w-[800px] lg:min-w-full table-auto">
-          <thead className="text-sm font-medium text-left">
-            <tr>
-              {/* <th className="w-10 p-3">
-                <CustomCheckbox />
-              </th> */}
-              <th className="p-3">Order No</th>
-              <th className="p-3">Date & Time</th>
-              {/* <th className="p-3">Action</th> */}
-              {/* <th className="p-3">Submission Source</th> */}
-              <th className="p-3">Total Cards</th>
-              <th className="p-3">Cards Summary</th>
-              <th className="w-10 p-3"></th>
-            </tr>
-          </thead>
-          <tbody className="divide-y">
-            {submissions.map((submission: Submission) => (
-              <tr key={submission.id} className="hover:bg-light-grey-50">
-                {/* <td className="p-3">
-                  <CustomCheckbox />
-                </td> */}
-                <td className="p-3 font-medium">#{padId(submission.id)}</td>
-                <td className="p-3">
-                  <div className="flex items-center gap-1">
-                    <CalendarIcon />
-                    <span>{formatToUSTimezone(submission.dateTime)}</span>
-                  </div>
-                </td>
-                {/* <td className="p-3">{}</td> */}
-                {/* <td className="p-3">{submissionSourceMap[submission.submissionSource]}</td> */}
-                <td className="p-3">{ submission.numberOfCards }</td>
-                <td className="p-3">{ getCardsSummary(submission.cards, submission.numberOfCards) }</td>
-                <td className="p-4">
-                  <CustomDropdown
-                    items={[
-                      {
-                        label: 'View Detail',
-                        icon: <Eye className="h-4 w-4" />,
-                        onClick: () => handleViewDetailClick(submission)
-                      },
-                      {
-                        label: 'Delete',
-                        icon: <Trash2 className="h-4 w-4" />,
-                        onClick: () => handleDeleteClick(submission.id),
-                      }
-                    ]}
-                    dropdownClassName="right-2"
-                    position='left'
-                  >
-                    <MoreHorizontal className="h-6 w-6" />
-                  </CustomDropdown>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-
-      {/* Pagination */}
-      {totalPages > 1 && !isMoreItem && (
-        <div className="flex justify-center items-center gap-4 mt-6 mb-8">
-          <button
-            onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
-            disabled={currentPage === 1}
-            className={`px-4 py-2 rounded border text-sm ${currentPage === 1
-                ? 'text-gray-400 border-gray-300'
-                : 'text-primary border-primary'
-              }`}
-          >
-            Previous
-          </button>
-
-          <span className="text-base font-medium">
-            Page {currentPage} of {totalPages}
-          </span>
-
-          <button
-            onClick={() => setPage((prev) => Math.min(prev + 1, totalPages))}
-            disabled={currentPage === totalPages}
-            className={`px-4 py-2 rounded border text-sm ${currentPage === totalPages
-                ? 'text-gray-400 border-gray-300'
-                : 'text-primary border-primary'
-              }`}
-          >
-            Next
-          </button>
+      {submissions.length === 0 ? ( // Conditional rendering check
+        <div className="flex flex-col items-center justify-center py-16 text-center">
+          <p className="text-lg text-gray-500 font-medium">No submissions created yet</p>
+          <p className="text-sm text-pure-grey mt-2">The Submission tracking information will appear here once a User create an order</p>
         </div>
+      ) : (
+        <>
+          <div className="w-full overflow-x-auto p-4">
+            <table className="w-full min-w-[600px] md:min-w-[800px] lg:min-w-full table-auto">
+              <thead className="text-sm font-medium text-left">
+                <tr>
+                  <th className="p-3">Order No</th>
+                  <th className="p-3">Date & Time</th>
+                  <th className="p-3">Total Cards</th>
+                  <th className="p-3">Cards Summary</th>
+                  <th className="w-10 p-3"></th>
+                </tr>
+              </thead>
+              <tbody className="divide-y">
+                {submissions.map((submission: Submission) => (
+                  <tr key={submission.id} className="hover:bg-light-grey-50">
+                    <td className="p-3 font-medium">#{padId(submission.id)}</td>
+                    <td className="p-3">
+                      <div className="flex items-center gap-1">
+                        <CalendarIcon />
+                        <span>{formatToUSTimezone(submission.dateTime)}</span>
+                      </div>
+                    </td>
+                    <td className="p-3">{ submission.numberOfCards }</td>
+                    <td className="p-3">{ getCardsSummary(submission.cards, submission.numberOfCards) }</td>
+                    <td className="p-4">
+                      <CustomDropdown
+                        items={[
+                          {
+                            label: 'View Detail',
+                            icon: <Eye className="h-4 w-4" />,
+                            onClick: () => handleViewDetailClick(submission)
+                          },
+                          {
+                            label: 'Delete',
+                            icon: <Trash2 className="h-4 w-4" />,
+                            onClick: () => handleDeleteClick(submission.id),
+                          }
+                        ]}
+                        dropdownClassName="right-2"
+                        position='left'
+                      >
+                        <MoreHorizontal className="h-6 w-6" />
+                      </CustomDropdown>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+
+          {/* Pagination */}
+          {totalPages > 1 && !isMoreItem && (
+            <div className="flex justify-center items-center gap-4 mt-6 mb-8">
+              <button
+                onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
+                disabled={currentPage === 1}
+                className={`px-4 py-2 rounded border text-sm ${currentPage === 1
+                    ? 'text-gray-400 border-gray-300'
+                    : 'text-primary border-primary'
+                  }`}
+              >
+                Previous
+              </button>
+
+              <span className="text-base font-medium">
+                Page {currentPage} of {totalPages}
+              </span>
+
+              <button
+                onClick={() => setPage((prev) => Math.min(prev + 1, totalPages))}
+                disabled={currentPage === totalPages}
+                className={`px-4 py-2 rounded border text-sm ${currentPage === totalPages
+                    ? 'text-gray-400 border-gray-300'
+                    : 'text-primary border-primary'
+                  }`}
+              >
+                Next
+              </button>
+            </div>
+          )}
+        </>
       )}
 
       <CustomModal
