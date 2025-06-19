@@ -10,6 +10,8 @@ import {
   Font,
 } from '@react-pdf/renderer';
 import { GradingData } from '@/app/(admin)/dashboard/types';
+import { format } from 'date-fns'; // Or moment.js, dayjs
+
 
 // Register Aptos font
 Font.register({
@@ -382,7 +384,7 @@ const GradingReportPDF: React.FC<{ cardData: GradingData }> = ({ cardData }) => 
               </View>
               <View style={styles.cardInfoRow}>
                 <Text style={styles.cardInfoLabel}>Grading Date:</Text>
-                <Text style={styles.cardInfoValue}>{cardData.grading_date || currentDate}</Text>
+                <Text style={styles.cardInfoValue}>{ format(new Date(cardData.grading_date), 'dd-MM-yyyy') || currentDate}</Text>
               </View>
               <View style={styles.cardInfoRow}>
                 <Text style={styles.cardInfoLabel}>Card Number:</Text>

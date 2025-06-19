@@ -54,7 +54,7 @@ const GenerateCertificate = () => {
         overall_justification: currentCard.grade.overallJustification,
         card_name: currentCard.cardName,
         card_number: currentCard.grade.cardNumber,
-        grading_date: formatToUSTimezone(currentCard.grade.gradeDate as string)
+        grading_date: currentCard.grade.gradeDate as string
       });
     }
   }, [currentCard]);
@@ -282,10 +282,10 @@ const GenerateCertificate = () => {
             title="Card Scan Reference"
           />
 
-          <div className="flex flex-col md:flex-row items-center gap-6 mt-4 ml-2 md:ml-4">
+          <div className="flex flex-col sm:flex-row items-center gap-6 mt-4 ml-2 md:ml-4">
             <Button
               variant={"ghost"}
-              className="rounded-full heading-secondary bg-[#E0E0E0] hover:bg-gray-300 hover:text-black"
+              className="rounded-full w-full sm:w-auto heading-secondary bg-[#E0E0E0] hover:bg-gray-300 hover:text-black"
               disabled={isEditingReport || isGeneratingPDF || !gradingData}
               onClick={handleReportGeneration}
             >
@@ -301,7 +301,7 @@ const GenerateCertificate = () => {
 
             <Button
               variant={"ghost"}
-              className="rounded-full heading-secondary bg-[#E0E0E0] hover:bg-gray-300 hover:text-black"
+              className="rounded-full w-full sm:w-auto heading-secondary bg-[#E0E0E0] hover:bg-gray-300 hover:text-black"
               disabled={isEditingReport || generateLabel.isPending || !cardId || !gradingData} // Disable if gradingData is null
               onClick={handleLabelGeneration}
             >
@@ -319,6 +319,7 @@ const GenerateCertificate = () => {
             <ButtonGradient
               onClick={updateStatus}
               disabled={confirmGrade.isPending || isGeneratingPDFBackground || isEditingReport || !gradingData}
+              className="w-full sm:w-auto"
             >
               {confirmGrade.isPending || isGeneratingPDFBackground ? (
                 <>

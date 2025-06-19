@@ -2,13 +2,12 @@
 "use client";
 
 import { useState, useEffect, ReactNode } from "react";
-import { Pencil, Check, X, Star, AlertCircle } from "lucide-react";
+import { Pencil, Check, X, Star } from "lucide-react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import CustomSelect from "@/components/common/CustomSelect";
-import { useEnums } from "@/hooks/useEnums";
 import { GradingData } from "../../../types";
 import Image from "next/image";
+import { format } from 'date-fns'; // Or moment.js, dayjs
 
 // Define condition breakdown type
 interface ConditionBreakdown {
@@ -61,12 +60,10 @@ const validateRequired = (value: string | number | null | undefined): boolean =>
   return false;
 };
 
-const normalizeDate = (date: Date) => {
-  // Normalize to local midnight (removes time effect)
-  const localDate = new Date(date);
-  localDate.setHours(0, 0, 0, 0);
-
-  return localDate
+const normalizeDate = (date: Date): string => {
+  // Directly format the date into a "YYYY-MM-DD" string in the local timezone.
+  // This explicitly takes the local year, month, and day.
+  return format(date, 'yyyy-MM-dd');
 };
 
 // Star Rating Component
@@ -842,6 +839,7 @@ const GradingReport = ({
                           </span>
                         </div>
                         <ErrorMessage
+                          className="!top-2 sm:!-top-4"
                           message={validationErrors[`${section.title}.${key}`]}
                         />
                       </div>
