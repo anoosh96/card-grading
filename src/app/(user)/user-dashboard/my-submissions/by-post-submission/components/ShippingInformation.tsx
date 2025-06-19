@@ -1,5 +1,6 @@
-"use client";
+'use client'
 
+import { useState, useEffect, useRef } from "react";
 import { ButtonGradient } from "@/components/common/ButtonGradient";
 import CustomInput from "@/components/common/CustomInput";
 import CustomSelect from "@/components/common/CustomSelect";
@@ -8,66 +9,47 @@ import { Card, FormStepProps, Service } from "@/types";
 import { useEnums } from "@/hooks/useEnums";
 import { useFormState } from "@/hooks/useFormState";
 import { CardData, useSubmissionStore } from "@/stores/submissionStore";
-import { useEffect, useRef, useState } from "react";
 import { Trash2 } from "lucide-react";
 import { useServices } from "@/hooks/useServices";
 import { getTurnaroundTime } from "@/app/(user)/lib/utils/helpers";
+import { FlexibleRecord } from "@/types"; // Make sure FlexibleRecord is imported
 
 export default function ShippingInformation({ handleNext, handlePrevious }: FormStepProps) {
-  // Fetch enums using useEnums
   const { data: enumsData, isLoading, isError, error } = useEnums();
-
-  // Access zustand store to set submission data
   const { submission, setSubmission } = useSubmissionStore((state) => state);
-
-  // Destructure enums from the fetched data
   const { cardTypes } = enumsData || {};
   const { data: services } = useServices();
 
-  // State for number of cards input
   const [numberOfCards, setNumberOfCards] = useState<number>(submission.numberOfCards || 0);
   const [numberOfCardsError, setNumberOfCardsError] = useState('');
 
-  // State for managing multiple cards (for <= 10 cards)
   const [cards, setCards] = useState<CardData[]>(submission.cards || []);
 
-  // State for bulk card submission (for > 10 cards)
   const [bulkCardValue, setBulkCardValue] = useState<number | undefined>(submission.bulkCardValue);
   const [bulkDescription, setBulkDescription] = useState<string>(submission.bulkDescription || '');
   const [bulkCardValueError, setBulkCardValueError] = useState('');
 
-  // State for animations
   const [showCardDetails, setShowCardDetails] = useState(false);
-  const [previousNumberOfCards, setPreviousNumberOfCards] = useState(0);
 
-  // Initialize form state with useFormState for shipping info only
-  const { values, errors, handleChange, setValue, setError, clearError } = useFormState({
+  const { values, errors, handleChange, setError, clearError, resetFormErrors } = useFormState({
     fullName: submission.fullName,
     shippingAddress: submission.shippingAddress,
     phoneNumber: submission.phoneNumber,
     email: submission.email
   });
 
-  // State for card-specific errors
-  const [cardErrors, setCardErrors] = useState<{[key: string]: {[field: string]: string}}>({});
+  const [cardErrors, setCardErrors] = useState<{ [key: string]: { [field: string]: string } }>({});
 
   const errorRef = useRef<HTMLDivElement>(null);
   const cardDetailsRef = useRef<HTMLDivElement>(null);
 
-  // const getNewId = () => {
-  //   return cards && cards.length > 0 ? ((cards[cards.length - 1].id as number) + 1) : 1
-  // }
-
-  // Add a new card
   const addCard = () => {
     handleNumberOfCardsChange((numberOfCards + 1).toString())
   };
 
-  // Remove a card
   const removeCard = (cardId: number) => {
     if (cards.length > 1) {
       setCards(cards.filter(card => card.id !== cardId));
-      // Clear errors for removed card
       const newCardErrors = { ...cardErrors };
       delete newCardErrors[cardId];
       setCardErrors(newCardErrors);
@@ -75,31 +57,27 @@ export default function ShippingInformation({ handleNext, handlePrevious }: Form
     }
   };
 
-  // Update card data
   const updateCard = (cardId: number, field: keyof CardData, value: string) => {
-    if(field == 'serviceId'){
-      value = services.find((service: Service) => service.name == value)?.id
+    if (field === 'serviceId') {
+      value = services.find((service: Service) => service.name === value)?.id;
     }
 
-    setCards(cards.map(card => 
+    setCards(cards.map(card =>
       card.id === cardId ? { ...card, [field]: value } : card
     ));
-    // Clear error for this field
     clearCardError(cardId, field);
   };
 
-  // Set card error
-  const setCardError = (cardId: string, field: string, message: string) => {
-    setCardErrors(prev => ({
-      ...prev,
-      [cardId]: {
-        ...prev[cardId],
-        [field]: message
-      }
-    }));
-  };
+  // const setCardError = (cardId: string, field: string, message: string) => {
+  //   setCardErrors(prev => ({
+  //     ...prev,
+  //     [cardId]: {
+  //       ...prev[cardId],
+  //       [field]: message
+  //     }
+  //   }));
+  // };
 
-  // Clear card error
   const clearCardError = (cardId: number, field: string) => {
     setCardErrors(prev => {
       const newErrors = { ...prev };
@@ -113,47 +91,46 @@ export default function ShippingInformation({ handleNext, handlePrevious }: Form
     });
   };
 
-  // Handle number of cards change with animation
   const handleNumberOfCardsChange = (value: string) => {
-    if(value == ''){
+    if (value === '') {
       setNumberOfCards(0);
       setShowCardDetails(false);
+      setCards([]); // Clear cards when input is empty
+      setBulkCardValue(undefined); // Clear bulk value
+      setBulkDescription(''); // Clear bulk description
+      setNumberOfCardsError(''); // Clear error if any
+      setCardErrors({}); // Clear card specific errors
+      setBulkCardValueError(''); // Clear bulk card value errors
       return;
     }
 
     const num = parseInt(value);
     if (!isNaN(num)) {
-      setPreviousNumberOfCards(numberOfCards);
       setNumberOfCards(num);
       setNumberOfCardsError('');
-      
-      // Show card details section with animation
+
       if (num > 0) {
         setShowCardDetails(true);
-        
-        // Focus on card details section after a short delay for animation
+
         setTimeout(() => {
           if (cardDetailsRef.current) {
-            cardDetailsRef.current.scrollIntoView({ 
-              behavior: 'smooth', 
+            cardDetailsRef.current.scrollIntoView({
+              behavior: 'smooth',
               block: 'end',
-              inline: 'nearest' 
+              inline: 'nearest'
             });
           }
         }, 200);
       } else {
         setShowCardDetails(false);
       }
-      
-      // Adjust cards array based on number, preserving existing values
+
       if (num <= 10 && num > 0) {
         const newCards: CardData[] = [];
-        // Preserve existing cards up to the new number
         for (let i = 0; i < num; i++) {
           if (cards[i]) {
             newCards.push(cards[i]);
           } else {
-            // Add new empty card if needed
             newCards.push({
               id: i + 1,
               cardName: '',
@@ -165,20 +142,31 @@ export default function ShippingInformation({ handleNext, handlePrevious }: Form
           }
         }
         setCards(newCards);
+        setBulkCardValue(undefined); // Clear bulk value
+        setBulkDescription(''); // Clear bulk description
+        setBulkCardValueError(''); // Clear bulk card value errors
       } else if (num > 10) {
-        // Clear individual cards for bulk submission
         setCards([]);
+        setCardErrors({}); // Clear individual card errors
+        // if (!bulkCardValue) { // Only set error if value is not already present from submission
+        //   setBulkCardValueError('Total card value is required.');
+        // }
       }
     } else {
       setNumberOfCardsError('Please enter a valid number greater than 0');
       setShowCardDetails(false);
+      setCards([]); // Clear cards on invalid input
+      setBulkCardValue(undefined);
+      setBulkDescription('');
+      setCardErrors({});
+      setBulkCardValueError('');
     }
   };
 
-  // Validation for shipping information
   const validateShippingInfo = (): boolean => {
     let ok = true;
-    
+    resetFormErrors(); // Clear all shipping errors first
+
     if (!values.fullName) {
       setError('fullName', 'Full name is required.');
       ok = false;
@@ -189,52 +177,60 @@ export default function ShippingInformation({ handleNext, handlePrevious }: Form
         ok = false;
       }
     }
-    
+
     if (!values.shippingAddress) {
       setError('shippingAddress', 'Shipping address is required.');
       ok = false;
     }
-    
+
     if (!values.phoneNumber) {
       setError('phoneNumber', 'Phone number is required.');
       ok = false;
     }
 
+    if (!values.email) {
+      setError('email', 'Email is required.');
+      ok = false;
+    } else {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(values.email)) {
+        setError('email', 'Please enter a valid email address.');
+        ok = false;
+      }
+    }
+
     return ok;
   };
 
-  // Validation for number of cards
   const validateNumberOfCards = (): boolean => {
+    setNumberOfCardsError(''); // Clear error before re-validating
     if (!numberOfCards || numberOfCards <= 0) {
       setNumberOfCardsError('Number of cards is required and must be greater than 0.');
       return false;
     }
-    setNumberOfCardsError('');
     return true;
   };
 
-  // Validation for bulk card submission (> 10 cards)
   const validateBulkCards = (): boolean => {
-    if (!bulkCardValue) {
+    setBulkCardValueError(''); // Clear error before re-validating
+    if (bulkCardValue === undefined || bulkCardValue === null) {
       setBulkCardValueError('Total card value is required.');
       return false;
     }
     const value = bulkCardValue;
     if (isNaN(value) || value <= 0) {
-      setBulkCardValueError('Please enter a valid positive number.');
+      setBulkCardValueError('Please enter a valid positive number for total card value.');
       return false;
     }
-    setBulkCardValueError('');
     return true;
   };
 
-  // Validation for individual cards (<= 10 cards)
   const validateCards = (): boolean => {
     let ok = true;
-    const newCardErrors: {[key: string]: {[field: string]: string}} = {};
+    const newCardErrors: { [key: string]: { [field: string]: string } } = {};
 
     cards.forEach(card => {
-      const cardErrorsForCard: {[field: string]: string} = {};
+      const cardErrorsForCard: { [field: string]: string } = {};
 
       if (!card.cardName) {
         cardErrorsForCard.cardName = 'Card name is required.';
@@ -252,7 +248,7 @@ export default function ShippingInformation({ handleNext, handlePrevious }: Form
       } else {
         const year = parseInt(card.yearOfRelease as string);
         const currentYear = new Date().getFullYear();
-        
+
         if (isNaN(year)) {
           cardErrorsForCard.yearOfRelease = 'Please enter a valid number for year.';
           ok = false;
@@ -264,6 +260,14 @@ export default function ShippingInformation({ handleNext, handlePrevious }: Form
 
       if (!card.serviceId) {
         cardErrorsForCard.serviceId = 'Service level is required.';
+        ok = false;
+      }
+
+      if (card.cardValue === null || card.cardValue === undefined || isNaN(card.cardValue)) {
+        cardErrorsForCard.cardValue = 'Card value is required.';
+        ok = false;
+      } else if (card.cardValue <= 0) {
+        cardErrorsForCard.cardValue = 'Card value must be positive.';
         ok = false;
       }
 
@@ -283,10 +287,12 @@ export default function ShippingInformation({ handleNext, handlePrevious }: Form
     const isNumberOfCardsValid = validateNumberOfCards();
 
     let areCardsValid = true;
-    if (numberOfCards <= 10) {
+    if (numberOfCards > 0 && numberOfCards <= 10) {
       areCardsValid = validateCards();
-    } else {
+    } else if (numberOfCards > 10) {
       areCardsValid = validateBulkCards();
+    } else if (numberOfCards === 0) { // If number of cards is 0, no card validation needed
+      areCardsValid = true;
     }
 
     if (!isShippingValid || !isNumberOfCardsValid || !areCardsValid) {
@@ -296,16 +302,14 @@ export default function ShippingInformation({ handleNext, handlePrevious }: Form
       return;
     }
 
-    // Update zustand store with form data
-    if (numberOfCards <= 10) {
-      // Individual card submission
+    if (numberOfCards > 0 && numberOfCards <= 10) {
       setSubmission({
         fullName: values.fullName,
         shippingAddress: values.shippingAddress,
         phoneNumber: values.phoneNumber,
         email: values.email,
         numberOfCards: numberOfCards,
-        estimatedCompletion: getTurnaroundTime(submission.cards as Card[]),
+        estimatedCompletion: getTurnaroundTime(cards as Card[]), // Ensure this helper function handles CardData correctly
         cards: cards.map(card => ({
           id: card.id,
           cardName: card.cardName,
@@ -313,12 +317,11 @@ export default function ShippingInformation({ handleNext, handlePrevious }: Form
           yearOfRelease: Number(card.yearOfRelease),
           serviceId: card.serviceId,
           cardValue: Number(card.cardValue),
-          estimatedCompletion: services.find((service: Service) => service.id == card.serviceId)?.turnAroundTime
+          estimatedCompletion: services.find((service: Service) => service.id === card.serviceId)?.turnAroundTime
         })),
         step: 3
       });
-    } else {
-      // Bulk card submission
+    } else if (numberOfCards > 10) {
       setSubmission({
         fullName: values.fullName,
         shippingAddress: values.shippingAddress,
@@ -327,8 +330,21 @@ export default function ShippingInformation({ handleNext, handlePrevious }: Form
         numberOfCards: numberOfCards,
         bulkCardValue: bulkCardValue,
         bulkDescription: bulkDescription,
-        estimatedCompletion: '10d',
-        cards: [], // Empty for bulk submission
+        estimatedCompletion: '10d', // Placeholder or calculated for bulk
+        cards: [],
+        step: 3
+      });
+    } else if (numberOfCards === 0) { // Handle case where 0 cards are submitted, clear any card data
+      setSubmission({
+        fullName: values.fullName,
+        shippingAddress: values.shippingAddress,
+        phoneNumber: values.phoneNumber,
+        email: values.email,
+        numberOfCards: 0,
+        bulkCardValue: undefined,
+        bulkDescription: '',
+        estimatedCompletion: 'N/A', // Or some other appropriate value
+        cards: [],
         step: 3
       });
     }
@@ -336,7 +352,6 @@ export default function ShippingInformation({ handleNext, handlePrevious }: Form
     handleNext();
   };
 
-  // Initialize showCardDetails state on component mount
   useEffect(() => {
     if (numberOfCards > 0) {
       setShowCardDetails(true);
@@ -344,12 +359,11 @@ export default function ShippingInformation({ handleNext, handlePrevious }: Form
   }, []);
 
   useEffect(() => {
-    if(services){
-      setSubmission({ services })
+    if (services) {
+      setSubmission({ services });
     }
-  }, [services])
+  }, [services, setSubmission]);
 
-  // Conditional rendering while data is loading or if there's an error
   if (isLoading) {
     return <div>Loading enums...</div>;
   }
@@ -368,13 +382,13 @@ export default function ShippingInformation({ handleNext, handlePrevious }: Form
           {/* Shipping Information Section */}
           <div className="space-y-4">
             {/* Full Name */}
-            <div ref={errors.fullName ? errorRef : null}>
+            <div className="relative" ref={errors.fullName ? errorRef : null}>
               <label className="block font-semibold mb-2">Full Name</label>
               <CustomInput
                 id="fullName"
                 name="fullName"
                 placeholder="Enter Full Name"
-                className="w-full p-6"
+                className={`w-full p-6 ${errors.fullName ? 'error-class' : ''}`}
                 value={values.fullName}
                 onChange={(e) => {
                   handleChange(e);
@@ -382,18 +396,23 @@ export default function ShippingInformation({ handleNext, handlePrevious }: Form
                 }}
               />
               {errors.fullName && (
-                <p className="text-red-500 mt-1 text-sm">{errors.fullName}</p>
+                <div className="absolute top-4 right-0 transform -translate-y-full z-10 animate-fade-in-slide-down">
+                  <p className="text-xs bg-red-600 text-white py-1.5 px-3 rounded-lg shadow-md whitespace-nowrap">
+                    {errors.fullName}
+                  </p>
+                  <div className="w-0 h-0 border-x-8 border-t-8 border-x-transparent border-t-red-600 absolute bottom-[-8px] left-1/2 -translate-x-1/2"></div>
+                </div>
               )}
             </div>
 
             {/* Shipping Address */}
-            <div ref={errors.shippingAddress ? errorRef : null}>
+            <div className="relative" ref={errors.shippingAddress ? errorRef : null}>
               <label className="block font-semibold mb-2">Shipping Address</label>
               <CustomInput
                 id="shippingAddress"
                 name="shippingAddress"
                 placeholder="Enter Shipping Address"
-                className="w-full p-6"
+                className={`w-full p-6 ${errors.shippingAddress ? 'error-class' : ''}`}
                 value={values.shippingAddress}
                 onChange={(e) => {
                   handleChange(e);
@@ -401,18 +420,23 @@ export default function ShippingInformation({ handleNext, handlePrevious }: Form
                 }}
               />
               {errors.shippingAddress && (
-                <p className="text-red-500 mt-1 text-sm">{errors.shippingAddress}</p>
+                <div className="absolute top-4 right-0 transform -translate-y-full z-10 animate-fade-in-slide-down">
+                  <p className="text-xs bg-red-600 text-white py-1.5 px-3 rounded-lg shadow-md whitespace-nowrap">
+                    {errors.shippingAddress}
+                  </p>
+                  <div className="w-0 h-0 border-x-8 border-t-8 border-x-transparent border-t-red-600 absolute bottom-[-8px] left-1/2 -translate-x-1/2"></div>
+                </div>
               )}
             </div>
 
             {/* Phone Number */}
-            <div ref={errors.phoneNumber ? errorRef : null}>
+            <div className="relative" ref={errors.phoneNumber ? errorRef : null}>
               <label className="block font-semibold mb-2">Phone Number</label>
               <CustomInput
                 id="phoneNumber"
                 name="phoneNumber"
                 placeholder="Enter Phone Number"
-                className="w-full p-6"
+                className={`w-full p-6 ${errors.phoneNumber ? 'error-class' : ''}`}
                 value={values.phoneNumber}
                 onChange={(e) => {
                   handleChange(e);
@@ -420,18 +444,24 @@ export default function ShippingInformation({ handleNext, handlePrevious }: Form
                 }}
               />
               {errors.phoneNumber && (
-                <p className="text-red-500 mt-1 text-sm">{errors.phoneNumber}</p>
+                <div className="absolute top-4 right-0 transform -translate-y-full z-10 animate-fade-in-slide-down">
+                  <p className="text-xs bg-red-600 text-white py-1.5 px-3 rounded-lg shadow-md whitespace-nowrap">
+                    {errors.phoneNumber}
+                  </p>
+                  <div className="w-0 h-0 border-x-8 border-t-8 border-x-transparent border-t-red-600 absolute bottom-[-8px] left-1/2 -translate-x-1/2"></div>
+                </div>
               )}
             </div>
 
-            <div ref={errors.email ? errorRef : null}>
+            {/* Email */}
+            <div className="relative" ref={errors.email ? errorRef : null}>
               <label className="block font-semibold mb-2">Email</label>
               <CustomInput
                 id="email"
                 name="email"
                 placeholder="Enter Email"
                 type="email"
-                className="w-full p-6"
+                className={`w-full p-6 ${errors.email ? 'error-class' : ''}`}
                 value={values.email}
                 onChange={(e) => {
                   handleChange(e);
@@ -439,36 +469,45 @@ export default function ShippingInformation({ handleNext, handlePrevious }: Form
                 }}
               />
               {errors.email && (
-                <p className="text-red-500 mt-1 text-sm">{errors.email}</p>
+                <div className="absolute top-4 right-0 transform -translate-y-full z-10 animate-fade-in-slide-down">
+                  <p className="text-xs bg-red-600 text-white py-1.5 px-3 rounded-lg shadow-md whitespace-nowrap">
+                    {errors.email}
+                  </p>
+                  <div className="w-0 h-0 border-x-8 border-t-8 border-x-transparent border-t-red-600 absolute bottom-[-8px] left-1/2 -translate-x-1/2"></div>
+                </div>
               )}
             </div>
           </div>
 
           {/* Number of Cards Section */}
-          <div>
+          <div className="relative">
             <label className="block font-semibold mb-2">Number of Cards</label>
             <CustomInput
               id="numberOfCards"
               name="numberOfCards"
               placeholder="Enter number of cards"
               type="text"
-              className="w-full p-6"
-              value={numberOfCards}
+              className={`w-full p-6 ${numberOfCardsError ? 'error-class' : ''}`}
+              value={numberOfCards} // Show empty if 0 and original state was 0 or input is empty
               onChange={(e) => handleNumberOfCardsChange(e.target.value)}
             />
             {numberOfCardsError && (
-              <p className="text-red-500 mt-1 text-sm">{numberOfCardsError}</p>
+              <div className="absolute top-4 right-0 transform -translate-y-full z-10 animate-fade-in-slide-down">
+                <p className="text-xs bg-red-600 text-white py-1.5 px-3 rounded-lg shadow-md whitespace-nowrap">
+                  {numberOfCardsError}
+                </p>
+                <div className="w-0 h-0 border-x-8 border-t-8 border-x-transparent border-t-red-600 absolute bottom-[-8px] left-1/2 -translate-x-1/2"></div>
+              </div>
             )}
           </div>
 
           {/* Animated Card Information Section */}
-          <div 
+          <div
             ref={cardDetailsRef}
-            className={`transition-all duration-500 ease-in-out transform ${
-              showCardDetails && numberOfCards > 0
-                ? 'opacity-100 translate-y-0' 
+            className={`transition-all duration-500 ease-in-out transform ${showCardDetails && numberOfCards > 0
+                ? 'opacity-100 translate-y-0'
                 : 'opacity-0 -translate-y-4 overflow-hidden'
-            }`}
+              }`}
           >
             {/* Individual Card Details (≤ 10 cards) */}
             {numberOfCards > 0 && numberOfCards <= 10 && (
@@ -494,96 +533,124 @@ export default function ShippingInformation({ handleNext, handlePrevious }: Form
 
                   {/* Table Rows */}
                   {cards.map((card, index) => (
-                    <div 
-                      key={card.id} 
-                      className={`grid grid-cols-6 gap-4 p-6 border-b border-gray-100 last:border-b-0 bg-white transition-all duration-300 ease-out transform ${
-                        showCardDetails 
-                          ? 'opacity-100 translate-x-0' 
+                    <div
+                      key={card.id}
+                      className={`grid grid-cols-6 gap-4 p-6 border-b border-gray-100 last:border-b-0 bg-white transition-all duration-300 ease-out transform ${showCardDetails
+                          ? 'opacity-100 translate-x-0'
                           : 'opacity-0 translate-x-4'
-                      }`}
-                      style={{ 
+                        }`}
+                      style={{
                         transitionDelay: `${index * 100}ms`,
                         animationDelay: `${index * 100}ms`
                       }}
                     >
                       {/* Card Name */}
-                      <div>
+                      <div className="relative">
                         <CustomInput
                           id={`cardName-${card.id}`}
                           name={`cardName-${card.id}`}
                           placeholder="Card Name"
-                          className="w-full p-7 text-sm transition-all duration-200 focus:ring-2 focus:ring-blue-200 focus:border-blue-400"
+                          className={`w-full p-7 text-sm transition-all duration-200 focus:ring-2 focus:ring-blue-200 focus:border-blue-400 ${cardErrors[card.id]?.cardName ? 'error-class' : ''}`}
                           value={card.cardName}
                           onChange={(e) => updateCard(card.id, 'cardName', e.target.value)}
                         />
                         {cardErrors[card.id]?.cardName && (
-                          <p className="text-red-500 mt-1 text-xs animate-pulse">{cardErrors[card.id].cardName}</p>
+                          <div className="absolute -top-1 right-0 transform -translate-y-full z-10 animate-fade-in-slide-down">
+                            <p className="text-xs bg-red-600 text-white py-1.5 px-3 rounded-lg shadow-md whitespace-nowrap">
+                              {cardErrors[card.id].cardName}
+                            </p>
+                            <div className="w-0 h-0 border-x-8 border-t-8 border-x-transparent border-t-red-600 absolute bottom-[-8px] left-1/2 -translate-x-1/2"></div>
+                          </div>
                         )}
                       </div>
 
                       {/* Category */}
-                      <div>
+                      <div className="relative">
                         <CustomSelect
                           options={cardTypes}
                           selectedOption={card.category || "Category"}
-                          borderColor="border-gray-200"
+                          borderColor={`border-gray-200 ${cardErrors[card.id]?.category ? 'error-class-border' : ''}`}
                           bg="bg-white"
                           setSelectedOption={(value) => updateCard(card.id, 'category', value as string)}
                           className="relative text-sm"
                         />
                         {cardErrors[card.id]?.category && (
-                          <p className="text-red-500 mt-1 text-xs animate-pulse">{cardErrors[card.id].category}</p>
+                          <div className="absolute -top-1 right-0 transform -translate-y-full z-10 animate-fade-in-slide-down">
+                            <p className="text-xs bg-red-600 text-white py-1.5 px-3 rounded-lg shadow-md whitespace-nowrap">
+                              {cardErrors[card.id].category}
+                            </p>
+                            <div className="w-0 h-0 border-x-8 border-t-8 border-x-transparent border-t-red-600 absolute bottom-[-8px] left-1/2 -translate-x-1/2"></div>
+                          </div>
                         )}
                       </div>
 
                       {/* Year */}
-                      <div>
+                      <div className="relative">
                         <CustomInput
                           id={`year-${card.id}`}
                           name={`year-${card.id}`}
                           placeholder="Year"
-                          className="w-full p-7 text-sm transition-all duration-200 focus:ring-2 focus:ring-blue-200 focus:border-blue-400"
+                          type="number"
+                          className={`w-full p-7 text-sm transition-all duration-200 focus:ring-2 focus:ring-blue-200 focus:border-blue-400 ${cardErrors[card.id]?.yearOfRelease ? 'error-class' : ''}`}
                           value={card.yearOfRelease as string}
                           onChange={(e) => updateCard(card.id, 'yearOfRelease', e.target.value)}
                         />
                         {cardErrors[card.id]?.yearOfRelease && (
-                          <p className="text-red-500 mt-1 text-xs animate-pulse">{cardErrors[card.id].yearOfRelease}</p>
+                          <div className="absolute -top-1 right-0 transform -translate-y-full z-10 animate-fade-in-slide-down">
+                            <p className="text-xs bg-red-600 text-white py-1.5 px-3 rounded-lg shadow-md whitespace-nowrap">
+                              {cardErrors[card.id].yearOfRelease}
+                            </p>
+                            <div className="w-0 h-0 border-x-8 border-t-8 border-x-transparent border-t-red-600 absolute bottom-[-8px] left-1/2 -translate-x-1/2"></div>
+                          </div>
                         )}
                       </div>
 
                       {/* Service Level */}
-                      <div>
+                      <div className="relative">
                         <CustomSelect
                           options={services?.filter((service: Service) => !service.maxCardValue || (service.maxCardValue > (card.cardValue || 0))).map((service: Service) => (service.name)) || []}
                           selectedOption={
                             services?.find((service: Service) => service.id === card.serviceId)?.name || "Service"
                           }
-                          borderColor="border-gray-200"
+                          borderColor={`border-gray-200 ${cardErrors[card.id]?.serviceId ? 'error-class-border' : ''}`}
                           bg={`bg-white ${card.cardValue === null || card.cardValue === undefined || card.cardValue <= 0 ? 'opacity-50 cursor-not-allowed' : ''}`}
                           disabled={card.cardValue === null || card.cardValue === undefined || card.cardValue <= 0}
                           setSelectedOption={(value) => updateCard(card.id, 'serviceId', value as string)}
                           className="relative text-sm"
                         />
                         {cardErrors[card.id]?.serviceId && (
-                          <p className="text-red-500 mt-1 text-xs animate-pulse">{cardErrors[card.id].serviceId}</p>
+                          <div className="absolute -top-1 right-0 transform -translate-y-full z-10 animate-fade-in-slide-down">
+                            <p className="text-xs bg-red-600 text-white py-1.5 px-3 rounded-lg shadow-md whitespace-nowrap">
+                              {cardErrors[card.id].serviceId}
+                            </p>
+                            <div className="w-0 h-0 border-x-8 border-t-8 border-x-transparent border-t-red-600 absolute bottom-[-8px] left-1/2 -translate-x-1/2"></div>
+                          </div>
                         )}
                       </div>
 
                       {/* Value */}
-                      <div>
+                      <div className="relative">
                         <CustomInput
                           id={`value-${card.id}`}
                           name={`value-${card.id}`}
                           placeholder="£ Value"
                           type="number"
-                          className="w-full p-7 text-sm transition-all duration-200 focus:ring-2 focus:ring-blue-200 focus:border-blue-400"
-                          value={card.cardValue as number}
+                          className={`w-full p-7 text-sm transition-all duration-200 focus:ring-2 focus:ring-blue-200 focus:border-blue-400 ${cardErrors[card.id]?.cardValue ? 'error-class' : ''}`}
+                          value={card.cardValue === null || card.cardValue === undefined ? '' : card.cardValue as number}
                           onChange={(e) => updateCard(card.id, 'cardValue', e.target.value)}
                         />
+                        {cardErrors[card.id]?.cardValue && (
+                          <div className="absolute -top-1 right-0 transform -translate-y-full z-10 animate-fade-in-slide-down">
+                            <p className="text-xs bg-red-600 text-white py-1.5 px-3 rounded-lg shadow-md whitespace-nowrap">
+                              {cardErrors[card.id].cardValue}
+                            </p>
+                            <div className="w-0 h-0 border-x-8 border-t-8 border-x-transparent border-t-red-600 absolute bottom-[-8px] left-1/2 -translate-x-1/2"></div>
+                          </div>
+                        )}
                       </div>
 
                       {/* Actions */}
-                      <div className="flex justify-center">
+                      <div className="flex justify-center items-start pt-2">
                         {cards.length > 1 && (
                           <button
                             type="button"
@@ -597,8 +664,8 @@ export default function ShippingInformation({ handleNext, handlePrevious }: Form
                     </div>
                   ))}
                   <div className="flex justify-center py-4">
-                    <button type="button" className={`bg-transparent border-none shadow-none text-red-500 text-center hover:text-red-700 ${ numberOfCards == 10 ? 'hidden' : ''}`} onClick={addCard}>
-                      + Add Another Card 
+                    <button type="button" className={`bg-transparent border-none shadow-none text-red-500 text-center hover:text-red-700 ${numberOfCards === 10 ? 'hidden' : ''}`} onClick={addCard}>
+                      + Add Another Card
                     </button>
                   </div>
                 </div>
@@ -606,14 +673,13 @@ export default function ShippingInformation({ handleNext, handlePrevious }: Form
                 {/* Mobile Card View - Visible on mobile and tablet */}
                 <div className="lg:hidden space-y-4">
                   {cards.map((card, index) => (
-                    <div 
-                      key={card.id} 
-                      className={`bg-white rounded-lg shadow-sm border border-gray-200 p-4 transition-all duration-300 ease-out transform ${
-                        showCardDetails 
-                          ? 'opacity-100 translate-y-0' 
+                    <div
+                      key={card.id}
+                      className={`bg-white rounded-lg shadow-sm border border-gray-200 p-4 transition-all duration-300 ease-out transform ${showCardDetails
+                          ? 'opacity-100 translate-y-0'
                           : 'opacity-0 translate-y-4'
-                      }`}
-                      style={{ 
+                        }`}
+                      style={{
                         transitionDelay: `${index * 100}ms`,
                         animationDelay: `${index * 100}ms`
                       }}
@@ -635,52 +701,67 @@ export default function ShippingInformation({ handleNext, handlePrevious }: Form
                       {/* Card Fields */}
                       <div className="space-y-4">
                         {/* Card Name */}
-                        <div>
+                        <div className="relative">
                           <label className="block text-sm font-medium text-gray-700 mb-1">Card Name</label>
                           <CustomInput
-                            id={`cardName-${card.id}`}
-                            name={`cardName-${card.id}`}
+                            id={`cardName-${card.id}-mobile`}
+                            name={`cardName-${card.id}-mobile`}
                             placeholder="Card Name"
-                            className="w-full p-3 text-sm transition-all duration-200 focus:ring-2 focus:ring-blue-200 focus:border-blue-400"
+                            className={`w-full p-3 text-sm transition-all duration-200 focus:ring-2 focus:ring-blue-200 focus:border-blue-400 ${cardErrors[card.id]?.cardName ? 'error-class' : ''}`}
                             value={card.cardName}
                             onChange={(e) => updateCard(card.id, 'cardName', e.target.value)}
                           />
                           {cardErrors[card.id]?.cardName && (
-                            <p className="text-red-500 mt-1 text-xs animate-pulse">{cardErrors[card.id].cardName}</p>
+                            <div className="absolute top-0 right-0 transform -translate-y-full z-10 animate-fade-in-slide-down">
+                              <p className="text-xs bg-red-600 text-white py-1.5 px-3 rounded-lg shadow-md whitespace-nowrap">
+                                {cardErrors[card.id].cardName}
+                              </p>
+                              <div className="w-0 h-0 border-x-8 border-t-8 border-x-transparent border-t-red-600 absolute bottom-[-8px] left-1/2 -translate-x-1/2"></div>
+                            </div>
                           )}
                         </div>
 
                         {/* Two column layout for category and year on mobile */}
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                           {/* Category */}
-                          <div>
+                          <div className="relative">
                             <label className="block text-sm font-medium text-gray-700 mb-1">Category</label>
                             <CustomSelect
                               options={cardTypes}
                               selectedOption={card.category || "Category"}
-                              borderColor="border-gray-200"
+                              borderColor={`border-gray-200 ${cardErrors[card.id]?.category ? 'error-class-border' : ''}`}
                               bg="bg-white"
                               setSelectedOption={(value) => updateCard(card.id, 'category', value as string)}
                               className="relative text-sm w-full"
                             />
                             {cardErrors[card.id]?.category && (
-                              <p className="text-red-500 mt-1 text-xs animate-pulse">{cardErrors[card.id].category}</p>
+                              <div className="absolute top-0 right-0 transform -translate-y-full z-10 animate-fade-in-slide-down">
+                                <p className="text-xs bg-red-600 text-white py-1.5 px-3 rounded-lg shadow-md whitespace-nowrap">
+                                  {cardErrors[card.id].category}
+                                </p>
+                                <div className="w-0 h-0 border-x-8 border-t-8 border-x-transparent border-t-red-600 absolute bottom-[-8px] left-1/2 -translate-x-1/2"></div>
+                              </div>
                             )}
                           </div>
 
                           {/* Year */}
-                          <div>
+                          <div className="relative">
                             <label className="block text-sm font-medium text-gray-700 mb-1">Year</label>
                             <CustomInput
-                              id={`year-${card.id}`}
-                              name={`year-${card.id}`}
+                              id={`year-${card.id}-mobile`}
+                              name={`year-${card.id}-mobile`}
                               placeholder="Year"
-                              className="w-full p-3 text-sm transition-all duration-200 focus:ring-2 focus:ring-blue-200 focus:border-blue-400"
+                              className={`w-full p-3 text-sm transition-all duration-200 focus:ring-2 focus:ring-blue-200 focus:border-blue-400 ${cardErrors[card.id]?.yearOfRelease ? 'error-class' : ''}`}
                               value={card.yearOfRelease as string}
                               onChange={(e) => updateCard(card.id, 'yearOfRelease', e.target.value)}
                             />
                             {cardErrors[card.id]?.yearOfRelease && (
-                              <p className="text-red-500 mt-1 text-xs animate-pulse">{cardErrors[card.id].yearOfRelease}</p>
+                              <div className="absolute top-0 right-0 transform -translate-y-full z-10 animate-fade-in-slide-down">
+                                <p className="text-xs bg-red-600 text-white py-1.5 px-3 rounded-lg shadow-md whitespace-nowrap">
+                                  {cardErrors[card.id].yearOfRelease}
+                                </p>
+                                <div className="w-0 h-0 border-x-8 border-t-8 border-x-transparent border-t-red-600 absolute bottom-[-8px] left-1/2 -translate-x-1/2"></div>
+                              </div>
                             )}
                           </div>
                         </div>
@@ -688,40 +769,58 @@ export default function ShippingInformation({ handleNext, handlePrevious }: Form
                         {/* Two column layout for service and value */}
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                           {/* Service Level */}
-                          <div>
+                          <div className="relative">
                             <label className="block text-sm font-medium text-gray-700 mb-1">Service Level</label>
                             <CustomSelect
                               options={services?.map((service: Service) => (service.name)) || []}
                               selectedOption={
                                 services?.find((service: Service) => service.id === card.serviceId)?.name || "Service"
                               }
-                              borderColor="border-gray-200"
+                              borderColor={`border-gray-200 ${cardErrors[card.id]?.serviceId ? 'error-class-border' : ''}`}
                               bg="bg-white"
                               setSelectedOption={(value) => updateCard(card.id, 'serviceId', value as string)}
                               className="relative text-sm w-full"
                             />
                             {cardErrors[card.id]?.serviceId && (
-                              <p className="text-red-500 mt-1 text-xs animate-pulse">{cardErrors[card.id].serviceId}</p>
+                              <div className="absolute top-0 right-0 transform -translate-y-full z-10 animate-fade-in-slide-down">
+                                <p className="text-xs bg-red-600 text-white py-1.5 px-3 rounded-lg shadow-md whitespace-nowrap">
+                                  {cardErrors[card.id].serviceId}
+                                </p>
+                                <div className="w-0 h-0 border-x-8 border-t-8 border-x-transparent border-t-red-600 absolute bottom-[-8px] left-1/2 -translate-x-1/2"></div>
+                              </div>
                             )}
                           </div>
 
                           {/* Value */}
-                          <div>
+                          <div className="relative">
                             <label className="block text-sm font-medium text-gray-700 mb-1">Value (£)</label>
                             <CustomInput
-                              id={`value-${card.id}`}
-                              name={`value-${card.id}`}
+                              id={`value-${card.id}-mobile`}
+                              name={`value-${card.id}-mobile`}
                               placeholder="£ Value"
                               type="number"
-                              className="w-full p-3 text-sm transition-all duration-200 focus:ring-2 focus:ring-blue-200 focus:border-blue-400"
-                              value={card.cardValue as number}
+                              className={`w-full p-3 text-sm transition-all duration-200 focus:ring-2 focus:ring-blue-200 focus:border-blue-400 ${cardErrors[card.id]?.cardValue ? 'error-class' : ''}`}
+                              value={card.cardValue === null || card.cardValue === undefined ? '' : card.cardValue as number}
                               onChange={(e) => updateCard(card.id, 'cardValue', e.target.value)}
                             />
+                            {cardErrors[card.id]?.cardValue && (
+                              <div className="absolute top-0 right-0 transform -translate-y-full z-10 animate-fade-in-slide-down">
+                                <p className="text-xs bg-red-600 text-white py-1.5 px-3 rounded-lg shadow-md whitespace-nowrap">
+                                  {cardErrors[card.id].cardValue}
+                                </p>
+                                <div className="w-0 h-0 border-x-8 border-t-8 border-x-transparent border-t-red-600 absolute bottom-[-8px] left-1/2 -translate-x-1/2"></div>
+                              </div>
+                            )}
                           </div>
                         </div>
                       </div>
                     </div>
                   ))}
+                  <div className="flex justify-center py-4">
+                    <button type="button" className={`bg-transparent border-none shadow-none text-red-500 text-center hover:text-red-700 ${numberOfCards === 10 ? 'hidden' : ''}`} onClick={addCard}>
+                      + Add Another Card
+                    </button>
+                  </div>
                 </div>
               </div>
             )}
@@ -733,29 +832,34 @@ export default function ShippingInformation({ handleNext, handlePrevious }: Form
                   <h2 className="text-2xl font-bold text-gray-800 mb-2">Bulk Card Submission</h2>
                   <p className="text-charcol">Since you have more than 10 cards, please provide the total value and description.</p>
                 </div>
-                
+
                 {/* Total Card Value */}
-                <div>
+                <div className="relative">
                   <label className="block font-semibold mb-2">Total Card Value (£)</label>
                   <CustomInput
                     id="bulkCardValue"
                     name="bulkCardValue"
                     placeholder="Enter total value of all cards"
                     type="number"
-                    className="w-full p-6 transition-all duration-200 focus:ring-2 focus:ring-purple-200 focus:border-purple-400"
-                    value={bulkCardValue}
+                    className={`w-full p-6 transition-all duration-200 focus:ring-2 focus:ring-purple-200 focus:border-purple-400 ${bulkCardValueError ? 'error-class' : ''}`}
+                    value={bulkCardValue === null || bulkCardValue === undefined ? '' : bulkCardValue}
                     onChange={(e) => {
                       setBulkCardValue(Number(e.target.value));
                       setBulkCardValueError('');
                     }}
                   />
                   {bulkCardValueError && (
-                    <p className="text-red-500 mt-1 text-sm animate-pulse">{bulkCardValueError}</p>
+                    <div className="absolute top-4 right-0 transform -translate-y-full z-10 animate-fade-in-slide-down">
+                      <p className="text-xs bg-red-600 text-white py-1.5 px-3 rounded-lg shadow-md whitespace-nowrap">
+                        {bulkCardValueError}
+                      </p>
+                      <div className="w-0 h-0 border-x-8 border-t-8 border-x-transparent border-t-red-600 absolute bottom-[-8px] left-1/2 -translate-x-1/2"></div>
+                    </div>
                   )}
                 </div>
 
                 {/* Description */}
-                <div>
+                <div className="relative">
                   <label className="block font-semibold mb-2">Description (Optional)</label>
                   <textarea
                     id="bulkDescription"
@@ -766,6 +870,7 @@ export default function ShippingInformation({ handleNext, handlePrevious }: Form
                     value={bulkDescription}
                     onChange={(e) => setBulkDescription(e.target.value)}
                   />
+                  {/* No specific error for description as it's optional */}
                 </div>
               </div>
             )}

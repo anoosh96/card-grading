@@ -105,7 +105,7 @@ function CardDetails() {
   };
 
   return (
-    <section className="bg-white p-7">
+    <section className="bg-white p-4 lg:p-7">
       <div className="flex items-center justify-between mb-10">
         <h1 className="heading-primary font-bold">Card Details</h1>
       </div>
@@ -124,7 +124,7 @@ function CardDetails() {
         classNames="mt-4"
       />
 
-      <div className="flex gap-6 mt-8">
+      <div className="flex flex-col md:flex-row gap-6 mt-8">
         <Button
           size={"lg"}
           className="h-auto font-semibold bg-soft-grey rounded-full text-pure-grey py-3 px-14 text-base hover:bg-soft-grey"
@@ -136,7 +136,7 @@ function CardDetails() {
         <Link href={`/user-dashboard/submission-status/order-tracking?id=${submissionId}&cardId=${cardId}`}>
           <Button
             size={"lg"}
-            className="h-auto font-semibold bg-soft-grey rounded-full text-pure-grey py-3 px-14 text-base hover:bg-soft-grey"
+            className="h-auto font-semibold bg-soft-grey rounded-full text-pure-grey py-3 px-14 text-base hover:bg-soft-grey w-full"
           >
             Track
           </Button>

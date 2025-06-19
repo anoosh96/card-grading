@@ -113,9 +113,9 @@ const DashboardSubmissionStatus: FC<DashboardSubmissionStatusProps> = ({
         <table className="w-full min-w-[600px] md:min-w-[800px] lg:min-w-full table-auto">
           <thead className="text-sm font-medium text-left">
             <tr>
-              <th className="w-10 p-3">
+              {/* <th className="w-10 p-3">
                 <CustomCheckbox />
-              </th>
+              </th> */}
               <th className="p-3">Order No</th>
               <th className="p-3">Date & Time</th>
               {/* <th className="p-3">Action</th> */}
@@ -128,9 +128,9 @@ const DashboardSubmissionStatus: FC<DashboardSubmissionStatusProps> = ({
           <tbody className="divide-y">
             {submissions.map((submission: Submission) => (
               <tr key={submission.id} className="hover:bg-light-grey-50">
-                <td className="p-3">
+                {/* <td className="p-3">
                   <CustomCheckbox />
-                </td>
+                </td> */}
                 <td className="p-3 font-medium">#{padId(submission.id)}</td>
                 <td className="p-3">
                   <div className="flex items-center gap-1">

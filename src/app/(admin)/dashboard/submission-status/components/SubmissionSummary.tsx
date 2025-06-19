@@ -7,6 +7,7 @@ import { SubmissionData } from "../add-post/add-post-types";
 import CustomSelect from "@/components/common/CustomSelect";
 import { useEnums } from "@/hooks/useEnums";
 import { cardStatusMap } from "@/app/(user)/lib/utils/helpers";
+import CustomInput from "@/components/common/CustomInput"; // Assuming you have this component
 
 interface SubmissionSummaryProps {
   title: string;
@@ -28,33 +29,92 @@ const SubmissionSummary = ({
   setIsEditing,
 }: SubmissionSummaryProps) => {
   const [formData, setFormData] = useState<SubmissionData>(data);
+  // State to hold validation errors for each field
+  const [validationErrors, setValidationErrors] = useState<
+    Partial<Record<keyof SubmissionData, string>>
+  >({});
   // Fetch enums for dropdown options
   const { data: enumData, isLoading } = useEnums();
 
   useEffect(() => {
     setFormData(data);
+    setValidationErrors({}); // Clear validation errors when data changes or component mounts/updates
   }, [data]);
 
-  const handleChange = (key: string, value: string) => {
+  // Validation function for specific fields
+  const validateField = (key: keyof SubmissionData, value: string | number | null) => {
+    let error = "";
+    if (key === "cardName") {
+      if (!value || String(value).trim() === "") {
+        error = "Card name is required.";
+      }
+    } else if (key === "yearOfRelease") {
+      if (!value) {
+        error = "Year of release is required.";
+      } else {
+        const year = Number(value);
+        const currentYear = new Date().getFullYear();
+        if (isNaN(year)) {
+          error = "Please enter a valid number for year.";
+        } else if (year < 1800 || year > currentYear + 1) {
+          error = `Year must be between 1800 and ${currentYear + 1}.`;
+        }
+      }
+    }
+    // Update the validationErrors state for the specific field
+    setValidationErrors((prev) => ({
+      ...prev,
+      [key]: error,
+    }));
+    return error; // Return the error message (empty string if valid)
+  };
+
+
+  const handleChange = (key: keyof SubmissionData, value: string) => {
     setFormData((prev) => ({
       ...prev,
       [key]: value,
     }));
+    // Validate the field immediately on change if it's one of the validated fields
+    if (key === "cardName" || key === "yearOfRelease") {
+      validateField(key, value);
+    }
   };
 
   const handleSave = () => {
-    onSubmit(formData);
-    setIsEditing?.(false);
+    let formIsValid = true;
+    const newErrors: Partial<Record<keyof SubmissionData, string>> = {};
+
+    // Run all validations
+    const cardNameError = validateField("cardName", formData.cardName);
+    if (cardNameError) {
+      formIsValid = false;
+      newErrors.cardName = cardNameError;
+    }
+
+    const yearOfReleaseError = validateField("yearOfRelease", formData.yearOfRelease);
+    if (yearOfReleaseError) {
+      formIsValid = false;
+      newErrors.yearOfRelease = yearOfReleaseError;
+    }
+
+    // Set all errors at once after checking all fields
+    setValidationErrors(newErrors);
+
+    if (formIsValid) {
+      onSubmit(formData);
+      setIsEditing?.(false);
+    }
   };
 
   const handleCancel = () => {
     setFormData(data);
+    setValidationErrors({}); // Clear validation errors on cancel
     setIsEditing?.(false);
   };
 
   // Get dropdown options from enum data
   const getCategoryOptions = () => {
-    // You might need to adjust these based on your actual enum data structure
     return enumData?.cardTypes || [];
   };
 
@@ -145,36 +205,45 @@ const SubmissionSummary = ({
               )}
 
               <div
-                className={`grid sm:grid-cols-2 py-1 ${key === "submissionDate" || key === "status"
-                  ? "text-[18px] font-medium"
-                  : ""
-                  }`}
+                className={`grid sm:grid-cols-2 py-1`}
               >
-                <span className="font-medium text-gray-900">{label}</span>
+                <span className="font-medium text-gray-900 mb-2 sm:mb-0">{label}</span>
                 {isEditing ? (
-                  isDropdownField(key) ? (
-                    // Render CustomSelect for dropdown fields
-                    <div className="w-full">
-                      <CustomSelect
-                        options={getOptionsForField(key)}
-                        selectedOption={value || ""}
-                        setSelectedOption={(selected) => handleChange(key, selected as string)}
-                        borderColor="border-gray-300"
-                        bg="bg-white"
-                        className="w-full"
+                  <div className="relative"> {/* Added relative positioning for error bubble */}
+                    {isDropdownField(key) ? (
+                      <div className="w-full">
+                        <CustomSelect
+                          options={getOptionsForField(key)}
+                          selectedOption={value || ""}
+                          setSelectedOption={(selected) => handleChange(key, selected as string)}
+                          borderColor={validationErrors[key] ? "border-red-500" : "border-gray-300"} // Apply red border on error
+                          bg="bg-white"
+                          className={`w-full ${validationErrors[key] ? 'error-class' : ''}`} // Apply 'error-class'
+                        />
+                      </div>
+                    ) : (
+                      // Using CustomInput for text/number fields
+                      <CustomInput
+                        type={key === "yearOfRelease" ? "number" : "text"}
+                        value={value as string}
+                        readOnly={isReadOnly(key)}
+                        disabled={isReadOnly(key)}
+                        onChange={(e) => handleChange(key, e.target.value)}
+                        // Apply red border and 'error-class' on error
+                        className={`w-full p-7 ${isReadOnly(key) ? '!bg-[#E0E0E0]' : 'bg-white'} ${validationErrors[key] ? 'border-red-500 error-class' : 'border-gray-300'}`}
                       />
-                    </div>
-                  ) : (
-                    // Render regular input for other fields
-                    <input
-                      type="text"
-                      value={value}
-                      readOnly={ isReadOnly(key) }
-                      disabled={ isReadOnly(key) }
-                      onChange={(e) => handleChange(key, e.target.value)}
-                      className={`border border-gray-300 bg-white rounded-lg p-4 w-full ${isReadOnly(key) ? '!bg-[#E0E0E0]': ''}`}
-                    />
-                  )
+                    )}
+                    {/* Error message display */}
+                    {validationErrors[key] && (
+                      <div className="absolute -top-5 right-0 ml-2 transform -translate-y-1/2 z-10 animate-fade-in-slide-down">
+                        <p className="text-xs bg-red-600 text-white py-1.5 px-3 rounded-lg shadow-md whitespace-nowrap">
+                          {validationErrors[key]}
+                        </p>
+                        {/* Triangle pointer for the error bubble */}
+                        <div className="w-0 h-0 border-x-8 border-t-8 border-x-transparent border-t-red-600 absolute bottom-[-8px] left-1/2 -translate-x-1/2"></div>
+                      </div>
+                    )}
+                  </div>
                 ) : (
                   <span
                     className={

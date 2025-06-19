@@ -72,7 +72,8 @@ export default function VerificationCodePage() {
 
   return (
     <div className="container mx-auto mt-4">
-      <h1 className="text-xl md:text-3xl font-medium text-pure-grey mb-6">Verification Code</h1>
+      <h1 className="text-xl md:text-3xl font-medium text-pure-grey mb-2">Verification Code</h1>
+      <p className="text-charcol text-sm mb-4">We have sent a code to you email address, please enter the code.</p>
       <div className="w-full flex-col mb-6">
         <label htmlFor="code" className="block text-lg font-medium text-gray-700 mb-2">
           Enter Code

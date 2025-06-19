@@ -20,7 +20,7 @@ export default function CustomCheckbox({
 }: CustomCheckboxProps) {
   const sizeMap = {
     'sm': { dimensions: 'h-4 w-4', text: 'heading-tertiary' },
-    'md': { dimensions: 'h-6 w-6', text: 'text-lg' },
+    'md': { dimensions: 'h-6 w-6', text: 'text-xs sm:text-lg' },
     'lg': { dimensions: 'h-8 w-8', text: 'text-xl' }
   };
 

@@ -36,7 +36,7 @@ const StepProgressBar: React.FC<StepProgressBarProps> = ({ currentStep, classNam
                     <span className="text-lg text-white">{i + 1 <= currentStep ? i + 1 : ''}</span>
                   )}
                 </div>
-                <span className={`text-sm text-light-red text-center ${i == 0 ? '-ml-[10px]' : ''}`}>{step}</span>
+                <span className={`text-xs sm:text-sm text-light-red text-center ${i == 0 ? '-ml-[10px]' : ''}`}>{step}</span>
              </div>
             )
           })

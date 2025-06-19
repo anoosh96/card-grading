@@ -68,7 +68,7 @@ export default function ByFormSubmissionPage() {
   }
 
   return (
-    <section className="p-7 bg-white">
+    <section className="py-7 px-4 md:p-7 bg-white">
       <div className="mb-20">
         <ProgressBar currentStep={step == 4 ? 3 : step} steps={steps} />
       </div>

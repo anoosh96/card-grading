@@ -12,6 +12,7 @@ import { FlexibleRecord } from "@/types";
 import { Loader2 } from "lucide-react";
 import { padId } from "@/lib/utils"; // Assuming padId is still used for summary
 import { serviceType } from "@/app/(user)/lib/utils/constants";
+import { handleRequestSuccess } from "@/lib/toast";
 
 // Define props interface for CardDetails
 interface CardDetailsProps {
@@ -106,6 +107,7 @@ export default function CardDetails({ currentCard: initialCard }: CardDetailsPro
         // when currentCard prop changes, triggering the useEffect in this component.
 
         // Navigate back to submission status page, passing current cardId
+        handleRequestSuccess(data?.message);
         router.push(`/dashboard/submission-status/${cardBeingEdited.submissionId}?cardId=${cardBeingEdited.id}`);
       },
       onError: (error) => {

@@ -1,10 +1,62 @@
 import Link from "next/link";
 import Image from "next/image";
 import { ButtonGradient } from "@/components/common/ButtonGradient";
-import CustomInput from "@/components/common/CustomInput";
-import CustomTextArea from "@/components/common/CustomTextAreaa";
+import CustomInput from "@/components/common/CustomInput"; // Assuming this accepts value, onChange, disabled
+import CustomTextAreaa from "@/components/common/CustomTextAreaa"; // Assuming this accepts value, onChange, disabled
+
+import { useState } from "react"; // Import useState
+import { useContactMessage } from "@/hooks/useContactUs"; // Import the hook
+import { showToast } from "@/lib/toast";
 
 function ContactForm() {
+  // State to manage form inputs
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    subject: "",
+    message: "",
+  });
+
+  // Get the mutate function and loading state from your new hook
+  const { mutate, isPending } = useContactMessage();
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { id, value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [id]: value,
+    }));
+  };
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    // Basic client-side validation
+    if (!formData.name || !formData.email || !formData.message) {
+      showToast("Please fill in all required fields (Name, Email, Message).", { variant: 'error' });
+      return;
+    }
+    // Basic email format check
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+      showToast("Please enter a valid email address.", { variant: 'error' });
+      return;
+    }
+
+    // Call the mutate function from the hook
+    mutate(formData, {
+      onSuccess: () => {
+        // Clear the form only on successful submission
+        setFormData({
+          name: "",
+          email: "",
+          subject: "",
+          message: "",
+        });
+      },
+      // onError is handled by the hook itself
+    });
+  };
+
   return (
     <div className="w-full mx-auto px-4 md:px-10 py-8">
       <h1 className="text-[2rem] font-bold mb-5">Contact Us</h1>
@@ -58,39 +110,70 @@ function ContactForm() {
             </div>
 
             <div className="bg-white w-full lg:w-4/5 mt-10 md:mt-20 flex flex-col items-start justify-start rounded-2xl p-0 lg:p-6 backdrop-blur-sm">
-              <form className="flex w-full flex-col justify-start items-start gap-5">
+              <form className="flex w-full flex-col justify-start items-start gap-5" onSubmit={handleSubmit}>
                 <div className="flex w-full flex-col">
                   <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-2">
                     Name
                   </label>
-                  <CustomInput id="name" placeholder="Enter Name" />
+                  <CustomInput
+                    id="name"
+                    placeholder="Enter Name"
+                    value={formData.name}
+                    onChange={handleChange}
+                    disabled={isPending}
+                    required
+                  />
                 </div>
 
                 <div className="flex w-full flex-col">
                   <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
                     Email
                   </label>
-                  <CustomInput id="email" placeholder="Enter Email" />
+                  <CustomInput
+                    id="email"
+                    placeholder="Enter Email"
+                    type="email" // Added type email for better browser validation
+                    value={formData.email}
+                    onChange={handleChange}
+                    disabled={isPending}
+                    required
+                  />
                 </div>
 
                 <div className="flex w-full flex-col">
                   <label htmlFor="subject" className="block text-sm font-medium text-gray-700 mb-2">
                     Subject
                   </label>
-                  <CustomInput id="subject" placeholder="Enter Subject" />
+                  <CustomInput
+                    id="subject"
+                    placeholder="Enter Subject"
+                    value={formData.subject}
+                    onChange={handleChange}
+                    disabled={isPending}
+                  />
                 </div>
 
                 <div className="flex w-full flex-col">
                   <label htmlFor="message" className="block text-sm font-medium text-gray-700 mb-2">
                     Message
                   </label>
-                  <CustomTextArea id="message" placeholder="Enter message" />
-                  {/* <Textarea id="message" placeholder="Enter Message" className="w-full px-4 py-2 rounded-2xl border-gray-200 min-h-[120px]" /> */}
+                  <CustomTextAreaa
+                    id="message"
+                    placeholder="Enter message"
+                    value={formData.message}
+                    onChange={handleChange}
+                    disabled={isPending}
+                    required
+                  />
                 </div>
 
                 <div className="flex justify-end w-full">
-                  <ButtonGradient type="submit" className="px-4 py-3 rounded-full font-medium text-base text-white">
-                    Send Message
+                  <ButtonGradient
+                    type="submit"
+                    className="px-4 py-3 rounded-full font-medium text-base text-white"
+                    disabled={isPending} // Disable button while sending
+                  >
+                    {isPending ? "Sending Message..." : "Send Message"}
                   </ButtonGradient>
                 </div>
               </form>

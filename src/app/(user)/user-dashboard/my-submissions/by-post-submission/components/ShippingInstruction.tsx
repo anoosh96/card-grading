@@ -26,9 +26,9 @@ export default function ShippingInstruction({ handleNext }: FormStepProps) {
       <h1 className="heading-primary font-bold">Ship Your Card Securely</h1>
       <p className="text-neutral-grey mt-4">Follow these instructions to safely ship your card</p>
 
-      <div className="bg-light-grey rounded-lg p-7 mt-8">
+      <div className="bg-light-grey rounded-lg py-7 px-4 sm:p-7 mt-8">
         <h2 className="heading-primary font-bold">Shipping Instructions:</h2>
-        <div className="mt-4 space-y-6 p-7">
+        <div className="mt-4 space-y-6 py-7 px-4 sm:p-7">
           {instructions.map((instruction, index) => (
             <div className="flex gap-4" key={index}>
               <Image src={"/icons/double-star.svg"} width={20} height={20} alt="list icon image" />
@@ -36,11 +36,11 @@ export default function ShippingInstruction({ handleNext }: FormStepProps) {
             </div>
           ))}
         </div>
-        <div className="bg-transparent-red p-8 flex items-center text-light-red">
+        <div className="bg-transparent-red p-4 md:p-8 flex items-center text-light-red">
           <FaInfoCircle className="text-2xl bg-transparent" />
-          <p className="text-xl ml-6 font-regular">Once received, you&#39;ll get a tracking number to monitor progress.</p>
+          <p className="text-sm md:text-xl ml-6 font-regular">Once received, you&#39;ll get a tracking number to monitor progress.</p>
         </div>
-        <CustomCheckbox text="I confirm that I have read and will follow the shipping instructions" className="bg-transparent mt-4" size="md" checked={checked} onChange={setChecked} />
+        <CustomCheckbox text="I confirm that I have read and will follow the shipping instructions" className="bg-transparent mt-4 text-xs" size="md" checked={checked} onChange={setChecked} />
       </div>
 
       {/* Buttons */}

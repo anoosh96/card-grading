@@ -1,7 +1,7 @@
 // hooks/useUpdateSubmission.ts
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import axiosClient from '@/lib/axiosClient';
-import { handleRequestError, showToast } from '@/lib/toast';
+import { handleRequestError, handleRequestSuccess, showToast } from '@/lib/toast';
 
 interface UpdateSubmissionInput {
   id: number;
@@ -63,7 +63,7 @@ export const useUpdateSubmission = () => {
       queryClient.invalidateQueries({ queryKey: ['admin-submission'] });
       queryClient.invalidateQueries({ queryKey: ['admin-submission-analysis'] });
 
-
+      // handleRequestSuccess(data?.message)
       //   queryClient.invalidateQueries({ queryKey: ['submission-analysis'] });
     },
     onError: handleRequestError,

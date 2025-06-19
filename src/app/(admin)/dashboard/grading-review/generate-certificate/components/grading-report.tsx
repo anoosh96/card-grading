@@ -31,6 +31,20 @@ const MAX_TEXTAREA_LENGTH = 500;
 const MAX_INPUT_LENGTH = 100;
 const MAX_SCORE = 10;
 
+// Define required fields by section
+const REQUIRED_FIELDS = {
+  "AI Card Grading Report": ["card_name", "grading_date", "card_number", "graded_by"],
+  "Final Grade": ["grade", "final_score", "condition_tier"],
+  "AI Grading Summary": ["ai_summary"],
+  "Detailed Condition Breakdown": [
+    "corners.score", "corners.comments",
+    "edges.score", "edges.comments",
+    "surface.score", "surface.comments",
+    "centering.score", "centering.comments"
+  ],
+  "Final Grade Justification": ["overall_justification"]
+};
+
 // Validation functions
 const validateScore = (value: number): boolean => {
   return value >= 0 && value <= MAX_SCORE;
@@ -40,6 +54,12 @@ const validateTextLength = (text: string, maxLength: number): boolean => {
   return text.length <= maxLength;
 };
 
+const validateRequired = (value: string | number | null | undefined): boolean => {
+  if (value === null || value === undefined) return false;
+  if (typeof value === 'string') return value.trim().length > 0;
+  if (typeof value === 'number') return !isNaN(value);
+  return false;
+};
 
 const normalizeDate = (date: Date) => {
   // Normalize to local midnight (removes time effect)
@@ -131,19 +151,38 @@ const GradingReport = ({
 
   useEffect(() => {
     setFormData(data);
+    // When data changes, ensure editing state is reset and errors are cleared
+    setIsEditing({});
+    setValidationErrors({});
   }, [data]);
 
   const validateField = (
     key: string,
     value: string | number,
-    type?: string
+    type?: string,
+    sectionTitle?: string
   ): string => {
+    // Determine the relevant section for required field check
+    let effectiveSectionTitle = sectionTitle;
+    if (sectionTitle === "conditionBreakdown") {
+      effectiveSectionTitle = "Detailed Condition Breakdown";
+    }
+
+    // Check if field is required
+    const sectionRequiredFields = REQUIRED_FIELDS[effectiveSectionTitle as keyof typeof REQUIRED_FIELDS] || [];
+    const isRequired = sectionRequiredFields.includes(key) ||
+      sectionRequiredFields.some(field => field.includes(key));
+
+    if (isRequired && !validateRequired(value)) {
+      return "This field is required";
+    }
+
     if (type === "number" || key.includes("score")) {
       const numValue = typeof value === "string" ? parseFloat(value) : value;
-      if (isNaN(numValue)) {
+      if (isRequired && isNaN(numValue)) {
         return "Please enter a valid number";
       }
-      if (!validateScore(numValue)) {
+      if (!isNaN(numValue) && !validateScore(numValue)) {
         return `Score must be between 0 and ${MAX_SCORE}`;
       }
     } else if (type === "textarea") {
@@ -151,7 +190,7 @@ const GradingReport = ({
       if (!validateTextLength(textValue, MAX_TEXTAREA_LENGTH)) {
         return `Text must be less than ${MAX_TEXTAREA_LENGTH} characters (current: ${textValue.length})`;
       }
-    } else if (type !== "date") {
+    } else if (type !== "date" && type !== "star-rating") {
       const textValue = String(value);
       if (!validateTextLength(textValue, MAX_INPUT_LENGTH)) {
         return `Text must be less than ${MAX_INPUT_LENGTH} characters (current: ${textValue.length})`;
@@ -166,17 +205,19 @@ const GradingReport = ({
     value: string | number | Date,
     type?: string
   ) => {
-    const validationKey = `${section}.${key}`;
+    const validationKeyPrefix = section === "conditionBreakdown" ? section : section;
+    const validationKey = `${validationKeyPrefix}.${key}`;
     let finalValue: string | number;
 
     if (type === "date" && value instanceof Date) {
-      // Convert date to YYYY-MM-DD format without time
+      // Convert date to ISO-MM-DD format without time
       finalValue = value.toISOString().split("T")[0]; // e.g., "2025-05-12"
     } else {
       finalValue = value as string | number;
     }
 
-    const error = validateField(key, finalValue, type);
+    // Perform validation immediately
+    const error = validateField(key, finalValue, type, section);
 
     setValidationErrors((prev) => ({
       ...prev,
@@ -215,27 +256,89 @@ const GradingReport = ({
       ...prev,
       grade: newGrade,
     }));
+    // Clear any validation error for grade field
+    setValidationErrors((prev) => ({
+      ...prev,
+      "Final Grade.grade": "",
+    }));
   };
 
-  const hasValidationErrors = (): boolean => {
+  const hasValidationErrors = (sectionTitle?: string): boolean => {
+    if (sectionTitle) {
+      // For Detailed Condition Breakdown, check specifically for its keys
+      if (sectionTitle === "Detailed Condition Breakdown") {
+        return Object.keys(validationErrors)
+          .filter(key => key.startsWith("conditionBreakdown"))
+          .some(key => validationErrors[key] !== "");
+      }
+      return Object.keys(validationErrors)
+        .filter(key => key.startsWith(sectionTitle))
+        .some(key => validationErrors[key] !== "");
+    }
     return Object.values(validationErrors).some((error) => error !== "");
   };
 
-  const handleSave = (section: string) => {
-    if (hasValidationErrors()) {
-      return;
+  const validateSection = (sectionTitle: string): void => {
+    let effectiveSectionTitle = sectionTitle;
+    if (sectionTitle === "conditionBreakdown") {
+      effectiveSectionTitle = "Detailed Condition Breakdown";
     }
-    onSubmit(formData);
-    setIsEditing((prev) => ({ ...prev, [section]: false }));
-    setEditing?.(false)
-    // Clear validation errors for this section
-    const updatedErrors = { ...validationErrors };
-    Object.keys(updatedErrors).forEach((key) => {
-      if (key.startsWith(section)) {
-        delete updatedErrors[key];
+
+    const sectionRequiredFields = REQUIRED_FIELDS[effectiveSectionTitle as keyof typeof REQUIRED_FIELDS] || [];
+    const newErrors: { [key: string]: string } = {};
+
+    sectionRequiredFields.forEach(field => {
+      let value: any;
+      let validationKey: string;
+      let type: string;
+
+      if (field.includes('.')) {
+        // Handle nested fields like "corners.score" for conditionBreakdown
+        const [category, subKey] = field.split('.');
+        value = formData.condition_breakdown?.[category as keyof ConditionBreakdown]?.[subKey as 'score' | 'comments'];
+        validationKey = `conditionBreakdown.${field}`;
+        type = subKey === 'score' ? 'number' : 'textarea';
+      } else {
+        value = formData[field as keyof GradingData];
+        validationKey = `${sectionTitle}.${field}`;
+        type = field.includes('score') ? 'number' :
+          field.includes('summary') || field.includes('justification') ? 'textarea' :
+            field === 'grading_date' ? 'date' :
+              field === 'grade' ? 'star-rating' : 'text';
+      }
+
+      const error = validateField(field, value, type, effectiveSectionTitle);
+      if (error) {
+        newErrors[validationKey] = error;
       }
     });
-    setValidationErrors(updatedErrors);
+
+    setValidationErrors(prev => ({
+      ...prev,
+      ...newErrors
+    }));
+  };
+
+  const handleSave = (section: string) => {
+    // First validate all required fields in the section
+    validateSection(section === "Detailed Condition Breakdown" ? "conditionBreakdown" : section); // Pass the internal key for validation
+
+    // Check if there are any validation errors after validation
+    setTimeout(() => {
+      if (!hasValidationErrors(section)) {
+        onSubmit(formData);
+        setIsEditing((prev) => ({ ...prev, [section]: false }));
+        setEditing?.(false);
+        // Clear validation errors for this section
+        const updatedErrors = { ...validationErrors };
+        Object.keys(updatedErrors).forEach((key) => {
+          if (key.startsWith(section) || (section === "Detailed Condition Breakdown" && key.startsWith('conditionBreakdown'))) {
+            delete updatedErrors[key];
+          }
+        });
+        setValidationErrors(updatedErrors);
+      }
+    }, 0);
   };
 
   const handleCancel = (section: string) => {
@@ -245,11 +348,24 @@ const GradingReport = ({
     // Clear validation errors for this section
     const updatedErrors = { ...validationErrors };
     Object.keys(updatedErrors).forEach((key) => {
-      if (key.startsWith(section)) {
+      if (key.startsWith(section) || (section === "Detailed Condition Breakdown" && key.startsWith('conditionBreakdown'))) {
         delete updatedErrors[key];
       }
     });
     setValidationErrors(updatedErrors);
+  };
+
+  // Helper component for displaying error messages
+  const ErrorMessage = ({ message, className = "" }: { message: string; className?: string }) => {
+    if (!message) return null;
+    return (
+      <div className={`absolute -top-4 right-0 transform -translate-y-full z-10 animate-fade-in-slide-down ${className}`}>
+        <p className="text-xs bg-red-600 text-white py-1.5 px-3 rounded-lg shadow-md whitespace-nowrap w-full">
+          {message}
+        </p>
+        <div className="w-0 h-0 border-x-8 border-t-8 border-x-transparent border-t-red-600 absolute bottom-[-8px] left-1/2 -translate-x-1/2"></div>
+      </div>
+    );
   };
 
   // Define sections for the report
@@ -258,25 +374,25 @@ const GradingReport = ({
       title: "AI Card Grading Report",
       icon: "/assets/images/report.svg",
       fields: [
-        { label: "Card Name", key: "card_name" },
-        { label: "Grading Date", key: "grading_date", type: "date" },
-        { label: "Card Number", key: "card_number" },
-        { label: "Graded by", key: "graded_by" },
+        { label: "Card Name", key: "card_name", required: true },
+        { label: "Grading Date", key: "grading_date", type: "date", required: true },
+        { label: "Card Number", key: "card_number", required: true },
+        { label: "Graded by", key: "graded_by", required: true },
       ],
     },
     {
       title: "Final Grade",
       icon: "/assets/images/grade.svg",
       fields: [
-        { label: "Grade", key: "grade", type: "star-rating" },
-        { label: "AI Score", key: "final_score", type: "number" },
-        { label: "Condition Tier", key: "condition_tier" },
+        { label: "Grade", key: "grade", type: "star-rating", required: true },
+        { label: "AI Score", key: "final_score", type: "number", required: true },
+        { label: "Condition Tier", key: "condition_tier", required: true },
       ],
     },
     {
       title: "AI Grading Summary",
       icon: "/assets/images/brain.svg",
-      fields: [{ label: "", key: "ai_summary", type: "textarea" }],
+      fields: [{ label: "", key: "ai_summary", type: "textarea", required: true }],
     },
     {
       title: "Detailed Condition Breakdown",
@@ -289,31 +405,35 @@ const GradingReport = ({
           key: "corners",
           score: formData.condition_breakdown.corners.score,
           comments: formData.condition_breakdown.corners.comments,
+          required: true,
         },
         {
           category: "Edges",
           key: "edges",
           score: formData.condition_breakdown.edges.score,
           comments: formData.condition_breakdown.edges.comments,
+          required: true,
         },
         {
           category: "Surface",
           key: "surface",
           score: formData.condition_breakdown.surface.score,
           comments: formData.condition_breakdown.surface.comments,
+          required: true,
         },
         {
           category: "Centering",
           key: "centering",
           score: formData.condition_breakdown.centering.score,
           comments: formData.condition_breakdown.centering.comments,
+          required: true,
         },
       ],
     },
     {
       title: "Final Grade Justification",
       icon: "/assets/images/report.svg",
-      fields: [{ label: "", key: "overall_justification", type: "textarea" }],
+      fields: [{ label: "", key: "overall_justification", type: "textarea", required: true }],
     },
   ];
 
@@ -355,13 +475,13 @@ const GradingReport = ({
                   <>
                     <button
                       onClick={() => handleSave(section.title)}
-                      disabled={hasValidationErrors()}
-                      className={`${hasValidationErrors()
+                      disabled={hasValidationErrors(section.title)}
+                      className={`${hasValidationErrors(section.title)
                         ? "text-gray-400 cursor-not-allowed"
                         : "text-green-500 hover:text-green-700"
                         } transition-colors`}
                       title={
-                        hasValidationErrors()
+                        hasValidationErrors(section.title)
                           ? "Please fix validation errors before saving"
                           : "Save changes"
                       }
@@ -377,10 +497,10 @@ const GradingReport = ({
                   </>
                 ) : (
                   <button
-                    onClick={() =>{
-                       setIsEditing((prev) => ({ ...prev, [section.title]: true }))
-                       setEditing?.(true)
-                      }
+                    onClick={() => {
+                      setIsEditing((prev) => ({ ...prev, [section.title]: true }))
+                      setEditing?.(true)
+                    }
                     }
                     className="text-light-red hover:text-orange-700"
                   >
@@ -394,7 +514,7 @@ const GradingReport = ({
           {/* Section Content */}
           {section.type === "table" ? (
             <div className="overflow-x-auto">
-              <table className="w-full text-left">
+              <table className="w-full text-left table-auto sm:table-fixed"> {/* Added table-auto and sm:table-fixed */}
                 <thead>
                   <tr className="border-b border-gray-200">
                     {section.tableHeaders.map((header, i) => (
@@ -403,6 +523,7 @@ const GradingReport = ({
                         className="py-2 font-medium text-gray-900 px-2 sm:px-4"
                       >
                         {header}
+                        {i > 0 && <span className="text-red-500 ml-1">*</span>}
                       </th>
                     ))}
                   </tr>
@@ -413,10 +534,14 @@ const GradingReport = ({
                       key={rowIndex}
                       className="border-b border-gray-200 last:border-b-0"
                     >
-                      <td className="py-2 px-2 sm:px-4">{row.category}</td>
+                      <td className="py-2 px-2 sm:px-4 whitespace-nowrap"> {/* Added whitespace-nowrap */}
+                        {row.category}
+                      </td>
                       <td className="py-2 px-2 sm:px-4">
                         {isEditing[section.title] ? (
-                          <div className="space-y-1">
+                          <div className="space-y-1 relative">
+                            {" "}
+                            {/* Added relative positioning */}
                             <input
                               type="number"
                               min="0"
@@ -425,29 +550,37 @@ const GradingReport = ({
                               value={row.score}
                               onChange={(e) =>
                                 handleChange(
-                                  "conditionBreakdown",
+                                  "conditionBreakdown", // Use internal section key
                                   `${row.key}.score`,
-                                   e.target.value,
+                                  e.target.value,
                                   "number"
                                 )
                               }
-                              className={`border rounded-lg p-2 w-full sm:w-20 ${validationErrors[
-                                `conditionBreakdown.${row.key}.score`
-                              ]
-                                ? "border-red-500 bg-red-50"
-                                : "border-gray-300 bg-white"
+                              onBlur={(e) => {
+                                // Added onBlur for validation on defocus
+                                const error = validateField(
+                                  `${row.key}.score`,
+                                  parseFloat(e.target.value),
+                                  "number",
+                                  "conditionBreakdown" // Use internal section key
+                                );
+                                setValidationErrors((prev) => ({
+                                  ...prev,
+                                  [`conditionBreakdown.${row.key}.score`]: error,
+                                }));
+                              }}
+                              className={`border rounded-lg p-2 w-full sm:w-20 ${validationErrors[`conditionBreakdown.${row.key}.score`]
+                                  ? "border-red-500 bg-red-50"
+                                  : "border-gray-300 bg-white"
                                 }`}
+                              required
                             />
-                            {validationErrors[
-                              `conditionBreakdown.${row.key}.score`
-                            ] && (
-                                <div className="flex items-center text-red-500 text-xs">
-                                  <AlertCircle size={12} className="mr-1" />
-                                  {validationErrors[
-                                    `conditionBreakdown.${row.key}.score`
-                                  ]}
-                                </div>
-                              )}
+                            {/* <ErrorMessage
+                              className="!-top-0 !-right-0 md:!-right-[70%] lg:!right-full lg:mr-2 !transform-none lg:!-translate-y-1/2" // Adjusted positioning for responsiveness
+                              message={
+                                validationErrors[`conditionBreakdown.${row.key}.score`]
+                              }
+                            /> */}
                           </div>
                         ) : (
                           <span className="font-medium">{row.score}</span>
@@ -455,39 +588,50 @@ const GradingReport = ({
                       </td>
                       <td className="py-2 px-2 sm:px-4">
                         {isEditing[section.title] ? (
-                          <div className="space-y-1">
+                          <div className="space-y-1 relative">
+                            {" "}
+                            {/* Added relative positioning */}
                             <textarea
                               value={row.comments}
                               onChange={(e) =>
                                 handleChange(
-                                  "conditionBreakdown",
+                                  "conditionBreakdown", // Use internal section key
                                   `${row.key}.comments`,
                                   e.target.value,
                                   "textarea"
                                 )
                               }
-                              className={`border rounded-lg p-2 w-full min-h-[80px] resize-y ${validationErrors[
-                                `conditionBreakdown.${row.key}.comments`
-                              ]
-                                ? "border-red-500 bg-red-50"
-                                : "border-gray-300 bg-white"
+                              onBlur={(e) => {
+                                // Added onBlur for validation on defocus
+                                const error = validateField(
+                                  `${row.key}.comments`,
+                                  e.target.value,
+                                  "textarea",
+                                  "conditionBreakdown" // Use internal section key
+                                );
+                                setValidationErrors((prev) => ({
+                                  ...prev,
+                                  [`conditionBreakdown.${row.key}.comments`]: error,
+                                }));
+                              }}
+                              className={`border rounded-lg p-2 w-full min-h-[80px] resize-y ${validationErrors[`conditionBreakdown.${row.key}.comments`]
+                                  ? "border-red-500 bg-red-50"
+                                  : "border-gray-300 bg-white"
                                 }`}
                               rows={3}
                               maxLength={MAX_TEXTAREA_LENGTH}
+                              required
                             />
                             <div className="flex justify-between items-center text-xs text-gray-500">
-                              <span>{row.comments.length}/{MAX_TEXTAREA_LENGTH} characters</span>
+                              <span>
+                                {row.comments.length}/{MAX_TEXTAREA_LENGTH} characters
+                              </span>
                             </div>
-                            {validationErrors[
-                              `conditionBreakdown.${row.key}.comments`
-                            ] && (
-                                <div className="flex items-center text-red-500 text-xs">
-                                  <AlertCircle size={12} className="mr-1" />
-                                  {validationErrors[
-                                    `conditionBreakdown.${row.key}.comments`
-                                  ]}
-                                </div>
-                              )}
+                            <ErrorMessage
+                              message={
+                                validationErrors[`conditionBreakdown.${row.key}.comments`]
+                              }
+                            />
                           </div>
                         ) : (
                           <span className="text-gray-600 whitespace-pre-wrap">
@@ -508,15 +652,16 @@ const GradingReport = ({
               }}
               className="space-y-4"
             >
-              {section.fields?.map(({ label, key, type }, fieldIndex) => (
+              {section.fields?.map(({ label, key, type, required }, fieldIndex) => (
                 <div key={fieldIndex}>
                   <div
                     className={`${label ? "grid sm:grid-cols-2 grid-cols-1" : ""
-                      } py-1 gap-2`}
+                      } py-1 gap-2 relative`}
                   >
                     {label && (
                       <span className="font-medium text-gray-900 flex items-center">
                         {label}
+                        {required && <span className="text-red-500 ml-1">*</span>}
                       </span>
                     )}
                     {type === "star-rating" ? (
@@ -531,6 +676,10 @@ const GradingReport = ({
                             {formData[key as keyof GradingData] as ReactNode}
                           </span>
                         )}
+                        <ErrorMessage
+                          message={validationErrors[`${section.title}.${key}`]}
+                          className="!top-full !-translate-y-0 !right-auto !left-0 mt-1" // Adjust position for star rating
+                        />
                       </div>
                     ) : type === "number" ? (
                       isEditing[section.title] ? (
@@ -549,17 +698,27 @@ const GradingReport = ({
                                 type
                               )
                             }
+                            onBlur={(e) => { // Added onBlur for validation on defocus
+                              const error = validateField(
+                                key,
+                                Number(e.target.value),
+                                type,
+                                section.title
+                              );
+                              setValidationErrors((prev) => ({
+                                ...prev,
+                                [`${section.title}.${key}`]: error,
+                              }));
+                            }}
                             className={`border rounded-lg p-4 w-full ${validationErrors[`${section.title}.${key}`]
                               ? "border-red-500 bg-red-50"
                               : "border-gray-300 bg-white"
                               }`}
+                            required={required}
                           />
-                          {validationErrors[`${section.title}.${key}`] && (
-                            <div className="flex items-center text-red-500 text-sm">
-                              <AlertCircle size={14} className="mr-1" />
-                              {validationErrors[`${section.title}.${key}`]}
-                            </div>
-                          )}
+                          <ErrorMessage
+                            message={validationErrors[`${section.title}.${key}`]}
+                          />
                         </div>
                       ) : (
                         <span className="text-gray-600 font-medium">
@@ -575,22 +734,21 @@ const GradingReport = ({
                                 ? new Date(formData[key as keyof GradingData] as string)
                                 : null
                             }
-                            onChange={(date: Date | null) =>
+                            onChange={(date: Date | null) => {
                               handleChange(section.title, key, normalizeDate(date as Date), type)
-                            }
+                              // No onBlur needed for date picker as onChange handles the full value change
+                            }}
                             dateFormat="dd MMMM yyyy"
                             className={`border rounded-lg p-4 w-full ${validationErrors[`${section.title}.${key}`]
                               ? "border-red-500 bg-red-50"
                               : "border-gray-300 bg-white"
                               }`}
                             placeholderText="Select grading date"
+                            required={required}
                           />
-                          {validationErrors[`${section.title}.${key}`] && (
-                            <div className="flex items-center text-red-500 text-sm">
-                              <AlertCircle size={14} className="mr-1" />
-                              {validationErrors[`${section.title}.${key}`]}
-                            </div>
-                          )}
+                          <ErrorMessage
+                            message={validationErrors[`${section.title}.${key}`]}
+                          />
                         </div>
                       ) : (
                         <span className="text-gray-600">
@@ -612,12 +770,25 @@ const GradingReport = ({
                                 type
                               )
                             }
+                            onBlur={(e) => { // Added onBlur for validation on defocus
+                              const error = validateField(
+                                key,
+                                e.target.value,
+                                type,
+                                section.title
+                              );
+                              setValidationErrors((prev) => ({
+                                ...prev,
+                                [`${section.title}.${key}`]: error,
+                              }));
+                            }}
                             className={`border rounded-lg p-4 w-full min-h-[100px] resize-y ${validationErrors[`${section.title}.${key}`]
                               ? "border-red-500 bg-red-50"
                               : "border-gray-300 bg-white"
                               }`}
                             rows={4}
                             maxLength={MAX_TEXTAREA_LENGTH}
+                            required={required}
                           />
                           <div className="flex justify-between items-center text-xs text-gray-500">
                             <span>
@@ -626,12 +797,9 @@ const GradingReport = ({
                               ).length}/{MAX_TEXTAREA_LENGTH} characters
                             </span>
                           </div>
-                          {validationErrors[`${section.title}.${key}`] && (
-                            <div className="flex items-center text-red-500 text-sm">
-                              <AlertCircle size={14} className="mr-1" />
-                              {validationErrors[`${section.title}.${key}`]}
-                            </div>
-                          )}
+                          <ErrorMessage
+                            message={validationErrors[`${section.title}.${key}`]}
+                          />
                         </div>
                       ) : (
                         <div className="text-gray-600 whitespace-pre-wrap">
@@ -646,11 +814,24 @@ const GradingReport = ({
                           onChange={(e) =>
                             handleChange(section.title, key, e.target.value)
                           }
+                          onBlur={(e) => { // Added onBlur for validation on defocus
+                            const error = validateField(
+                              key,
+                              e.target.value,
+                              "text",
+                              section.title
+                            );
+                            setValidationErrors((prev) => ({
+                              ...prev,
+                              [`${section.title}.${key}`]: error,
+                            }));
+                          }}
                           className={`border rounded-lg p-4 w-full ${validationErrors[`${section.title}.${key}`]
                             ? "border-red-500 bg-red-50"
                             : "border-gray-300 bg-white"
                             }`}
                           maxLength={MAX_INPUT_LENGTH}
+                          required={required}
                         />
                         <div className="flex justify-between items-center text-xs text-gray-500">
                           <span>
@@ -659,12 +840,9 @@ const GradingReport = ({
                             ).length}/{MAX_INPUT_LENGTH} characters
                           </span>
                         </div>
-                        {validationErrors[`${section.title}.${key}`] && (
-                          <div className="flex items-center text-red-500 text-sm">
-                            <AlertCircle size={14} className="mr-1" />
-                            {validationErrors[`${section.title}.${key}`]}
-                          </div>
-                        )}
+                        <ErrorMessage
+                          message={validationErrors[`${section.title}.${key}`]}
+                        />
                       </div>
                     ) : (
                       <span className="text-gray-600">

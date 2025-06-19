@@ -50,23 +50,23 @@ export default function ProgressTracker({ trackingNumber, overallProgress, estim
 
     // If the status is still pending, the full turnaround time applies from now.
     if (statusMap[normalizedStatus] === statusMap.PAYMENT_PENDING || statusMap[normalizedStatus] === statusMap.SUBMISSION_PENDING || statusMap[normalizedStatus] === statusMap.CARD_PENDING) {
-        daysRemaining = totalTurnaroundDays;
+      daysRemaining = totalTurnaroundDays;
     } else {
-        // For other statuses (Received, Grading), calculate remaining based on progress
-        const progressFraction = overallProgress / 100;
-        daysRemaining = totalTurnaroundDays * (1 - progressFraction);
+      // For other statuses (Received, Grading), calculate remaining based on progress
+      const progressFraction = overallProgress / 100;
+      daysRemaining = totalTurnaroundDays * (1 - progressFraction);
     }
-    
+
     // Round up to ensure at least 1 day if any time is left
     const roundedDaysRemaining = Math.max(0, Math.ceil(daysRemaining));
 
     if (roundedDaysRemaining === 0) {
-        // If 0 days remaining, but not 'Completed' status, means it's due very soon.
-        return 'Less than 1 day remaining';
+      // If 0 days remaining, but not 'Completed' status, means it's due very soon.
+      return 'Less than 1 day remaining';
     } else if (roundedDaysRemaining === 1) {
-        return '1 day remaining';
+      return '1 day remaining';
     } else {
-        return `${roundedDaysRemaining} days remaining`;
+      return `${roundedDaysRemaining} days remaining`;
     }
   };
 
@@ -93,8 +93,10 @@ export default function ProgressTracker({ trackingNumber, overallProgress, estim
         </div>
         <div className="mt-4 sm:mt-8 pl-2 sm:pl-4 space-y-4 sm:space-y-6">
           <div className="flex items-center gap-4 sm:gap-8">
-            <div className={`flex items-center justify-center rounded-full w-6 h-6 sm:w-8 sm:h-8 ${statusMap[normalizedStatus] >= statusMap.SUBMISSION_RECEIVED || statusMap[normalizedStatus] >= statusMap.CARD_RECEIVED ? 'bg-light-red text-white' : 'bg-soft-grey text-black'}  text-sm`}>
-              <span>1</span>
+            <div className="w-10 md:w-auto">
+              <div className={`flex items-center justify-center rounded-full w-6 h-6 sm:w-8 sm:h-8 ${statusMap[normalizedStatus] >= statusMap.SUBMISSION_RECEIVED || statusMap[normalizedStatus] >= statusMap.CARD_RECEIVED ? 'bg-light-red text-white' : 'bg-soft-grey text-black'}  text-sm`}>
+                <span>1</span>
+              </div>
             </div>
             <div>
               <h3 className="text-charcol text-base sm:text-lg">Submission Received</h3>
@@ -102,8 +104,10 @@ export default function ProgressTracker({ trackingNumber, overallProgress, estim
             </div>
           </div>
           <div className="flex items-center gap-4 sm:gap-8">
-            <div className={`flex items-center justify-center rounded-full w-6 h-6 sm:w-8 sm:h-8 ${statusMap[normalizedStatus] >= statusMap.GRADING_IN_PROGRESS || statusMap[normalizedStatus] >= statusMap.GRADING_IN_PROGRESS_CARD ? 'bg-light-red text-white' : 'bg-soft-grey text-black'}`}>
-              <span>2</span>
+            <div className="w-10 md:w-auto">
+              <div className={`flex items-center justify-center rounded-full w-6 h-6 sm:w-8 sm:h-8 ${statusMap[normalizedStatus] >= statusMap.GRADING_IN_PROGRESS || statusMap[normalizedStatus] >= statusMap.GRADING_IN_PROGRESS_CARD ? 'bg-light-red text-white' : 'bg-soft-grey text-black'}`}>
+                <span>2</span>
+              </div>
             </div>
             <div>
               <h3 className="text-charcol text-base sm:text-lg">Grading in Progress</h3>
@@ -111,8 +115,10 @@ export default function ProgressTracker({ trackingNumber, overallProgress, estim
             </div>
           </div>
           <div className="flex items-center gap-4 sm:gap-8">
-            <div className={`flex items-center justify-center rounded-full w-6 h-6 sm:w-8 sm:h-8 ${statusMap[normalizedStatus] >= statusMap.GRADING_COMPLETE || statusMap[normalizedStatus] >= statusMap.GRADING_COMPLETE_CARD ? 'bg-light-red text-white' : 'bg-soft-grey text-black'}`}>
-              <span>3</span>
+            <div className="w-10 md:w-auto">
+              <div className={`flex items-center justify-center rounded-full w-6 h-6 sm:w-8 sm:h-8 ${statusMap[normalizedStatus] >= statusMap.GRADING_COMPLETE || statusMap[normalizedStatus] >= statusMap.GRADING_COMPLETE_CARD ? 'bg-light-red text-white' : 'bg-soft-grey text-black'}`}>
+                <span>3</span>
+              </div>
             </div>
             <div>
               <h3 className="text-charcol text-base sm:text-lg">Grading Complete</h3>
@@ -123,7 +129,7 @@ export default function ProgressTracker({ trackingNumber, overallProgress, estim
           {overallProgress < 100 && statusMap[normalizedStatus] < statusMap.GRADING_COMPLETE &&
             <div className="bg-transparent-red p-4 sm:p-8 flex items-center text-light-red">
               <FaInfoCircle className="text-xl sm:text-2xl bg-transparent" />
-              <p className="text-lg sm:text-xl ml-2 sm:ml-6 font-regular">Estimated completion: <span className="font-light">{displayEstimatedCompletion}</span></p>
+              <p className="text-lg sm:text-xl ml-2 sm:ml-6 font-regular">Estimated completion: <span className="font-light block md:inline">{displayEstimatedCompletion}</span></p>
             </div>
           }
         </div>

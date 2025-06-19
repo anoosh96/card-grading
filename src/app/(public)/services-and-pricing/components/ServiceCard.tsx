@@ -11,7 +11,7 @@ export default function ServiceCard({ name, price, tag, turnaroundTime, maxCardV
   // const arrowPointOverlap = '20px'; // How much the arrow point extends into the right card
 
   return (
-    <div className={`w-[440px] h-[220px] ${colorClass} rounded-lg flex shadow-2xl`}>
+    <div className={`w-[350px] sm:w-[440px] h-[220px] ${colorClass} rounded-lg flex shadow-2xl`}>
       <div className="w-[140px] flex items-center relative">
         <div className="pl-10 pb-2 relative z-[10]">
           <span className="heading-primary text-charcol font-bold">£{price}</span><span className="text-sm">&nbsp;/&nbsp;&nbsp;card</span>
@@ -25,7 +25,7 @@ export default function ServiceCard({ name, price, tag, turnaroundTime, maxCardV
         <div className={`absolute left-28 top-0 bottom-0 my-auto w-0 h-0 border-y-[60px] border-y-transparent border-l-[65px] ${borderClass }  z-[2]`}>
         </div>
       </div>
-      <div className="bg-light-grey/80 w-[357px] h-full rounded-lg -mt-[20px] -mr-[40px] pt-8 pb-4 pl-10">
+      <div className="bg-light-grey/80 w-[230px] sm:w-[357px] h-full rounded-lg -mt-[20px] -mr-[40px] pt-8 pb-4 pl-10 shadow-xl">
         <div className="flex flex-col h-full justify-between">
           <div>
             <div className="heading-primary mb-2">
@@ -36,17 +36,17 @@ export default function ServiceCard({ name, price, tag, turnaroundTime, maxCardV
             </div>
           </div>
 
-          <div className="flex gap-8">
+          <div className="flex gap-6 sm:gap-8">
              <div className="mb-2">
-                <div className="text-grey text-sm">
+                <div className="text-grey text-xs sm:text-sm">
                    Turnaround Time
                 </div>
-                <div className="text-charcol text-sm">
+                <div className="text-charcol text-xs sm:text-sm">
                   {turnaroundTime}
                 </div>
              </div>
              <div>
-                <div className="text-grey text-sm">
+                <div className="text-grey text-xs sm:text-sm">
                    Max Card Value
                 </div>
                 <div className="text-charcol text-sm">

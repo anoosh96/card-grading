@@ -54,7 +54,7 @@ function OrderTracking() {
   };
 
   return (
-    <section className="p-7 bg-white">
+    <section className="p-4 sm:p-7 bg-white">
       <div className="flex items-center justify-between mb-4">
         {/* Always display 'Card Tracking' as we are focused on a single card */}
         <h1 className="heading-primary font-bold">Card Tracking</h1>
@@ -71,7 +71,7 @@ function OrderTracking() {
 
       <ProgressTracker {...trackingParams} />
 
-      <div className="flex gap-6 mt-8">
+      <div className="flex flex-col md:flex-row gap-6 mt-8">
         <Button
           size={"lg"}
           className="h-auto font-semibold bg-soft-grey rounded-full text-pure-grey py-3 px-14 text-base hover:bg-soft-grey"

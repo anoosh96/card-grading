@@ -165,11 +165,11 @@ const OrderDetails = ({ currentCard }: OrderDetailsProp) => {
         classNames="mt-4"
       />
 
-      <div className="flex items-center gap-6 ml-2 sm:ml-6 mt-4">
+      <div className="flex flex-col sm:flex-row items-center gap-6 ml-2 sm:ml-6 mt-4">
         <Button
           onClick={() => router.back()}
           variant={"ghost"}
-          className="rounded-full w-28 text-light-grey-100 heading-secondary font-medium bg-[#E0E0E0] hover:bg-gray-300 hover:text-black"
+          className="rounded-full w-full sm:w-28 text-light-grey-100 heading-secondary font-medium bg-[#E0E0E0] hover:bg-gray-300 hover:text-black"
           disabled={updateSubmission.isPending}
         >
           Back
@@ -178,7 +178,7 @@ const OrderDetails = ({ currentCard }: OrderDetailsProp) => {
         <Button
           onClick={() => router.push(`/dashboard/submission-status/${currentCard.submissionId}?cardId=${currentCard.id}&edit=true`)}
           variant={"ghost"}
-          className="rounded-full text-light-grey-100 heading-secondary font-medium bg-[#E0E0E0] hover:bg-gray-300 hover:text-black"
+          className="rounded-full w-full sm:w-auto text-light-grey-100 heading-secondary font-medium bg-[#E0E0E0] hover:bg-gray-300 hover:text-black"
           disabled={updateSubmission.isPending}
         >
           Edit Card
@@ -187,7 +187,7 @@ const OrderDetails = ({ currentCard }: OrderDetailsProp) => {
         <ButtonGradient
           onClick={() => updateStatus(cardStatus.GRADING_IN_PROGRESS,
             `/dashboard/grading-review/generate-certificate?submissionId=${currentCard.submissionId}&cardId=${cardId}`, false)}
-          className="max-w-[8rem] w-full"
+          className="w-full sm:max-w-[8rem]"
           disabled={currentCardStatus == cardStatus.CARD_REJECTED || updateSubmission.isPending}
         >
           {currentCardStatus == cardStatus.CARD_RECEIVED ? 'Start Grading' : 'Edit Grade'}
@@ -198,7 +198,7 @@ const OrderDetails = ({ currentCard }: OrderDetailsProp) => {
           <Button
             onClick={() => updateStatus(cardStatus.CARD_REJECTED, `/dashboard/submission-status/${currentCard.submissionId}?cardId=${cardId}`)}
             variant={"ghost"}
-            className="rounded-full text-light-grey-100 heading-secondary font-medium bg-[#E0E0E0] hover:bg-gray-300 hover:text-black"
+            className="rounded-full w-full sm:w-auto text-light-grey-100 heading-secondary font-medium bg-[#E0E0E0] hover:bg-gray-300 hover:text-black"
             disabled={updateSubmission.isPending || currentCardStatus == cardStatus.CARD_REJECTED}
           >
             {"Reject Card"}

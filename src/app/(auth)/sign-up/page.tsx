@@ -4,8 +4,8 @@ import { ButtonGradient } from "@/components/common/ButtonGradient";
 import CustomInput from "@/components/common/CustomInput";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useSignUp } from "@/hooks/useSignup"; // assuming you have this hook
-import { useFormState } from "@/hooks/useFormState"; // use your custom form hook
+import { useSignUp } from "@/hooks/useSignup";
+import { useFormState } from "@/hooks/useFormState";
 import { handleRequestError } from "@/lib/toast";
 import { useUserStore } from "@/stores/userStore";
 import { AxiosError } from "axios";
@@ -15,7 +15,6 @@ import { FlexibleRecord, SignupField } from "@/types";
 export default function SignupPage() {
   const router = useRouter();
 
-  // Form state using custom useFormState hook
   const { values, errors, handleChange, setError, clearError, resetFormErrors, handleApiValidationError } = useFormState({
     name: '',
     email: '',
@@ -23,15 +22,13 @@ export default function SignupPage() {
     confirmPassword: ''
   });
 
-  // Loading and error handling
   const { mutateAsync: signup, isPending: signupLoading } = useSignUp();
-  const { setUser, setToken } = useUserStore();  // Zustand hook to set user
+  const { setUser, setToken } = useUserStore();
 
   const validateForm = () => {
     let isValid = true;
     const newErrors: FlexibleRecord = {};
 
-    // Check for required fields
     if (!values.name.trim()) {
       newErrors.name = 'Name is required';
       isValid = false;
@@ -52,13 +49,11 @@ export default function SignupPage() {
       isValid = false;
     }
 
-    // Validate password match if both are provided
     if (values.password && values.confirmPassword && values.password !== values.confirmPassword) {
       newErrors.confirmPassword = 'Passwords do not match';
       isValid = false;
     }
 
-    // Set all errors
     Object.entries(newErrors).forEach(([field, message]) => {
       setError(field as SignupField, message as string);
     });
@@ -69,7 +64,6 @@ export default function SignupPage() {
   const handleSignup = async () => {
     resetFormErrors();
     
-    // Check if form is valid
     if (!validateForm()) {
       return;
     }
@@ -78,17 +72,15 @@ export default function SignupPage() {
 
     try {
       const { user, token } = await signup({ name, email, password });
-      setUser(user);  // Store user data in Zustand after sign-up
+      setUser(user);
       setToken(token);
-      router.push('/verification-code'); // Redirect to login page on successful signup
+      router.push('/verification-code');
     } catch (err) {
       resetFormErrors();
-      // Check if the error response has validation errors
       if (err instanceof AxiosError && err?.response?.data?.errors) {
-        handleApiValidationError(err.response.data); // Map API errors to form fields
+        handleApiValidationError(err.response.data);
       }
       else {
-        // If there is a general message (e.g., "User already exists"), set it globally
         handleRequestError(err);
       }
     }
@@ -97,7 +89,8 @@ export default function SignupPage() {
   return (
     <div className="mt-4">
       <h1 className="text-xl md:text-3xl font-semibold text-pure-grey mb-10">Create Account</h1>
-      <div className="flex w-full flex-col mb-6">
+      
+      <div className="flex w-full flex-col mb-6 relative">
         <label htmlFor="name" className="block font-medium text-gray-700 mb-2">
           Name <span className="text-red-500">*</span>
         </label>
@@ -105,7 +98,7 @@ export default function SignupPage() {
           id="name"
           name="name"
           placeholder="Enter Name"
-          className="w-full p-6"
+          className={`w-full p-6 ${errors.name ? 'error-class' : ''}`}
           value={values.name}
           onChange={(e) => {
             handleChange(e);
@@ -113,10 +106,17 @@ export default function SignupPage() {
           }}
           required
         />
-        {errors.name && <p className="text-red-500 text-sm">{errors.name}</p>}
+        {errors.name && (
+          <div className="absolute top-4 right-0 transform -translate-y-full z-10">
+            <p className="text-xs bg-red-600 text-white py-1.5 px-3 rounded-lg shadow-md whitespace-nowrap">
+              {errors.name}
+            </p>
+            <div className="w-0 h-0 border-x-8 border-t-8 border-x-transparent border-t-red-600 absolute bottom-[-8px] left-1/2 -translate-x-1/2"></div>
+          </div>
+        )}
       </div>
 
-      <div className="flex w-full flex-col mb-6">
+      <div className="flex w-full flex-col mb-6 relative">
         <label htmlFor="email" className="block font-medium text-gray-700 mb-2">
           Email <span className="text-red-500">*</span>
         </label>
@@ -124,7 +124,7 @@ export default function SignupPage() {
           id="email"
           name="email"
           placeholder="Enter Email"
-          className="w-full p-6"
+          className={`w-full p-6 ${errors.email ? 'error-class' : ''}`}
           value={values.email}
           onChange={(e) => {
             handleChange(e);
@@ -132,10 +132,17 @@ export default function SignupPage() {
           }}
           required
         />
-        {errors.email && <p className="text-red-500 text-sm">{errors.email}</p>}
+        {errors.email && (
+          <div className="absolute top-4 right-0 transform -translate-y-full z-10">
+            <p className="text-xs bg-red-600 text-white py-1.5 px-3 rounded-lg shadow-md whitespace-nowrap">
+              {errors.email}
+            </p>
+            <div className="w-0 h-0 border-x-8 border-t-8 border-x-transparent border-t-red-600 absolute bottom-[-8px] left-1/2 -translate-x-1/2"></div>
+          </div>
+        )}
       </div>
 
-      <div className="flex w-full flex-col mb-6">
+      <div className="flex w-full flex-col mb-6 relative">
         <label htmlFor="password" className="block font-medium text-gray-700 mb-2">
           Password <span className="text-red-500">*</span>
         </label>
@@ -144,7 +151,7 @@ export default function SignupPage() {
           name="password"
           placeholder="Enter Password"
           type="password"
-          className="w-full p-6"
+          className={`w-full p-6 ${errors.password ? 'error-class' : ''}`}
           value={values.password}
           onChange={(e) => {
             handleChange(e);
@@ -152,10 +159,17 @@ export default function SignupPage() {
           }}
           required
         />
-        {errors.password && <p className="text-red-500 text-sm">{errors.password}</p>}
+        {errors.password && (
+          <div className="absolute top-4 right-0 transform -translate-y-full z-10">
+            <p className="text-xs bg-red-600 text-white py-1.5 px-3 rounded-lg shadow-md whitespace-nowrap">
+              {errors.password}
+            </p>
+            <div className="w-0 h-0 border-x-8 border-t-8 border-x-transparent border-t-red-600 absolute bottom-[-8px] left-1/2 -translate-x-1/2"></div>
+          </div>
+        )}
       </div>
 
-      <div className="flex w-full flex-col">
+      <div className="flex w-full flex-col relative">
         <label htmlFor="confirmPassword" className="block font-medium text-gray-700 mb-2">
           Confirm Password <span className="text-red-500">*</span>
         </label>
@@ -164,7 +178,7 @@ export default function SignupPage() {
           name="confirmPassword"
           placeholder="Confirm Password"
           type="password"
-          className="w-full p-6"
+          className={`w-full p-6 ${errors.confirmPassword ? 'error-class' : ''}`}
           value={values.confirmPassword}
           onChange={(e) => {
             handleChange(e);
@@ -172,7 +186,14 @@ export default function SignupPage() {
           }}
           required
         />
-        {errors.confirmPassword && <p className="text-red-500 text-sm">{errors.confirmPassword}</p>}
+        {errors.confirmPassword && (
+          <div className="absolute top-4 right-0 transform -translate-y-full z-10">
+            <p className="text-xs bg-red-600 text-white py-1.5 px-3 rounded-lg shadow-md whitespace-nowrap">
+              {errors.confirmPassword}
+            </p>
+            <div className="w-0 h-0 border-x-8 border-t-8 border-x-transparent border-t-red-600 absolute bottom-[-8px] left-1/2 -translate-x-1/2"></div>
+          </div>
+        )}
       </div>
 
       <ButtonGradient className="w-full mt-6 py-6" onClick={handleSignup} disabled={signupLoading}>

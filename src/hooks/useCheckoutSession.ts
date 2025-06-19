@@ -13,6 +13,7 @@ interface CreateCheckoutSessionPayload {
   totalCost: number;
   numberOfCards: number;
   bulkCardValue?: number;
+  bulkDescription?: string;
   userId: number;
   submissionId?: number;
   metadata?: Record<string, any>;

@@ -108,7 +108,7 @@ export default function OurServices() {
   // const [subscriptionLoading, setSubscriptionLoading] = useState(false);
 
   return (
-    <section className="p-10 mt-4">
+    <section className="p-4 sm:p-10 mt-4">
       <h1 className="text-charcol font-bold heading-primary" >Our Grading Services & Pricing</h1>
       <p className="text-charcol mt-2">Select from our affordable grading services with quick turnaround times and premium accuracy.</p>
 
@@ -118,7 +118,7 @@ export default function OurServices() {
           <h2 className="heading-primary text-charcol text-center font-bold mb-10">Service Levels</h2>
           <div className="grid grid-cols-1 xl:grid-cols-2 gap-10 w-full">
             {SERVICES_DATA?.map((service: Service, index: number) => {
-              return (<div key={index} className={`flex p-10 justify-center ${index == 4 ? 'xl:col-span-2 xl:justify-center' : ''}`}>
+              return (<div key={index} className={`flex p-2 sm:p-10 justify-center ${index == 4 ? 'xl:col-span-2 xl:justify-center' : ''}`}>
                 <ServiceCard {...service} /> </div>)
             })}
           </div>

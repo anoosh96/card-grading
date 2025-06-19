@@ -45,6 +45,7 @@ export default function Payment({ handleNext, handlePrevious }: FormStepProps) {
       totalCost: totalSubmission,
       numberOfCards: totalCards,
       userId: user?.id as number,
+      bulkDescription: submission?.bulkDescription,
       submissionId: submission.id ? Number(submission.id) : undefined,
     });
 
