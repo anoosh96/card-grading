@@ -45,12 +45,8 @@ export function DashboardSidebar() {
   const confirmLogout = async () => {
     try {
       await logoutMutateAsync();
+      router.push('/')
       setIsModalOpen(false);
-
-      setTimeout(() => {
-        router.push('/');
-      }, 200)
-
     } catch (error) {
       console.error("Logout failed", error);
     }
