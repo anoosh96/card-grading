@@ -126,3 +126,10 @@
 // };
 
 // export default GradingReview;
+
+
+const GradingReviewPage = () => {
+  return(
+    <h1>Grading Review Page</h1>
+  )
+}
