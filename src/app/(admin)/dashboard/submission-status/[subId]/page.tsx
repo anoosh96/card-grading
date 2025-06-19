@@ -6,8 +6,9 @@ import { useParams, useSearchParams } from "next/navigation";
 import CardDetails from "../components/CardDetails";
 import OrderDetails from "../components/OrderDetails"; // IMPORTANT: OrderDetails will likely need its own data fetching
 import { OrderDetailsSkeleton } from "@/components/skeletons/DashboardSkeleton";
+import { Suspense } from "react";
 
-export default function SubmissionStatusPage() {
+function SubmissionStatusComponent() {
   const { subId } = useParams(); // This is the submission ID
   const searchParams = useSearchParams();
 
@@ -77,5 +78,13 @@ export default function SubmissionStatusPage() {
         <CardDetails currentCard={currentCard} />
       )}
     </>
+  );
+}
+
+export default function SubmissionStatusPage() {
+  return (
+    <Suspense fallback={<OrderDetailsSkeleton />}>
+      <SubmissionStatusComponent />
+    </Suspense>
   );
 }

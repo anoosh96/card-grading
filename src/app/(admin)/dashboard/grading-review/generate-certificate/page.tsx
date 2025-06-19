@@ -1,7 +1,7 @@
 "use client";
 
 import CardImages from "@/app/(user)/user-dashboard/submission-status/card-details/CardImages";
-import React, { useEffect, useMemo, useState } from "react";
+import React, { Suspense, useEffect, useMemo, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { ButtonGradient } from "@/components/common/ButtonGradient";
 import { formatToUSTimezone } from "@/lib/utils";
@@ -356,4 +356,10 @@ const GenerateCertificate = () => {
   );
 };
 
-export default GenerateCertificate;
+export default function GenerateCertificatePage() {
+  return (
+    <Suspense fallback={<ReportSkeleton />}>
+      <GenerateCertificate />
+    </Suspense>
+  );
+}

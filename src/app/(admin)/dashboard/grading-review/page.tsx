@@ -133,3 +133,5 @@ const GradingReviewPage = () => {
     <h1>Grading Review Page</h1>
   )
 }
+
+export default GradingReviewPage
