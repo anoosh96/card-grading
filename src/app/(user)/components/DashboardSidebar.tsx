@@ -20,6 +20,7 @@ export function DashboardSidebar() {
   const { isCollapsed, setIsCollapsed } = useSidebar();
 
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isSheetOpen, setIsSheetOpen] = useState(false); // State for Sheet control
 
   const { mutateAsync: logoutMutateAsync, isPending } = useLogout();
 
@@ -35,13 +36,21 @@ export function DashboardSidebar() {
   const handleLogout = (e: React.MouseEvent<HTMLElement>) => {
     e.preventDefault();
     setIsModalOpen(true);
+    // Close the sheet when logout is clicked on mobile
+    if (isMobile) {
+      setIsSheetOpen(false); // This ensures the sheet closes before the modal
+    }
   };
 
-  const confirmLogout = async () => {
+  const confirmLogout = async () => {   
     try {
       await logoutMutateAsync();
       setIsModalOpen(false);
-      router.push('/');
+
+      setTimeout(() => {
+        router.push('/');
+      }, 200)
+
     } catch (error) {
       console.error("Logout failed", error);
     }
@@ -57,20 +66,19 @@ export function DashboardSidebar() {
       }
     };
 
-    // Set initial value based on window width, but only on the client side
     if (typeof window !== 'undefined') {
       handleResize();
     }
 
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
-  }, []);
+  }, [setIsCollapsed]);
 
   return (
     <>
       {isMobile ? (
-        <Sheet>
-          <SheetTrigger className="absolute top-5 left-5 z-50">
+        <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
+          <SheetTrigger className="absolute top-5 left-5 z-[50]">
             <Menu className="w-6 h-6 text-primary" />
           </SheetTrigger>
           <SheetContent side="left" className="w-72 p-6">
@@ -84,7 +92,7 @@ export function DashboardSidebar() {
                     key={item.href}
                     {...item}
                     isActive={matchNestedPaths(item.href)}
-                    clickHandler={handleLogout}
+                    clickHandler={handleLogout} // This handles logout and closes sheet
                     icon={<item.Icon className="w-5 h-5" />}
                     isCollapsed={false}
                   />
@@ -93,6 +101,8 @@ export function DashboardSidebar() {
                     key={item.href}
                     {...item}
                     isActive={matchNestedPaths(item.href)}
+                    // Add an onClick handler to close the sheet for all other items
+                    clickHandler={() => setIsSheetOpen(false)}
                     icon={<item.Icon className="w-5 h-5" />}
                     isCollapsed={false}
                   />
@@ -105,7 +115,7 @@ export function DashboardSidebar() {
         <aside className={cn(
           "bg-white fixed h-screen flex flex-col transition-all",
           isCollapsed ? "w-20" : "w-72",
-          "duration-300" // Added transition for smooth animation
+          "duration-300"
         )}>
           <div className={cn("p-6", isCollapsed ? "px-4" : "")}>
             <Link href="/" className={cn("text-xl font-bold", isCollapsed ? "hidden" : "block")}>

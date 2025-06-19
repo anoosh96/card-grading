@@ -69,7 +69,7 @@ const CustomModal: React.FC<ModalProps> = ({
     >
       <div
         ref={modalRef}
-        className={`bg-white p-6 rounded-lg shadow-lg relative transition-transform duration-200 ${isOpen ? "scale-100 opacity-100" : "scale-95 opacity-0"
+        className={`bg-white p-6 w-full sm:w-auto rounded-lg shadow-lg relative transition-transform duration-200 ${isOpen ? "scale-100 opacity-100" : "scale-95 opacity-0"
           } ${cn}`}
       >
         {/* Close Button */}
