@@ -13,11 +13,11 @@ export const dashboardSidebarItems: SidebarItemProps[] = [
     label: "Submission Status",
     Icon: DashboardSubmissionStatusIcon,
   },
-  {
-    href: "/dashboard/grading-review/generate-certificate",
-    label: "Grading Review",
-    Icon: DashboardGradedCardIcon,
-  },
+  // {
+  //   href: "/dashboard/grading-review/generate-certificate",
+  //   label: "Grading Review",
+  //   Icon: DashboardGradedCardIcon,
+  // },
   // {
   //   href: "/dashboard/order-history",
   //   label: "Order History",

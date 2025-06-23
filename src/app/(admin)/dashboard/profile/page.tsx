@@ -9,12 +9,13 @@ import { useCallback, useEffect, useState } from "react";
 import { useUserStore } from "@/stores/userStore";
 import { useFormState } from "@/hooks/useFormState";
 import { useUpdateProfile } from "@/hooks/useUpdateProfile";
-import { User, UserProfile } from "@/types"; // Import FlexibleRecord if needed for form.handleApiValidationError
+import { User, UserProfile } from "@/types";
 import { removeEmpty } from "@/lib/utils";
 import { useRouter } from "next/navigation";
 import { AxiosError } from "axios";
 import { handleRequestError } from "@/lib/toast";
-import { SkeletonProfilePage } from "@/components/skeletons/DashboardSkeleton";
+import { ImageCropper } from "@/components/common/ImageCropper"; // Import the new component
+import { SkeletonProfilePage } from "@/components/skeletons/AdminDashboardSkeleton";
 
 export default function ProfilePage() {
   const { user, setUser } = useUserStore(state => state);
@@ -37,6 +38,7 @@ export default function ProfilePage() {
   const form = useFormState<UserProfile>(initialData());
   const [image, setImage] = useState<string | undefined>(user?.profileImageUrl);
   const [imageFile, setImageFile] = useState<File | undefined>(undefined);
+  const [imageToCrop, setImageToCrop] = useState<string | null>(null); // State to hold image URL for cropping
 
   const { mutate: updateProfile, isPending: isLoading } = useUpdateProfile();
 
@@ -44,9 +46,7 @@ export default function ProfilePage() {
     if (acceptedFiles.length > 0) {
       const file = acceptedFiles[0];
       const imageUrl = URL.createObjectURL(file);
-      setImage(imageUrl);
-      setImageFile(file);
-      form.handleChange({ target: {name: 'profileImage', value: imageUrl}} as React.ChangeEvent<HTMLInputElement>)
+      setImageToCrop(imageUrl); // Set image for cropping
     }
   }, []);
 
@@ -54,6 +54,20 @@ export default function ProfilePage() {
     onDrop,
     accept: { "image/*": [] }
   });
+
+  // Callback after image is cropped
+  const handleCropComplete = useCallback((croppedFile: File) => {
+    const croppedImageUrl = URL.createObjectURL(croppedFile);
+    setImage(croppedImageUrl);
+    setImageFile(croppedFile);
+    form.handleChange({ target: { name: 'profileImage', value: croppedImageUrl } } as React.ChangeEvent<HTMLInputElement>);
+    setImageToCrop(null); // Close the cropper
+  }, [form]);
+
+  // Callback to close the cropper without applying changes
+  const handleCloseCropper = useCallback(() => {
+    setImageToCrop(null);
+  }, []);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -63,7 +77,7 @@ export default function ProfilePage() {
 
     // Password match validation
     if (form.values.password && form.values.password !== form.values.confirmPassword) {
-      form.setError("confirmPassword", "Passwords do not match");
+      form.setError("confirmPassword", form.values.confirmPassword !== '' ? "Passwords do not match" : "Please Confirm Your Password");
       isValid = false;
     }
 
@@ -87,9 +101,7 @@ export default function ProfilePage() {
       isValid = false;
     }
 
-
     if (!isValid) {
-      // Optional: Scroll to the first error
       const firstErrorField = Object.keys(form.errors).find(key => form.errors[key as keyof UserProfile]);
       if (firstErrorField) {
         document.getElementById(firstErrorField)?.scrollIntoView({ behavior: 'smooth', block: 'center' });
@@ -97,6 +109,7 @@ export default function ProfilePage() {
       return;
     }
 
+    // Pass imageFile to the updateProfile mutation
     const cleanData = removeEmpty({ ...form.values, profileImage: imageFile })
     updateProfile(cleanData, {
       onError: (error: unknown) => {
@@ -108,8 +121,6 @@ export default function ProfilePage() {
         }
       },
       onSuccess: async (data) => {
-        // Reset only the password and confirm password fields, not the whole form
-        // as other fields might have been updated by the server
         form.setValue("password", "");
         form.setValue("confirmPassword", "");
         setUser(data.data as User)
@@ -143,7 +154,7 @@ export default function ProfilePage() {
           >
             <input {...getInputProps()} />
             <img
-              src={image || "/assets/images/profile-avatar.svg"}
+              src={image || "/assets/images/placeholder.png"}
               alt="Profile"
               className="w-full h-full object-cover cursor-pointer"
             />
@@ -261,40 +272,15 @@ export default function ProfilePage() {
               )}
             </div>
 
-            {/* Payment Method (if needed, remember to add similar error styling) */}
-            {/* <div className="col-span-1 sm:col-span-2 relative">
-              <label htmlFor="paymentMethod" className="block font-semibold mb-1 sm:mb-2">Payment Method</label>
-              <CustomSelect
-                options={['Card', 'Paypal']}
-                optionIcons={['/icons/credit-card.svg', '/icons/logos_paypal.svg']}
-                selectedOption={paymentMethodMap[form.values.paymentMethod as string] as string}
-                borderColor={`border-transparent ${form.errors.paymentMethod ? 'error-class-border' : ''}`}
-                bg="bg-white"
-                setSelectedOption={(value) => {
-                  form.setValue("paymentMethod", value as string);
-                  form.clearError("paymentMethod");
-                }}
-                className="relative"
-              />
-              {form.errors.paymentMethod && (
-                <div className="absolute top-4 right-0 transform -translate-y-full z-10 animate-fade-in-slide-down">
-                  <p className="text-xs bg-red-600 text-white py-1.5 px-3 rounded-lg shadow-md whitespace-nowrap">
-                    {form.errors.paymentMethod}
-                  </p>
-                  <div className="w-0 h-0 border-x-8 border-t-8 border-x-transparent border-t-red-600 absolute bottom-[-8px] left-1/2 -translate-x-1/2"></div>
-                </div>
-              )}
-            </div> */}
-
             <div className="flex flex-col sm:flex-row gap-4 mt-4 sm:mt-6 col-span-1 sm:col-span-2">
               <Button
                 size={"lg"}
                 type="button"
                 onClick={() => {
-                  form.resetForm(); // Reset form values
-                  form.resetFormErrors(); // Clear all errors
-                  setImage(user?.profileImageUrl); // Reset image to original user image
-                  setImageFile(undefined); // Clear selected image file
+                  form.resetForm();
+                  form.resetFormErrors();
+                  setImage(user?.profileImageUrl);
+                  setImageFile(undefined);
                 }}
                 className="h-auto font-semibold bg-soft-grey rounded-full text-pure-grey py-2 sm:py-3 px-8 sm:px-14 text-base hover:bg-soft-grey"
               >
@@ -312,6 +298,14 @@ export default function ProfilePage() {
           </div>
         </form>
       </div>
+
+      {imageToCrop && (
+        <ImageCropper
+          imageSrc={imageToCrop}
+          onCropComplete={handleCropComplete}
+          onClose={handleCloseCropper}
+        />
+      )}
     </section>
   )
 }

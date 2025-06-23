@@ -85,9 +85,12 @@ export default function CardDetails({ currentCard: initialCard }: CardDetailsPro
       cardName: cardBeingEdited.cardName,
       category: cardBeingEdited.category,
       yearOfRelease: cardBeingEdited.yearOfRelease,
-      status: cardBeingEdited.status,
       cardId: cardBeingEdited.id // Use id from cardBeingEdited
     };
+
+    if(cardBeingEdited.status !== initialCard.status){
+      values.status = cardBeingEdited.status
+    }
 
     // Call the mutation with our data
     updateSubmission.mutate({

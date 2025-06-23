@@ -88,7 +88,7 @@ export function DashboardSidebar() {
                     {...item}
                     isActive={matchNestedPaths(item.href)}
                     clickHandler={handleLogout} // This handles logout and also closes the sheet via isSheetOpen(false) in handleLogout
-                    icon={<item.Icon className="w-5 h-5" />}
+                    icon={<item.Icon className="h-5" />}
                     isCollapsed={false}
                   />
                 ) : (
@@ -97,7 +97,7 @@ export function DashboardSidebar() {
                     {...item}
                     isActive={matchNestedPaths(item.href)}
                     clickHandler={() => setIsSheetOpen(false)} // NEW: Close sheet for non-logout items
-                    icon={<item.Icon className="w-5 h-5" />}
+                    icon={<item.Icon className="h-5" />}
                     isCollapsed={false}
                   />
                 )
@@ -117,7 +117,7 @@ export function DashboardSidebar() {
             </Link>
           </div>
 
-          <nav className="flex-1 mt-32 space-y-5 overflow-y-scroll">
+          <nav className="flex-1 mt-32 space-y-5 overflow-y-scroll hide-scrollbar" style={{ msOverflowStyle: 'none', scrollbarWidth: 'none' }}>
             {dashboardSidebarItems.map((item) =>
               item.label === 'Logout' ? (
                 <SidebarItem
@@ -126,7 +126,7 @@ export function DashboardSidebar() {
                   isActive={matchNestedPaths(item.href)}
                   clickHandler={handleLogout}
                   isCollapsed={isCollapsed}
-                  icon={<item.Icon className="w-5 h-5" />}
+                  icon={<item.Icon className="h-5" />}
                 />
               ) : (
                 <SidebarItem
@@ -134,7 +134,7 @@ export function DashboardSidebar() {
                   {...item}
                   isActive={matchNestedPaths(item.href)}
                   isCollapsed={isCollapsed}
-                  icon={<item.Icon className="w-5 h-5" />}
+                  icon={<item.Icon className="h-5" />}
                 />
               )
             )}

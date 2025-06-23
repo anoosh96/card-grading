@@ -23,7 +23,6 @@ export default function ProgressTracker({ trackingNumber, overallProgress, estim
 
   const normalizedStatus = Object.keys(statusMap).find(key => key.toLowerCase().includes(submissionStatus.toLowerCase())) || submissionStatus;
 
-  console.log(statusMap[normalizedStatus]);
 
   const calculateDynamicEstimatedCompletion = (): string => {
     // If grading is already complete (100% or final status), show "Completed"

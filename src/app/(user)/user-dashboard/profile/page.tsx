@@ -15,6 +15,8 @@ import { useRouter } from "next/navigation";
 import { AxiosError } from "axios";
 import { handleRequestError } from "@/lib/toast";
 import { SkeletonProfilePage } from "@/components/skeletons/DashboardSkeleton";
+import { ImageCropper } from "@/components/common/ImageCropper"; // Import the new component
+
 
 export default function ProfilePage() {
   const { user, setUser } = useUserStore(state => state);
@@ -37,6 +39,9 @@ export default function ProfilePage() {
   const form = useFormState<UserProfile>(initialData());
   const [image, setImage] = useState<string | undefined>(user?.profileImageUrl);
   const [imageFile, setImageFile] = useState<File | undefined>(undefined);
+  const [imageToCrop, setImageToCrop] = useState<string | null>(null); // State to hold image URL for cropping
+
+
 
   const { mutate: updateProfile, isPending: isLoading } = useUpdateProfile();
 
@@ -44,9 +49,7 @@ export default function ProfilePage() {
     if (acceptedFiles.length > 0) {
       const file = acceptedFiles[0];
       const imageUrl = URL.createObjectURL(file);
-      setImage(imageUrl);
-      setImageFile(file);
-      form.handleChange({ target: {name: 'profileImage', value: imageUrl}} as React.ChangeEvent<HTMLInputElement>)
+      setImageToCrop(imageUrl); // Set image for cropping
     }
   }, []);
 
@@ -54,6 +57,20 @@ export default function ProfilePage() {
     onDrop,
     accept: { "image/*": [] }
   });
+
+  // Callback after image is cropped
+  const handleCropComplete = useCallback((croppedFile: File) => {
+    const croppedImageUrl = URL.createObjectURL(croppedFile);
+    setImage(croppedImageUrl);
+    setImageFile(croppedFile);
+    form.handleChange({ target: { name: 'profileImage', value: croppedImageUrl } } as React.ChangeEvent<HTMLInputElement>);
+    setImageToCrop(null); // Close the cropper
+  }, [form]);
+
+  // Callback to close the cropper without applying changes
+  const handleCloseCropper = useCallback(() => {
+    setImageToCrop(null);
+  }, []);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -63,7 +80,7 @@ export default function ProfilePage() {
 
     // Password match validation
     if (form.values.password && form.values.password !== form.values.confirmPassword) {
-      form.setError("confirmPassword", "Passwords do not match");
+      form.setError("confirmPassword", form.values.confirmPassword !== '' ? "Passwords do not match" : "Please Confirm Your Password");
       isValid = false;
     }
 
@@ -154,7 +171,7 @@ export default function ProfilePage() {
           >
             <input {...getInputProps()} />
             <img
-              src={image || "/assets/images/profile-avatar.svg"}
+              src={image || "/assets/images/placeholder.png"}
               alt="Profile"
               className="w-full h-full object-cover cursor-pointer"
             />
@@ -371,6 +388,14 @@ export default function ProfilePage() {
           </div>
         </form>
       </div>
+
+      {imageToCrop && (
+        <ImageCropper
+          imageSrc={imageToCrop}
+          onCropComplete={handleCropComplete}
+          onClose={handleCloseCropper}
+        />
+      )}
     </section>
   )
 }

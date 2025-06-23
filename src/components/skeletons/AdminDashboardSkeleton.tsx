@@ -45,76 +45,85 @@ export function DashboardSubmissionCardSkeleton() {
 export const SkeletonTracking = () => {
   return (
     <div className="w-full mx-auto bg-white rounded-lg shadow-sm border animate-pulse">
-      {/* Header */}
       <div className="p-6 flex justify-between items-center border-b">
         <div>
-          <div className="h-7 bg-gray-200 rounded w-48 mb-2"></div> {/* heading-primary */}
-          <div className="h-4 bg-gray-200 rounded w-64"></div> {/* heading-tertiary */}
+          <div className="h-6 bg-gray-300 rounded w-48 mb-2"></div>
+          <div className="h-4 bg-gray-200 rounded w-64"></div>
         </div>
-        {/* Only show 'View all' skeleton if it might be rendered */}
-        {/* Assuming isMoreItem is true to render this part of skeleton */}
-        <div className="h-4 bg-gray-200 rounded w-24"></div> {/* View all link */}
+        <div className="inline-block flex items-center">
+          <div className="h-4 bg-gray-300 rounded w-20 mr-2"></div>
+          <div className="h-4 w-4 bg-gray-300 rounded-full"></div>
+        </div>
       </div>
-
-      {/* Table */}
       <div className="w-full overflow-x-auto p-4">
         <table className="w-full min-w-[600px] md:min-w-[800px] lg:min-w-full table-auto">
           <thead className="text-sm font-medium text-left">
             <tr>
-              <th className="w-10 p-3">
-                <div className="h-4 bg-gray-200 rounded w-4"></div> {/* CustomCheckbox */}
+              <th className="p-3">
+                <div className="h-4 bg-gray-200 rounded w-24"></div>
               </th>
               <th className="p-3">
-                <div className="h-4 bg-gray-200 rounded w-20"></div> {/* Order No */}
+                <div className="h-4 bg-gray-200 rounded w-32"></div>
               </th>
               <th className="p-3">
-                <div className="h-4 bg-gray-200 rounded w-28"></div> {/* Date & Time */}
+                <div className="h-4 bg-gray-200 rounded w-28"></div>
               </th>
               <th className="p-3">
-                <div className="h-4 bg-gray-200 rounded w-24"></div> {/* Total Cards */}
+                <div className="h-4 bg-gray-200 rounded w-36"></div>
               </th>
-              <th className="p-3">
-                <div className="h-4 bg-gray-200 rounded w-36"></div> {/* Cards Summary */}
-              </th>
-              <th className="w-10 p-3"></th> {/* For the MoreHorizontal icon */}
+              <th className="w-10 p-3"></th>
             </tr>
           </thead>
           <tbody className="divide-y">
-            {[...Array(5)].map((_, index) => ( // Render 5 rows for example
-              <tr key={index} className="hover:bg-light-grey-50">
-                <td className="p-3">
-                  <div className="h-4 bg-gray-200 rounded w-4"></div> {/* CustomCheckbox */}
-                </td>
-                <td className="p-3 font-medium">
-                  <div className="h-4 bg-gray-200 rounded w-20"></div> {/* Order No value */}
-                </td>
-                <td className="p-3">
-                  <div className="flex items-center gap-1">
-                    <div className="h-4 w-4 bg-gray-200 rounded-full"></div> {/* CalendarIcon */}
-                    <div className="h-4 bg-gray-200 rounded w-32"></div> {/* Date & Time value */}
-                  </div>
-                </td>
-                <td className="p-3">
-                  <div className="h-4 bg-gray-200 rounded w-16"></div> {/* Total Cards value */}
-                </td>
-                <td className="p-3">
-                  <div className="h-4 bg-gray-200 rounded w-48"></div> {/* Cards Summary value */}
-                </td>
-                <td className="p-4">
-                  <div className="h-6 w-6 bg-gray-200 rounded-full"></div> {/* MoreHorizontal icon */}
-                </td>
-              </tr>
-            ))}
+            {/* Skeleton Row 1 */}
+            <tr className="hover:bg-gray-50">
+              <td className="p-3 font-medium">
+                <div className="h-4 bg-gray-200 rounded w-20"></div>
+              </td>
+              <td className="p-3">
+                <div className="flex items-center gap-1">
+                  <div className="h-3 w-3 bg-gray-200 rounded-full"></div>
+                  <div className="h-4 bg-gray-200 rounded w-40"></div>
+                </div>
+              </td>
+              <td className="p-3">
+                <div className="h-4 bg-gray-200 rounded w-10"></div>
+              </td>
+              <td className="p-3">
+                <div className="h-4 bg-gray-200 rounded w-28"></div>
+              </td>
+              <td className="p-4">
+                <div className="relative inline-block">
+                  <div className="h-6 w-6 bg-gray-200 rounded-full"></div>
+                </div>
+              </td>
+            </tr>
+            {/* Skeleton Row 2 */}
+            <tr className="hover:bg-gray-50">
+              <td className="p-3 font-medium">
+                <div className="h-4 bg-gray-200 rounded w-20"></div>
+              </td>
+              <td className="p-3">
+                <div className="flex items-center gap-1">
+                  <div className="h-3 w-3 bg-gray-200 rounded-full"></div>
+                  <div className="h-4 bg-gray-200 rounded w-40"></div>
+                </div>
+              </td>
+              <td className="p-3">
+                <div className="h-4 bg-gray-200 rounded w-10"></div>
+              </td>
+              <td className="p-3">
+                <div className="h-4 bg-gray-200 rounded w-32"></div>
+              </td>
+              <td className="p-4">
+                <div className="relative inline-block">
+                  <div className="h-6 w-6 bg-gray-200 rounded-full"></div>
+                </div>
+              </td>
+            </tr>
+            {/* Add more skeleton rows as needed, or dynamically generate them */}
           </tbody>
         </table>
-      </div>
-
-      {/* Pagination skeleton */}
-      {/* Assuming totalPages > 1 and !isMoreItem is true to render this part of skeleton */}
-      <div className="flex justify-center items-center gap-4 mt-6 mb-8">
-        <div className="h-10 w-24 bg-gray-200 rounded"></div> {/* Previous button */}
-        <div className="h-6 w-32 bg-gray-200 rounded"></div> {/* Page X of Y text */}
-        <div className="h-10 w-24 bg-gray-200 rounded"></div> {/* Next button */}
       </div>
     </div>
   );
@@ -214,7 +223,7 @@ export function SkeletonProfilePage() {
       {/* Form inputs */}
       <div className="mt-10 w-full">
         <div className="grid grid-cols-2 gap-8 mt-8 p-2">
-          {Array.from({ length: 3 }).map((_, i) => (
+          {Array.from({ length: 4 }).map((_, i) => (
             <div key={i} className="flex flex-col gap-2">
               <div className="h-5 w-40 bg-gray-200 rounded" />
               <div className="h-12 w-full bg-gray-200 rounded-md" />

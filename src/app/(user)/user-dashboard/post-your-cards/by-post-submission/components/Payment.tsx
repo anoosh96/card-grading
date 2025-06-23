@@ -94,7 +94,7 @@ export default function Payment({ handlePrevious }: FormStepProps) {
               Proceeding...
             </>
           ) : (
-            "Proceed to Checkout"
+            "Proceed to Payment"
           )}
         </ButtonGradient>
       </div>

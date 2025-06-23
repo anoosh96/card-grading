@@ -8,79 +8,23 @@ import React from "react";
 
 export const SkeletonCard = () => {
   return (
-    <div className="w-full">
-      {/* Total Submissions Card */}
-      <div className="bg-white w-full rounded-[1.25rem] p-7 shadow-sm">
-        <div className="flex flex-col items-start gap-6 mb-4">
-          {/* Icon placeholder */}
-          <div className="bg-gray-200 p-3 rounded-lg w-12 h-12"></div>
-
-          <div>
-            <div className="flex items-end">
-              {/* Number placeholder */}
-              <div className="h-10 bg-gray-200 rounded w-20"></div>
-              {/* "Cards" text placeholder */}
-              <div className="h-6 bg-gray-200 rounded w-16 ml-2 mb-1"></div>
-            </div>
-          </div>
+    <div className="bg-white w-full rounded-[1.25rem] p-7 py-9 shadow-sm animate-pulse">
+      <div className="flex flex-col items-start gap-6 mb-4">
+        <div className="">
+          {/* Placeholder for the icon */}
+          <div className="h-[55px] w-[55px] bg-gray-300 rounded-full"></div>
         </div>
-
-        {/* "Total Submissions" text placeholder */}
-        <div className="h-6 bg-gray-200 rounded w-40 mt-2"></div>
-      </div>
-
-      {/* Submission Sources Card */}
-      {/*
-  <div className="bg-white w-full rounded-[1.25rem] p-6 shadow-sm">
-    <!-- Container with white background, rounded corners, padding, and shadow -->
-
-    <!-- Header -->
-    <div className="flex flex-col items-start justify-between mb-3">
-      <!-- Title placeholder -->
-      <div className="h-6 bg-gray-200 rounded w-48 mb-3"></div>
-
-      <!-- Separator -->
-      <div className="w-full h-[1px] bg-gray-200 mt-3"></div>
-    </div>
-
-    <!-- Filter badge placeholder -->
-    <div className="bg-gray-200 w-48 h-10 rounded-2xl"></div>
-
-    <div className="w-full flex flex-col gap-5 lg:flex-row">
-      <!-- Main content row -->
-
-      <!-- Left side - list of data rows -->
-      <div className="flex justify-between items-center gap-6 mt-7 xl:mt-4 w-11/12">
-        <div className="space-y-8 w-full md:w-1/2 xl:w-1/3">
-          <!-- By Post row -->
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <div className="h-4 w-8 rounded-sm bg-gray-200"></div>
-            </div>
-            <div className="h-4 bg-gray-200 rounded w-14"></div>
-            <div className="h-4 bg-gray-200 rounded w-8"></div>
-          </div>
-
-          <!-- By Form row -->
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <div className="h-4 w-8 rounded-sm bg-gray-200"></div>
-            </div>
-            <div className="h-4 bg-gray-200 rounded w-14"></div>
-            <div className="h-4 bg-gray-200 rounded w-8"></div>
+        <div>
+          <div className="flex items-end">
+            {/* Placeholder for the large number */}
+            <div className="h-10 bg-gray-300 rounded w-16"></div>
+            {/* Placeholder for "Cards" text */}
+            <div className="h-6 bg-gray-200 rounded w-20 px-2 mb-1 ml-2"></div>
           </div>
         </div>
       </div>
-
-      <!-- Right side - pie chart placeholder -->
-      <div className="flex items-center justify-center w-36 h-32">
-        <div className="w-[120px] h-[120px] rounded-full border-8 border-gray-200 flex items-center justify-center">
-          <div className="w-[80px] h-[80px] rounded-full bg-white"></div>
-        </div>
-      </div>
-    </div>
-  </div>
-*/}
+      {/* Placeholder for "Total Cards" heading */}
+      <div className="h-6 bg-gray-200 rounded w-32"></div>
     </div>
   );
 };
@@ -92,73 +36,57 @@ export const SkeletonCard = () => {
 export const SkeletonTracking = () => {
   return (
     <div className="bg-white rounded-lg shadow-sm animate-pulse">
-      {/* Header */}
-      <div className="flex items-center p-5 justify-between mb-8">
+      <div className="flex items-center p-5 justify-between mb-4">
         <div className="flex flex-col gap-1">
-          <div className="h-8 bg-gray-200 rounded w-40"></div>
-          <div className="h-4 bg-gray-200 rounded w-64 mt-1"></div>
+          <div className="h-8 bg-gray-200 rounded w-48 mb-1"></div>
+          <div className="h-4 bg-gray-200 rounded w-32"></div>
         </div>
-        <div className="h-4 bg-gray-200 rounded w-20"></div>
+        <div className="h-6 bg-gray-200 rounded w-24"></div>
       </div>
-
-      {/* Table */}
-      <div className="w-full overflow-x-auto md:max-w-full">
-        <table className="w-full min-w-[600px] md:min-w-[800px] lg:min-w-full">
+      <div className="w-full overflow-x-auto">
+        <table className="w-full min-w-[600px] md:min-w-[800px] lg:min-w-full table-auto">
           <thead>
-            <tr className="border-b px-16">
-              <th className="text-left py-3 pl-4 lg:pl-16 pr-4">
-                <div className="h-4 bg-gray-200 rounded w-16"></div>
+            <tr className="border-b">
+              <th className="text-left py-3 pl-4 lg:pl-16 pr-4 text-xs md:text-base">
+                <div className="h-4 bg-gray-200 rounded w-20"></div>
               </th>
-              <th className="text-left py-3 pl-4 lg:pl-16 pr-4">
+              <th className="text-left py-3 pl-4 lg:pl-16 pr-4 text-xs md:text-base">
+                <div className="h-4 bg-gray-200 rounded w-28"></div>
+              </th>
+              <th className="text-left py-3 px-4 text-xs md:text-base">
                 <div className="h-4 bg-gray-200 rounded w-24"></div>
               </th>
-              <th className="text-left py-3 lg:pl-16  px-4">
-                <div className="h-4 bg-gray-200 rounded w-20"></div>
-              </th>
-              {/* <th className="text-left py-3 px-4 invisible">
-                <div className="h-4 bg-gray-200 rounded w-32"></div>
-              </th> */}
-              <th className="text-left py-3 pl-4 pr-4 lg:pr-16">
-                <div className="h-4 bg-gray-200 rounded w-20"></div>
+              <th className="text-left py-3 pl-4 pr-4 lg:pr-16 text-xs md:text-base">
+                <div className="h-4 bg-gray-200 rounded w-28"></div>
               </th>
               <th></th>
             </tr>
           </thead>
           <tbody>
-            {[...Array(5)].map((_, index) => (
-              <tr key={index} className="border-b last:border-0">
-                <td className="py-5 pl-4 lg:pl-16 pr-4">
-                  <div className="h-4 bg-gray-200 rounded w-16"></div>
+            {Array(2).fill(0).map((_, rowIndex) => ( // Repeat for 2 rows as in your example
+              <tr key={rowIndex} className="border-b last:border-0">
+                <td className="py-5 pl-4 lg:pl-16 pr-4 text-xs md:text-base">
+                  <div className="h-4 bg-gray-200 rounded w-20"></div>
                 </td>
-                <td className="py-4 pl-4 lg:pl-16 pr-4">
+                <td className="py-3 pl-4 lg:pl-16 pr-4 text-xs md:text-base">
                   <div className="flex gap-2 items-center">
-                    <div className="h-4 w-4 bg-gray-200 rounded-full"></div>
-                    <div className="h-4 bg-gray-200 rounded  w-32"></div>
+                    <div className="h-4 w-4 bg-gray-200 rounded"></div> {/* Calendar icon placeholder */}
+                    <div className="h-4 bg-gray-200 rounded w-32"></div>
                   </div>
                 </td>
-                <td className="py-4 pl-4 lg:pl-16 pr-4">
-                  <div className="h-4 bg-gray-200 rounded w-16"></div>
+                <td className="py-3 px-4 text-xs md:text-base">
+                  <div className="h-4 bg-gray-200 rounded w-10"></div>
                 </td>
-                {/* <td className="py-3 px-4 invisible">
-                  <div className="h-4 bg-gray-200 rounded w-20"></div>
-                </td> */}
-                 <td className="py-4 pl-4 pr-4">
-                  <div className="h-4 bg-gray-200 rounded w-16"></div>
+                <td className="py-3 px-4 text-xs lg:text-base">
+                  <div className="h-4 bg-gray-200 rounded w-24"></div>
                 </td>
-                <td className="py-4 px-4">
-                  <div className="h-4 w-4 bg-gray-200 rounded"></div>
+                <td className="py-3 px-4">
+                  <div className="h-6 w-6 bg-gray-200 rounded-full"></div> {/* Ellipsis icon placeholder */}
                 </td>
               </tr>
             ))}
           </tbody>
         </table>
-
-        {/* Pagination skeleton */}
-        <div className="flex justify-center items-center gap-4 mt-6 mb-8">
-          <div className="w-20 h-8 bg-gray-200 rounded"></div>
-          <div className="w-24 h-6 bg-gray-200 rounded"></div>
-          <div className="w-20 h-8 bg-gray-200 rounded"></div>
-        </div>
       </div>
     </div>
   );
@@ -191,16 +119,16 @@ export const SkeletonHeader = () => {
     <header className="bg-white ml-0 md:ml-20 lg:ml-72 animate-pulse">
       <div className="flex items-center justify-between px-6 py-4">
         {/* Search input placeholder */}
-        <div className="hidden md:block w-96">
+        <div className="invisible w-96">
           <div className="h-10 bg-gray-200 rounded-md w-full"></div>
         </div>
 
         <div className="flex items-center w-full lg:w-auto justify-end lg:justify-normal gap-4">
           {/* Notification button placeholder */}
-          <div className="relative">
+          {/* <div className="relative">
             <div className="h-5 w-5 bg-gray-200 rounded-full"></div>
             <div className="absolute -top-1 -right-1 h-2 w-2 rounded-full bg-gray-300"></div>
-          </div>
+          </div> */}
 
           {/* Profile section placeholder */}
           <div className="flex items-center gap-3">
@@ -323,10 +251,10 @@ export function SkeletonProfilePage() {
           ))}
 
           {/* Payment method select */}
-          <div className="col-span-full flex flex-col gap-2 mt-4">
+          {/* <div className="col-span-full flex flex-col gap-2 mt-4">
             <div className="h-5 w-40 bg-gray-200 rounded" />
             <div className="h-12 w-full bg-gray-200 rounded-md" />
-          </div>
+          </div> */}
 
           {/* Buttons */}
           <div className="flex gap-6 mt-8 col-span-full">
@@ -505,135 +433,70 @@ export function OrderTrackingSkeleton() {
 
 export function SubmissionCardsListSkeleton() {
   return (
-    <section className="bg-gray-50 min-h-screen animate-pulse">
-      {/* Header Section */}
-      <div className="bg-white p-7 mb-6">
-        {/* Title */}
-        <div className="h-8 bg-gray-200 rounded w-48 mb-6"></div>
+    <section className="bg-gray-50 min-h-screen">
+      <div className="bg-white p-7 mb-6 animate-pulse">
+        {/* Submission ID Heading */}
+        <div className="h-8 bg-gray-300 rounded w-80 mb-6"></div>
 
-        {/* Submission Info Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
-          {/* Name */}
-          <div>
-            <div className="h-4 bg-gray-200 rounded w-1/3 mb-2"></div>
-            <div className="h-5 bg-gray-200 rounded w-2/3"></div>
-          </div>
-
-          {/* Email */}
-          <div>
-            <div className="h-4 bg-gray-200 rounded w-1/4 mb-2"></div>
-            <div className="h-5 bg-gray-200 rounded w-3/4"></div>
-          </div>
-
-          {/* Submission Type */}
-          <div>
-            <div className="h-4 bg-gray-200 rounded w-1/2 mb-2"></div>
-            <div className="h-5 bg-gray-200 rounded w-2/3"></div>
-          </div>
-
-          {/* Turnaround Time */}
-          <div>
-            <div className="h-4 bg-gray-200 rounded w-2/5 mb-2"></div>
-            <div className="h-5 bg-gray-200 rounded w-1/2"></div>
-          </div>
+        {/* Info Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 mb-8">
+          {[...Array(4)].map((_, i) => (
+            <div key={i}>
+              <div className="h-4 bg-gray-200 rounded w-28 mb-2"></div>
+              <div className="h-6 bg-gray-300 rounded w-48"></div>
+            </div>
+          ))}
         </div>
       </div>
 
-      {/* Cards Content */}
       <div className="px-7 pb-7">
-        {/* Search and Filter Bar Skeleton */}
-        <div className="bg-white rounded-lg p-6 mb-6 flex flex-col sm:flex-row gap-4 items-center">
-          <div className="flex-grow w-full">
-            <div className="h-12 bg-gray-200 rounded-md w-full"></div> {/* Search Input */}
+        {/* Search and Filter Section */}
+        <div className="bg-white rounded-lg p-6 mb-6 flex flex-col sm:flex-row gap-4 items-center animate-pulse">
+          {/* Search Input Skeleton */}
+          <div className="w-full sm:w-1/2">
+            <div className="h-10 bg-gray-200 rounded-full w-full"></div>
           </div>
-          <div className="w-full sm:w-auto">
-            <div className="h-12 bg-gray-200 rounded-md w-40"></div> {/* Status Select */}
-          </div>
-          <div className="w-full sm:w-auto">
-            <div className="h-10 bg-gray-200 rounded-md w-24"></div> {/* Clear Filters Button */}
+          {/* Filter Button Skeleton */}
+          <div className="w-full sm:w-1/2">
+            <div className="h-10 bg-gray-200 rounded-lg w-full"></div>
           </div>
         </div>
 
-        {/* Existing Cards Section Skeleton */}
-        <div className="bg-white rounded-lg p-6 mb-6">
-          <div className="h-6 bg-gray-200 rounded w-64 mb-6"></div> {/* "Existing Cards" title */}
+        {/* Existing Cards Section */}
+        <div className="bg-white rounded-lg p-6 mb-6 animate-pulse">
+          {/* Heading for Existing Cards */}
+          <div className="h-7 bg-gray-300 rounded w-48 mb-6"></div>
+
+          {/* Cards Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
-            {/* Generate 6 skeleton cards */}
-            {[...Array(6)].map((_, index) => (
-              <SkeletonCardItem key={index} />
+            {[...Array(2)].map((_, i) => ( // Render 2 skeleton cards
+              <div key={i} className="relative group">
+                <div className="bg-gray-100 rounded-lg p-6 border border-gray-200">
+                  <div className="flex justify-between items-start mb-4">
+                    {/* Card Name Skeleton */}
+                    <div className="h-5 bg-gray-300 rounded w-32"></div>
+                    {/* Status Tag Skeleton */}
+                    <div className="h-6 bg-gray-200 rounded-full w-20"></div>
+                  </div>
+                  <div className="space-y-3">
+                    {/* Category, Year, Service Skeletons */}
+                    {[...Array(3)].map((_, j) => (
+                      <div key={j} className="flex justify-between">
+                        <div className="h-4 bg-gray-200 rounded w-20"></div>
+                        <div className="h-4 bg-gray-300 rounded w-24"></div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
             ))}
           </div>
-          {/* Pagination Controls Skeleton */}
-          <div className="flex justify-center items-center gap-2 mt-8">
-            <div className="h-10 bg-gray-200 rounded-md w-24"></div> {/* Previous Button */}
-            <div className="h-10 bg-gray-200 rounded-md w-10"></div> {/* Page 1 Button */}
-            <div className="h-10 bg-gray-200 rounded-md w-10"></div> {/* Page 2 Button */}
-            <div className="h-10 bg-gray-200 rounded-md w-10"></div> {/* Page 3 Button */}
-            <div className="h-10 bg-gray-200 rounded-md w-24"></div> {/* Next Button */}
-          </div>
         </div>
-
-        {/* New Bulk Card Input Form Section Skeleton (if applicable, assuming it's usually shown) */}
-        <div className="bg-white rounded-lg p-6 mb-6">
-          <div className="flex justify-between items-center mb-6">
-            <div className="h-6 bg-gray-200 rounded w-48"></div> {/* "Add New Cards" title */}
-            <div className="flex items-center gap-4">
-              <div className="h-5 bg-gray-200 rounded w-40"></div> {/* Card count text */}
-              <div className="h-10 bg-gray-200 rounded-md w-32"></div> {/* Add New Card Slot Button */}
-            </div>
-          </div>
-
-          {/* Skeleton for New Card input fields (one row) */}
-          <div className="hidden lg:block bg-light-grey rounded-lg overflow-hidden shadow-sm border border-gray-200">
-            <div className="grid grid-cols-[2fr_1.5fr_1fr_0.5fr] gap-4 p-4 bg-gradient-to-r from-gray-50 to-gray-100 border-b border-gray-200">
-              <div className="h-6 bg-gray-200 rounded w-2/3"></div>
-              <div className="h-6 bg-gray-200 rounded w-1/2"></div>
-              <div className="h-6 bg-gray-200 rounded w-1/3"></div>
-              <div className="h-6 bg-gray-200 rounded w-1/4 mx-auto"></div>
-            </div>
-            <div className="grid grid-cols-[2fr_1.5fr_1fr_0.5fr] items-start gap-4 p-4 border-b border-gray-100 bg-white">
-              <div className="h-14 bg-gray-100 rounded-md w-full"></div>
-              <div className="h-14 bg-gray-100 rounded-md w-full"></div>
-              <div className="h-14 bg-gray-100 rounded-md w-full"></div>
-              <div className="h-8 bg-gray-100 rounded-full w-8 mx-auto"></div>
-            </div>
-          </div>
-          {/* Mobile version of new card skeleton (one card) */}
-          <div className="lg:hidden space-y-4">
-            <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4">
-              <div className="flex justify-between items-center mb-4 pb-2 border-b border-gray-100">
-                <div className="h-6 bg-gray-200 rounded w-24"></div>
-                <div className="h-8 bg-gray-200 rounded-full w-8"></div>
-              </div>
-              <div className="space-y-4">
-                <div>
-                  <div className="h-4 bg-gray-200 rounded w-1/3 mb-1"></div>
-                  <div className="h-10 bg-gray-100 rounded-md w-full"></div>
-                </div>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div>
-                    <div className="h-4 bg-gray-200 rounded w-1/2 mb-1"></div>
-                    <div className="h-10 bg-gray-100 rounded-md w-full"></div>
-                  </div>
-                  <div>
-                    <div className="h-4 bg-gray-200 rounded w-1/4 mb-1"></div>
-                    <div className="h-10 bg-gray-100 rounded-md w-full"></div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Action Buttons */}
-        <div className="flex gap-6">
-          <div className="h-12 bg-gray-200 rounded-full w-32"></div> {/* Back button */}
-          <div className="h-12 bg-gray-200 rounded-full w-48"></div> {/* Save New Cards button */}
-        </div>
+        {/* No buttons included as per request */}
       </div>
     </section>
   );
-}
+};
 
 // Individual card skeleton component
 export function SkeletonCardItem() {
@@ -646,7 +509,7 @@ export function SkeletonCardItem() {
         {/* Status Badge */}
         <div className="h-6 bg-gray-200 rounded-full w-24"></div>
       </div>
-      
+
       {/* Card Details */}
       <div className="space-y-3">
         {/* Category Row */}
@@ -654,13 +517,13 @@ export function SkeletonCardItem() {
           <div className="h-4 bg-gray-200 rounded w-16"></div>
           <div className="h-4 bg-gray-200 rounded w-24"></div>
         </div>
-        
+
         {/* Year Row */}
         <div className="flex justify-between">
           <div className="h-4 bg-gray-200 rounded w-10"></div>
           <div className="h-4 bg-gray-200 rounded w-16"></div>
         </div>
-        
+
         {/* Service Row */}
         <div className="flex justify-between">
           <div className="h-4 bg-gray-200 rounded w-14"></div>
@@ -707,8 +570,8 @@ export const ProgressBarSkeleton: React.FC<ProgressBarSkeletonProps> = ({ classN
             i === 0
               ? 'items-start'
               : i === skeletonSteps.length - 1
-              ? 'items-end'
-              : 'items-center';
+                ? 'items-end'
+                : 'items-center';
 
           // Adjust margin for the first label to align with the circle
           const firstLabelMargin = i === 0 ? '-ml-[10px]' : '';

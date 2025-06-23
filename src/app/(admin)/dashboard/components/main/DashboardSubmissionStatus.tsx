@@ -65,7 +65,7 @@ const DashboardSubmissionStatus: FC<DashboardSubmissionStatusProps> = ({
             Latest actions across the grading workflow
           </p>
         </div>
-        {isMoreItem && (
+        {isMoreItem && submissions.length > 0 && (
           <Link
             href="/dashboard/submission-status"
             className="flex-between hover:underline text-[#E3350D]"

@@ -533,9 +533,9 @@ export default function ShippingInformation({ handleNext, handlePrevious }: Form
                     <div className="font-semibold text-gray-700">Card Name</div>
                     <div className="font-semibold text-gray-700">Category</div>
                     <div className="font-semibold text-gray-700">Year</div>
-                    <div className="font-semibold text-gray-700">Service Level</div>
                     <div className="font-semibold text-gray-700">Value</div>
-                    <div className="font-semibold text-gray-700">Actions</div>
+                    <div className="font-semibold text-gray-700 ">Service Level</div>
+                    <div className="font-semibold text-gray-700 flex justify-center">Actions</div>
                   </div>
 
                   {/* Table Rows */}
@@ -612,6 +612,27 @@ export default function ShippingInformation({ handleNext, handlePrevious }: Form
                         )}
                       </div>
 
+                      {/* Value */}
+                      <div className="relative">
+                        <CustomInput
+                          id={`value-${card.id}`}
+                          name={`value-${card.id}`}
+                          placeholder="£ Value"
+                          type="number"
+                          className={`w-full p-7 text-sm transition-all duration-200 focus:ring-2 focus:ring-blue-200 focus:border-blue-400 ${cardErrors[card.id]?.cardValue ? 'error-class' : ''}`}
+                          value={card.cardValue === null || card.cardValue === undefined ? '' : card.cardValue as number}
+                          onChange={(e) => updateCard(card.id, 'cardValue', e.target.value)}
+                        />
+                        {cardErrors[card.id]?.cardValue && (
+                          <div className="absolute -top-1 right-0 transform -translate-y-full z-10 animate-fade-in-slide-down">
+                            <p className="text-xs bg-red-600 text-white py-1.5 px-3 rounded-lg shadow-md whitespace-nowrap">
+                              {cardErrors[card.id].cardValue}
+                            </p>
+                            <div className="w-0 h-0 border-x-8 border-t-8 border-x-transparent border-t-red-600 absolute bottom-[-8px] left-1/2 -translate-x-1/2"></div>
+                          </div>
+                        )}
+                      </div>
+
                       {/* Service Level */}
                       <div className="relative">
                         <CustomSelect
@@ -629,27 +650,6 @@ export default function ShippingInformation({ handleNext, handlePrevious }: Form
                           <div className="absolute -top-1 right-0 transform -translate-y-full z-10 animate-fade-in-slide-down">
                             <p className="text-xs bg-red-600 text-white py-1.5 px-3 rounded-lg shadow-md whitespace-nowrap">
                               {cardErrors[card.id].serviceId}
-                            </p>
-                            <div className="w-0 h-0 border-x-8 border-t-8 border-x-transparent border-t-red-600 absolute bottom-[-8px] left-1/2 -translate-x-1/2"></div>
-                          </div>
-                        )}
-                      </div>
-
-                      {/* Value */}
-                      <div className="relative">
-                        <CustomInput
-                          id={`value-${card.id}`}
-                          name={`value-${card.id}`}
-                          placeholder="£ Value"
-                          type="number"
-                          className={`w-full p-7 text-sm transition-all duration-200 focus:ring-2 focus:ring-blue-200 focus:border-blue-400 ${cardErrors[card.id]?.cardValue ? 'error-class' : ''}`}
-                          value={card.cardValue === null || card.cardValue === undefined ? '' : card.cardValue as number}
-                          onChange={(e) => updateCard(card.id, 'cardValue', e.target.value)}
-                        />
-                        {cardErrors[card.id]?.cardValue && (
-                          <div className="absolute -top-1 right-0 transform -translate-y-full z-10 animate-fade-in-slide-down">
-                            <p className="text-xs bg-red-600 text-white py-1.5 px-3 rounded-lg shadow-md whitespace-nowrap">
-                              {cardErrors[card.id].cardValue}
                             </p>
                             <div className="w-0 h-0 border-x-8 border-t-8 border-x-transparent border-t-red-600 absolute bottom-[-8px] left-1/2 -translate-x-1/2"></div>
                           </div>
@@ -774,6 +774,28 @@ export default function ShippingInformation({ handleNext, handlePrevious }: Form
                           </div>
                         </div>
 
+                        {/* Value */}
+                        <div className="relative">
+                          <label className="block text-sm font-medium text-gray-700 mb-1">Value (£)</label>
+                          <CustomInput
+                            id={`value-${card.id}-mobile`}
+                            name={`value-${card.id}-mobile`}
+                            placeholder="£ Value"
+                            type="number"
+                            className={`w-full p-3 text-sm transition-all duration-200 focus:ring-2 focus:ring-blue-200 focus:border-blue-400 ${cardErrors[card.id]?.cardValue ? 'error-class' : ''}`}
+                            value={card.cardValue === null || card.cardValue === undefined ? '' : card.cardValue as number}
+                            onChange={(e) => updateCard(card.id, 'cardValue', e.target.value)}
+                          />
+                          {cardErrors[card.id]?.cardValue && (
+                            <div className="absolute top-0 right-0 transform -translate-y-full z-10 animate-fade-in-slide-down">
+                              <p className="text-xs bg-red-600 text-white py-1.5 px-3 rounded-lg shadow-md whitespace-nowrap">
+                                {cardErrors[card.id].cardValue}
+                              </p>
+                              <div className="w-0 h-0 border-x-8 border-t-8 border-x-transparent border-t-red-600 absolute bottom-[-8px] left-1/2 -translate-x-1/2"></div>
+                            </div>
+                          )}
+                        </div>
+
                         {/* Two column layout for service and value */}
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                           {/* Service Level */}
@@ -794,28 +816,6 @@ export default function ShippingInformation({ handleNext, handlePrevious }: Form
                               <div className="absolute top-0 right-0 transform -translate-y-full z-10 animate-fade-in-slide-down">
                                 <p className="text-xs bg-red-600 text-white py-1.5 px-3 rounded-lg shadow-md whitespace-nowrap">
                                   {cardErrors[card.id].serviceId}
-                                </p>
-                                <div className="w-0 h-0 border-x-8 border-t-8 border-x-transparent border-t-red-600 absolute bottom-[-8px] left-1/2 -translate-x-1/2"></div>
-                              </div>
-                            )}
-                          </div>
-
-                          {/* Value */}
-                          <div className="relative">
-                            <label className="block text-sm font-medium text-gray-700 mb-1">Value (£)</label>
-                            <CustomInput
-                              id={`value-${card.id}-mobile`}
-                              name={`value-${card.id}-mobile`}
-                              placeholder="£ Value"
-                              type="number"
-                              className={`w-full p-3 text-sm transition-all duration-200 focus:ring-2 focus:ring-blue-200 focus:border-blue-400 ${cardErrors[card.id]?.cardValue ? 'error-class' : ''}`}
-                              value={card.cardValue === null || card.cardValue === undefined ? '' : card.cardValue as number}
-                              onChange={(e) => updateCard(card.id, 'cardValue', e.target.value)}
-                            />
-                            {cardErrors[card.id]?.cardValue && (
-                              <div className="absolute top-0 right-0 transform -translate-y-full z-10 animate-fade-in-slide-down">
-                                <p className="text-xs bg-red-600 text-white py-1.5 px-3 rounded-lg shadow-md whitespace-nowrap">
-                                  {cardErrors[card.id].cardValue}
                                 </p>
                                 <div className="w-0 h-0 border-x-8 border-t-8 border-x-transparent border-t-red-600 absolute bottom-[-8px] left-1/2 -translate-x-1/2"></div>
                               </div>

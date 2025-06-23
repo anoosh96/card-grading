@@ -102,7 +102,7 @@ export function DashboardSubmissionTracking({ showViewAll = false }: SubmissionT
           <h3 className="font-bold text-[2rem] text-charcol">Order Status</h3>
           <p className="text-sm text-pure-grey">Real-time updates on grading status</p>
         </div>
-        {showViewAll && (
+        {showViewAll && submissions.length > 0 && (
           <button onClick={handleViewAll} className="text-primary underline font-medium text-sm">
             View all &gt;
           </button>

@@ -63,7 +63,7 @@ export default function ByFormSubmissionPage() {
           </p>
           <Link href={"/user-dashboard/submission-status"}>
             <Button
-              className="mt-8 px-10 py-3 rounded-full bg-primary text-white text-base font-medium"
+              className="mt-8 px-10 py-3 rounded-full bg-green-600 text-white text-base font-medium hover:bg-green-500"
             >
               Continue
             </Button>

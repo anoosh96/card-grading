@@ -1,7 +1,7 @@
 'use client'
 
 import { Button } from "@/components/ui/button"
-import SubscriptionBox from "../my-submissions/SubscriptionBox"
+import SubscriptionBox from "../post-your-cards/SubscriptionBox"
 import { ButtonGradient } from "@/components/common/ButtonGradient"
 import { useUserStore } from "@/stores/userStore";
 import Link from "next/link";

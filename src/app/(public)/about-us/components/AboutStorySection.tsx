@@ -118,13 +118,16 @@ function AboutStorySection() {
           <h2 className="text-3xl font-bold mb-6">Our Story</h2>
           <div className="space-y-4">
             <p className="text-gray-600">
-              Lorem ipsum dolor sit amet consectetur. Tellus est elementum facilisi condimentum viverra curabitur nec nulla. Ornare lorem nibh tempor
-              quam erat quis. Ut nibh accumsan duis morbi amet eget. Ultricies id sed adipiscing cras. Sed semper sodales mauris viverra est gravida
-              eros faucibus. Id elementum neque gravida dictum ipsum. Velit enim urna ut pretium enim varius.
-            </p>
-            <p className="text-gray-600">
-              Lorem ipsum dolor sit amet consectetur. Blandit et arcu accumsan ut aliquet dignissim integer sollicitudin. Tincidunt tempus a etiam
-              tellus arcu nec ipsum.
+              At Precision Grading, we’re collectors first. We know the excitement of pulling a rare card, and the frustration of sending it off for 
+              grading only to face long waits, high costs, and inconsistent results. <br /> <br />
+              That’s why we built Precision Grading: an AI-powered platform created by collectors, for collectors. 
+              Our goal is simple, to make professional card grading affordable, fast, and reliable. <br /> <br />
+              With cutting-edge AI technology at our core, we deliver consistent, high-quality grades without the hefty price tag.
+              We pride ourselves on quick turnaround times, but we never sacrifice the accuracy and care your cards deserve. <br /> <br />
+              Beyond grading, Precision Grading is a community, a place where collectors can connect, share, and celebrate the hobby we all love. <br /> <br />
+              Grading should be precise, fair, and accessible. That’s our promise to every collector. That’s Precision Grading. <br /> <br />
+              Monthly members I can add on the way? Reviews I will gain as I grade? Can customers write reviews?
+
             </p>
           </div>
         </div>

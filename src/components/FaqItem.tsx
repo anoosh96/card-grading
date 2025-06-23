@@ -21,7 +21,7 @@ export default function FAQItem({ question, answer }: { question: string; answer
   }, []);
 
   return (
-    <div 
+    <div
       ref={faqRef}
       className="border rounded-lg shadow-md bg-white p-5 transition-all duration-300"
     >
@@ -31,21 +31,22 @@ export default function FAQItem({ question, answer }: { question: string; answer
         onClick={() => setIsOpen(!isOpen)}
       >
         <h3 className="lg:text-lg font-semibold">{question}</h3>
-        <Image 
-          src={`${isOpen ? '/icons/arrow-up.svg' : '/icons/arrow-down-2.svg'}`} 
-          width={30} 
-          height={30} 
-          alt="faq open icon" 
+        <Image
+          src={`${isOpen ? '/icons/arrow-up.svg' : '/icons/arrow-down-2.svg'}`}
+          width={30}
+          height={30}
+          alt="faq open icon"
         />
       </div>
 
       {/* Answer Content */}
       <div
         className={`overflow-hidden transition-all duration-300 ${
-          isOpen ? "max-h-screen mt-3" : "max-h-0"
+          isOpen ? "max-h-[200vh] mt-3" : "max-h-0"
         }`}
       >
-        <p className="text-gray-600">{answer}</p>
+        {/* dangerouslySetInnerHTML is used here to render the HTML string */}
+        <p className="text-gray-600" dangerouslySetInnerHTML={{ __html: answer }}></p>
       </div>
     </div>
   );

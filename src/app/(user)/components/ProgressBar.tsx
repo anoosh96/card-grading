@@ -22,21 +22,21 @@ const StepProgressBar: React.FC<StepProgressBarProps> = ({ currentStep, classNam
   }
 
   return (
-    <div className={`relative h-2 bg-transparent-red rounded-2xl w-full ${className}`}>
-      <div className={`absolute h-2 top-0 transition-all duration-300 bg-light-red ${getLoadingWidth()}`}></div>
+    <div className={`relative h-2 bg-soft-grey rounded-2xl w-full ${className}`}>
+      <div className={`absolute h-2 top-0 transition-all duration-300 bg-golden-amber ${getLoadingWidth()}`}></div>
       <div className={`absolute -top-5 left-0 right-0 w-full flex justify-between`}>
         {
           steps.map((step, i) => {
             return (
               <div key={i} className={`flex flex-col gap-1 justify-center ${ i == 0 ? 'items-start' : i == 1 ? 'items-center' : 'items-end'}`}>
-                <div className={`rounded-full ${i + 1 <= currentStep ? 'bg-light-red' : 'bg-transparent-red'} h-12 w-12 flex justify-center items-center`}>
+                <div className={`rounded-full ${i + 1 <= currentStep ? 'bg-golden-amber' : 'bg-soft-grey'} h-12 w-12 flex justify-center items-center`}>
                   {(i + 1 == currentStep && isSubmitted) ? (
                     <FaSpinner className="text-xl animate-spin" />
                   ) : (
                     <span className="text-lg text-white">{i + 1 <= currentStep ? i + 1 : ''}</span>
                   )}
                 </div>
-                <span className={`text-xs sm:text-sm text-light-red text-center ${i == 0 ? '-ml-[10px]' : ''}`}>{step}</span>
+                <span className={`text-xs sm:text-sm text-neutral-grey text-center ${i == 0 ? '-ml-[10px]' : ''}`}>{step}</span>
              </div>
             )
           })

@@ -62,15 +62,15 @@ export function DashboardHeader() {
   return (
     <header className="bg-white ml-0 md:ml-20 lg:ml-72">
       <div className="flex items-center justify-between px-4 sm:px-6 py-4"> {/* Adjusted px for mobile */}
-        <div className="hidden md:block w-96">
+        <div className="invisible w-96">
           <CustomInput isShowSearchIcon type="search" placeholder="Search" />
         </div>
 
         <div className="flex items-center w-full lg:w-auto justify-end lg:justify-normal gap-4">
-          <button className="relative">
+          {/* <button className="relative">
             <Image width={19} height={20} alt="Notification Bell Icon" src={"/icons/notification-icon.svg"} className="h-5 w-5" />
             <span className="absolute -top-1 -right-1 h-2 w-2 rounded-full bg-primary" />
-          </button>
+          </button> */}
 
           {/* User Profile and Dropdown */}
           <div className="relative flex items-center gap-2 sm:gap-3" ref={menuRef}> {/* Add ref here */}

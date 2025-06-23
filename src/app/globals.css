@@ -226,6 +226,20 @@ body {
     width: 100%;
     height: 88%;
   }
+
+  /* For Webkit browsers (Chrome, Safari, newer Edge, Opera) */
+  .hide-scrollbar::-webkit-scrollbar {
+    display: none;
+    /* Hides the scrollbar */
+  }
+
+  /* Optional: For a more robust solution, you might want to consider a class */
+  .hide-scrollbar {
+    -ms-overflow-style: none;
+    /* IE and Edge */
+    scrollbar-width: none;
+    /* Firefox */
+  }
 }
 
 @layer base {

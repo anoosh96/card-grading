@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState, useEffect, useMemo, Suspense } from "react";
+import React, { useState, useEffect, useMemo, Suspense, useRef } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEnums } from "@/hooks/useEnums";
 import { useServices } from "@/hooks/useServices";
@@ -20,6 +20,7 @@ import { useDeleteCard } from "@/hooks/useDeleteCard";
 import { cardStatus, serviceType } from "@/app/(user)/lib/utils/constants";
 import { Button } from "@/components/ui/button";
 import { padId } from "@/lib/utils";
+import CustomModal from "@/components/common/CustomModal";
 
 function AdminSubmissionDetailsContent() {
   const router = useRouter();
@@ -30,6 +31,9 @@ function AdminSubmissionDetailsContent() {
   const [searchTerm, setSearchTerm] = useState('');
   const [debouncedSearchTerm, setDebouncedSearchTerm] = useState('');
   const [selectedStatus, setSelectedStatus] = useState<string | ''>('');
+
+  const [isDeleteModal, setIsDeleteModal] = useState(false);
+  const selectedCard = useRef<Card | null>(null);
 
   useEffect(() => {
     const handler = setTimeout(() => {
@@ -115,8 +119,10 @@ function AdminSubmissionDetailsContent() {
     }
   };
 
-  const removeBulkCard = (card: CardData) => {
-    if (!card.submissionId) {
+  const removeBulkCard = () => {
+    const card = selectedCard.current as Card
+
+    if (!card?.submissionId) {
       setBulkCards(bulkCards.filter(c => c.id !== card.id)); // Corrected filter condition
       const newCardErrors = { ...cardErrors };
       delete newCardErrors[card.id];
@@ -125,6 +131,13 @@ function AdminSubmissionDetailsContent() {
     } else {
       deleteCardMutation({ submissionId: parseInt(submissionId), cardId: card.id as number });
     }
+
+    setIsDeleteModal(false)
+  };
+
+  const handleDeleteClick = (card: CardData) => {
+    selectedCard.current = card as Card
+    setIsDeleteModal(true);
   };
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -225,9 +238,9 @@ function AdminSubmissionDetailsContent() {
 
       setBulkCards([])
     }
-    catch(err){
+    catch (err) {
       console.error(err)
-     //
+      //
     }
   };
 
@@ -348,17 +361,19 @@ function AdminSubmissionDetailsContent() {
                       status={card.status || submission.submissionStatus}
                       onClick={() => handleCardClick(card.id)}
                     />
-                    <button
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        removeBulkCard(card);
-                      }}
-                      className="absolute top-2 right-2 bg-red-500 text-white rounded-full p-2 text-xs opacity-0 group-hover:opacity-100 transition-opacity duration-200"
-                      title="Delete Card"
-                      disabled={isDeletingCard}
-                    >
-                      <Trash2 className="w-4 h-4" />
-                    </button>
+                    {!isStandardSubmission &&
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleDeleteClick(card)
+                        }}
+                        className="absolute top-2 right-2 bg-red-500 text-white rounded-full p-2 text-xs opacity-0 group-hover:opacity-100 transition-opacity duration-200"
+                        title="Delete Card"
+                        disabled={isDeletingCard}
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </button>
+                    }
                   </div>
                 ))}
               </div>
@@ -501,7 +516,7 @@ function AdminSubmissionDetailsContent() {
                     <div className="flex justify-center items-center h-full">
                       <button
                         type="button"
-                        onClick={() => removeBulkCard(card)}
+                        onClick={() => handleDeleteClick(card)}
                         className="text-red-500 hover:text-red-700 p-1 transition-all duration-200 hover:scale-110"
                         title="Remove Card Slot"
                         disabled={isActionPending}
@@ -526,7 +541,7 @@ function AdminSubmissionDetailsContent() {
                       <h3 className="font-semibold text-gray-800">New Card #{index + 1}</h3>
                       <button
                         type="button"
-                        onClick={() => removeBulkCard(card)}
+                        onClick={() => handleDeleteClick(card)}
                         className="text-red-500 hover:text-red-700 p-1"
                         disabled={isActionPending}
                       >
@@ -631,6 +646,18 @@ function AdminSubmissionDetailsContent() {
           )}
         </div>
       </div>
+
+      <CustomModal
+        isOpen={isDeleteModal}
+        title="Are you sure you want to delete this Card?"
+        message="This action cannot be undone."
+        onConfirm={removeBulkCard}
+        onCancel={() => {
+          setIsDeleteModal(false);
+          selectedCard.current = null;
+        }}
+        cn="!p-20 !rounded-2xl"
+      />
     </section>
   );
 }
