@@ -74,25 +74,25 @@ function ContactForm() {
                 <p className="font-medium text-charcol text-lg">Follow Us & Stay Updated</p>
               </div>
               <div className="space-y-8 lg:space-y-14 px-1">
-                <div className="flex items-center gap-2 md:gap-8">
+                {/* <div className="flex items-center gap-2 md:gap-8">
                   <div className="h-6 w-6 md:w-10 md:h-10 rounded-full bg-gray-100 flex items-center justify-center">
                     <Image alt="Phone Icon" src={"/icons/phone-black-icon.svg"} width={40} height={40} />
                   </div>
                   <span className="text-sm sm:text-md md:text-lg font-medium">+0348 - 848924792</span>
-                </div>
+                </div> */}
 
                 <div className="flex items-center gap-2 md:gap-8">
                   <div className="h-6 w-6 md:w-10 md:h-10 rounded-full bg-gray-100 flex items-center justify-center">
                     <Image alt="Mail Icon" src={"/icons/mail-black-icon.svg"} width={40} height={40} />
                   </div>
-                  <span className="text-sm sm:text-md md:text-lg font-medium">Rico_Champlin@Grimes - Walker</span>
+                  <span className="text-sm sm:text-md md:text-lg font-medium">accounts@precisiongrading.co.uk</span>
                 </div>
 
                 <div className="flex items-center gap-2 md:gap-8">
                   <div className="h-6 w-6  md:w-10 md:h-10 rounded-full bg-gray-100 flex items-center justify-center">
                     <Image alt="Map Pin Icon" src={"/icons/map-pin-black-icon.svg"} width={40} height={40} />
                   </div>
-                  <span className="text-sm sm:text-md md:text-lg font-medium">48 Mara Loaf, Cleveland Heights 25-61</span>
+                  <span className="text-sm sm:text-md md:text-lg font-medium">Card Grading Center, 123 Main St, Cardville, CV 12345</span>
                 </div>
               </div>
 

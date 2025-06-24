@@ -11,7 +11,7 @@ function HeroSection() {
             <h1 className="heading-primary font-bold mb-4">
               AI-Driven Precision Grading
               <br />
-              for Pokémon Cards
+              for Collectible Cards
             </h1>
             <p className="font-medium text-lg mb-8">Accurate, fast, and transparent AI card grading—trusted by <br /> collectors worldwide.</p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center mb-1">

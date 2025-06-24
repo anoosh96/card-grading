@@ -22,7 +22,7 @@ function AboutMissionSection() {
                   <MissionArrowUp hover={isHovered} setHover={setIsHovered} />
                   <span className={`${isHovered ? 'text-white' : 'text-charcoal'} absolute w-full top-20 leading-relaxed font-semibold  -rotate-90 text-2xl`}>Mission A</span>
                   <p className={`block absolute top-5 text-start text-sm text-charcol left-32 w-72`}>
-                    To become one of the leading Pokémon
+                    To become one of the leading Collectible
                     <br />
                     grading companies in the UK.
                   </p>

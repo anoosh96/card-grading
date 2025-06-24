@@ -7,10 +7,10 @@ const lato = Lato({ weight: ["100", "300", "400", "700", "900"], subsets: ["lati
 
 export const metadata: Metadata = {
   title: {
-    default: `Precision Grading - AI-Driven Precision Grading for Pokémon Cards`,
+    default: `Precision Grading - AI-Driven Precision Grading for Collectible Cards`,
     template: `%s | Precision Grading`,
   },
-  description: "AI-Driven Precision Grading for Pokémon Cards. Accurate, fast, and transparent AI card grading—trusted by collectors worldwide.",
+  description: "AI-Driven Precision Grading for Collectible Cards. Accurate, fast, and transparent AI card grading—trusted by collectors worldwide.",
 };
 
 export default function RootLayout({

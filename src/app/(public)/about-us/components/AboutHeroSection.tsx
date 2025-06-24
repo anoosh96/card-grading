@@ -14,7 +14,7 @@ function AboutHeroSection() {
         <div className="flex flex-col gap-8 max-w-lg">
           <h2 className="text-[2rem] w-3/4 text-charcol font-bold">Revolutionizing Card Grading with AI</h2>
           <p className="text-lg text-charcol text-start">
-             AI’s Greatest Pokémon Card Grading Platform.
+             AI’s Greatest Collectible Card Grading Platform.
           </p>
         </div>
       </div>

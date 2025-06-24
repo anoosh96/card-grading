@@ -125,9 +125,7 @@ function AboutStorySection() {
               With cutting-edge AI technology at our core, we deliver consistent, high-quality grades without the hefty price tag.
               We pride ourselves on quick turnaround times, but we never sacrifice the accuracy and care your cards deserve. <br /> <br />
               Beyond grading, Precision Grading is a community, a place where collectors can connect, share, and celebrate the hobby we all love. <br /> <br />
-              Grading should be precise, fair, and accessible. That’s our promise to every collector. That’s Precision Grading. <br /> <br />
-              Monthly members I can add on the way? Reviews I will gain as I grade? Can customers write reviews?
-
+              Grading should be precise, fair, and accessible. That’s our promise to every collector. That’s Precision Grading.
             </p>
           </div>
         </div>

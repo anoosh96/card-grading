@@ -19,7 +19,7 @@ export default function WhatWeDo() {
           <div>
             <h2 className="text-[2rem] font-bold mb-5">What We Do</h2>
             <p className="text-sm leading-relaxed">
-              Our AI-powered grading system revolutionizes Pokémon card
+              Our AI-powered grading system revolutionizes Collectible card
               authentication by delivering fast, accurate, and consistent
               evaluations. Using advanced machine learning, we analyze card
               condition, centering, edges, and surface quality in seconds,
