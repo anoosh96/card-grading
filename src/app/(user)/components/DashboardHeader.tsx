@@ -78,8 +78,8 @@ export function DashboardHeader() {
               width={40}
               height={40}
               alt="Profile Avatar Icon"
-              src={user?.profileImageUrl || "/assets/images/profile-avatar.svg"}
-              className="h-9 w-9 sm:h-10 sm:w-10 rounded-full" // Adjusted size for mobile
+              src={user?.profileImageUrl || "/assets/images/placeholder.png"}
+              className="h-9 w-9 sm:h-10 sm:w-10 rounded-full object-cover" // Adjusted size for mobile
             />
 
             <div
