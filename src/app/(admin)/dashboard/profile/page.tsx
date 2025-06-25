@@ -92,7 +92,8 @@ export default function ProfilePage() {
     }
 
     // Email validation
-    const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+
     if (!form.values.email) {
       form.setError("email", "Email is required");
       isValid = false;
@@ -113,7 +114,7 @@ export default function ProfilePage() {
     const cleanData = removeEmpty({ ...form.values, profileImage: imageFile })
     updateProfile(cleanData, {
       onError: (error: unknown) => {
-        if (error instanceof AxiosError && error.response) {
+        if (error instanceof AxiosError && error.response?.data?.errors) {
           form.handleApiValidationError(error.response.data);
         }
         else {
