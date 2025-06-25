@@ -87,7 +87,7 @@ export function DashboardSidebar() {
                     {...item}
                     isActive={matchNestedPaths(item.href)}
                     clickHandler={handleLogout} // This handles logout and closes sheet
-                    icon={<item.Icon className="h-5" />}
+                    icon={<item.Icon className="" />}
                     isCollapsed={false}
                   />
                 ) : (
@@ -97,7 +97,7 @@ export function DashboardSidebar() {
                     isActive={matchNestedPaths(item.href)}
                     // Add an onClick handler to close the sheet for all other items
                     clickHandler={() => setIsSheetOpen(false)}
-                    icon={<item.Icon className="h-5" />}
+                    icon={<item.Icon className="" />}
                     isCollapsed={false}
                   />
                 )
@@ -126,7 +126,7 @@ export function DashboardSidebar() {
                   isActive={matchNestedPaths(item.href)}
                   clickHandler={handleLogout}
                   isCollapsed={isCollapsed}
-                  icon={<item.Icon className="h-5" />}
+                  icon={<item.Icon className="" />}
                 />
               ) : (
                 <SidebarItem
@@ -134,7 +134,7 @@ export function DashboardSidebar() {
                   {...item}
                   isActive={matchNestedPaths(item.href)}
                   isCollapsed={isCollapsed}
-                  icon={<item.Icon className="h-5" />}
+                  icon={<item.Icon className="" />}
                 />
               )
             )}
