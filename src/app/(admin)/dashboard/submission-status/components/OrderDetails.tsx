@@ -18,6 +18,8 @@ import { reactPDFGenerator } from "@/utils/pdf-generator";
 import { showToast } from "@/lib/toast";
 import { GradingData } from "../../types";
 import { FlexibleRecord } from "@/types";
+import { useGenerateLabel } from "@/hooks/grading/useGenerateLabel";
+import { useGenerateBackLabel } from "@/hooks/grading/useGenerateBackLabel";
 
 interface OrderDetailsProp {
   currentCard: CardData
@@ -28,6 +30,9 @@ const OrderDetails = ({ currentCard }: OrderDetailsProp) => {
   const searchParams = useSearchParams();
   const cardId = searchParams.get('cardId');
   const [isGeneratingPDF, setIsGeneratingPDF] = useState(false);
+  const generateLabel = useGenerateLabel();
+  const generateBackLabel = useGenerateBackLabel(); // Assuming you have a similar hook for back label generation
+
 
 
   const updateSubmission = useUpdateSubmission();
@@ -127,6 +132,37 @@ const OrderDetails = ({ currentCard }: OrderDetailsProp) => {
     return URL.createObjectURL(currentCard.backImage as File);
   }, [currentCard?.backImage]);
 
+  const handleLabelGeneration = async () => {
+    // Construct the payload with the desired fields
+    const payload = {
+      cardId: cardId as string,
+      year: currentCard?.yearOfRelease?.toString(),
+      name: currentCard?.cardName,
+      grade: currentCard?.grade?.finalScore?.toString(),
+      conditionBreakdown: {
+        centering: { score: currentCard?.grade?.conditionBreakdown?.centering?.score || 0 },
+        corners: { score: currentCard?.grade?.conditionBreakdown?.corners?.score || 0 },
+        edges: { score: currentCard?.grade?.conditionBreakdown?.edges?.score || 0 },
+        surface: { score: currentCard?.grade?.conditionBreakdown?.surface?.score || 0 },
+      },
+    };
+
+    // Call the mutate function with the constructed payload
+    generateLabel.mutate(payload);
+  };
+
+
+  const handleBackLabelGeneration = async () => {
+    // Construct the payload with the desired fields
+    const payload = {
+      reportPdfUrl: currentCard?.grade?.reportPdfUrl as string,
+      cardId: cardId as string,
+    };
+
+    // Call the mutate function with the constructed payload
+    generateBackLabel.mutate(payload);
+  };
+
   // Get current card status for conditional rendering
   const currentCardStatus = currentCard?.status
 
@@ -165,63 +201,98 @@ const OrderDetails = ({ currentCard }: OrderDetailsProp) => {
         classNames="mt-4"
       />
 
-      <div className="flex flex-col sm:flex-row items-center gap-6 ml-2 sm:ml-6 mt-4">
-        <Button
-          onClick={() => router.back()}
-          variant={"ghost"}
-          className="rounded-full w-full sm:w-28 text-light-grey-100 heading-secondary font-medium bg-[#E0E0E0] hover:bg-gray-300 hover:text-black"
-          disabled={updateSubmission.isPending}
-        >
-          Back
-        </Button>
+      <div className="grid grid-cols-1 lg:grid-cols-3 xl:grid-cols-5 gap-4 pt-8 p-4">
+        {/* Group 1: Navigation Buttons (Back, Edit Card) */}
 
-        <Button
-          onClick={() => router.push(`/dashboard/submission-status/${currentCard.submissionId}?cardId=${currentCard.id}&edit=true`)}
-          variant={"ghost"}
-          className="rounded-full w-full sm:w-auto text-light-grey-100 heading-secondary font-medium bg-[#E0E0E0] hover:bg-gray-300 hover:text-black"
-          disabled={updateSubmission.isPending}
-        >
-          Edit Card
-        </Button>
-
-        <ButtonGradient
-          onClick={() => updateStatus(cardStatus.GRADING_IN_PROGRESS,
-            `/dashboard/grading-review/generate-certificate?submissionId=${currentCard.submissionId}&cardId=${cardId}`, false)}
-          className="w-full sm:max-w-[8rem]"
-          disabled={currentCardStatus == cardStatus.CARD_REJECTED || updateSubmission.isPending}
-        >
-          {!currentCard.grade ? 'Start Grading' : 'Edit Grade'}
-        </ButtonGradient>
-
-        {
-          currentCardStatus !== submissionStatus.GRADING_COMPLETE &&
           <Button
-            onClick={() => updateStatus(cardStatus.CARD_REJECTED, `/dashboard/submission-status/${currentCard.submissionId}?cardId=${cardId}`)}
+            onClick={() => router.back()}
             variant={"ghost"}
-            className="rounded-full w-full sm:w-auto text-light-grey-100 heading-secondary font-medium bg-[#E0E0E0] hover:bg-gray-300 hover:text-black"
-            disabled={updateSubmission.isPending || currentCardStatus == cardStatus.CARD_REJECTED}
+            className="rounded-full text-light-grey-100 heading-secondary font-medium bg-[#E0E0E0] hover:bg-gray-300 hover:text-black shadow-md transition-all duration-200 ease-in-out"
+            disabled={updateSubmission.isPending}
           >
-            {"Reject Card"}
+            Back
           </Button>
-        }
-
-        {
-          currentCard.grade &&
-          <ButtonGradient
-            onClick={handleDownloadPdf} // Pass cardId for card-specific PDF
-            className="max-w-[12rem] w-full"
-            disabled={isGeneratingPDF || !currentCard?.grade}
+          <Button
+            onClick={() => router.push(`/dashboard/submission-status/${currentCard.submissionId}?cardId=${currentCard.id}&edit=true`)}
+            variant={"ghost"}
+            className="rounded-full text-light-grey-100 heading-secondary font-medium bg-[#E0E0E0] hover:bg-gray-300 hover:text-black shadow-md transition-all duration-200 ease-in-out"
+            disabled={updateSubmission.isPending || isGeneratingPDF || generateLabel.isPending || generateBackLabel.isPending}
           >
-            {isGeneratingPDF ? (
-              <>
-                <Loader2 className="animate-spin w-5 h-5" />
-                Downloading Report...
-              </>
-            ) : (
-              "Download Report"
-            )}
+            Edit Card
+          </Button>
+                  {/* Group 2: Core Grading Actions */}
+          <ButtonGradient
+            onClick={() => updateStatus(cardStatus.GRADING_IN_PROGRESS,
+              `/dashboard/grading-review/generate-certificate?submissionId=${currentCard.submissionId}&cardId=${cardId}`, false)}
+            className=" shadow-md transition-all duration-200 ease-in-out"
+            disabled={currentCardStatus === cardStatus.CARD_REJECTED || updateSubmission.isPending || generateLabel.isPending || generateBackLabel.isPending || isGeneratingPDF}
+          >
+            {!currentCard.grade ? 'Start Grading' : 'Edit Grade'}
           </ButtonGradient>
-        }
+
+
+        {currentCardStatus !== submissionStatus.GRADING_COMPLETE && (
+            <Button
+              onClick={() => updateStatus(cardStatus.CARD_REJECTED, `/dashboard/submission-status/${currentCard.submissionId}?cardId=${cardId}`)}
+              variant={"ghost"}
+              className="rounded-full  text-light-grey-100 heading-secondary font-medium bg-[#E0E0E0] hover:bg-gray-300 hover:text-black shadow-md transition-all duration-200 ease-in-out"
+              disabled={updateSubmission.isPending || currentCardStatus === cardStatus.CARD_REJECTED}
+            >
+              {"Reject Card"}
+            </Button>
+          )}
+
+        {/* Group 3: Report/Label Actions (conditional on grade existence) */}
+        {currentCard.grade && (
+          <>
+            <ButtonGradient
+              onClick={handleDownloadPdf}
+              className=" shadow-md transition-all duration-200 ease-in-out"
+              disabled={isGeneratingPDF || !currentCard?.grade || generateLabel.isPending || generateBackLabel.isPending || updateSubmission.isPending}
+            >
+              {isGeneratingPDF ? (
+                <>
+                  <Loader2 className="animate-spin w-5 h-5 mr-2" />
+                  Downloading Report...
+                </>
+              ) : (
+                "Download Report"
+              )}
+            </ButtonGradient>
+
+            <Button
+              variant={"ghost"}
+              className="rounded-full heading-secondary bg-[#E0E0E0] hover:bg-gray-300 hover:text-black shadow-md transition-all duration-200 ease-in-out"
+              disabled={generateLabel.isPending || isGeneratingPDF || updateSubmission.isPending || !currentCard?.grade}
+              onClick={handleLabelGeneration}
+            >
+              {generateLabel.isPending ? (
+                <>
+                  <Loader2 className="animate-spin w-5 h-5 mr-2" />
+                  Generating Label...
+                </>
+              ) : (
+                "Print Label"
+              )}
+            </Button>
+
+            <Button
+              variant={"ghost"}
+              className="rounded-full heading-secondary bg-[#E0E0E0] hover:bg-gray-300 hover:text-black shadow-md transition-all duration-200 ease-in-out"
+              disabled={generateBackLabel.isPending || generateLabel.isPending || isGeneratingPDF || updateSubmission.isPending || !currentCard?.grade}
+              onClick={handleBackLabelGeneration}
+            >
+              {generateBackLabel.isPending ? (
+                <>
+                  <Loader2 className="animate-spin w-5 h-5 mr-2" />
+                  Generating Back...
+                </>
+              ) : (
+                "Print Back Label"
+              )}
+            </Button>
+          </>
+        )}
       </div>
     </div>
   );

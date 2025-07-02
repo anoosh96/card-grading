@@ -41,7 +41,7 @@ export default function Payment({ handlePrevious }: FormStepProps) {
       shippingFullName: submission.fullName as string,
       shippingAddress: submission.shippingAddress as string,
       shippingPhone: submission.phoneNumber as string,
-      shippingEmail: submission.email as string,
+      shippingEmail: user?.email as string,
       bulkCardValue: submission.bulkCardValue,
       totalCost: totalSubmission,
       numberOfCards: totalCards,

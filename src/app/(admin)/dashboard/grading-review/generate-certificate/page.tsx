@@ -18,6 +18,7 @@ import { ReportSkeleton } from "@/components/skeletons/AdminDashboardSkeleton";
 import { useConfirmGrade } from "@/hooks/grading/useConfirmGrade";
 import { useCardDetails } from "@/hooks/useCardDetails";
 import { useGenerateLabel } from '@/hooks/grading/useGenerateLabel'; // Adjust the path as necessary
+import { useGenerateBackLabel } from "@/hooks/grading/useGenerateBackLabel";
 
 const GenerateCertificate = () => {
   const router = useRouter();
@@ -31,6 +32,8 @@ const GenerateCertificate = () => {
   const { mutateAsync: gradingRecommendation, isPending: isGradingPending, error: gradingError } = useGradingRecommendation();
   const confirmGrade = useConfirmGrade();
   const generateLabel = useGenerateLabel();
+  const generateBackLabel = useGenerateBackLabel(); // Assuming you have a similar hook for back label generation
+  
 
   const [isConfirmDoc, setIsConfirmDoc] = useState(false);
   const [isGeneratingPDF, setIsGeneratingPDF] = useState(false);
@@ -39,6 +42,7 @@ const GenerateCertificate = () => {
 
   const [gradingData, setGradingData] = useState<GradingData | null | undefined>(null);
   const [pdfFile, setPdfFile] = useState<Blob | null>(null);
+  
 
   useEffect(() => {
     if (currentCard?.grade) {
@@ -286,7 +290,8 @@ const GenerateCertificate = () => {
             <Button
               variant={"ghost"}
               className="rounded-full w-full sm:w-auto heading-secondary bg-[#E0E0E0] hover:bg-gray-300 hover:text-black"
-              disabled={isEditingReport || isGeneratingPDF || !gradingData}
+              disabled={isEditingReport || generateBackLabel.isPending ||
+                 isGeneratingPDF || !gradingData || generateLabel.isPending}
               onClick={handleReportGeneration}
             >
               {isGeneratingPDF ? (
@@ -302,23 +307,41 @@ const GenerateCertificate = () => {
             <Button
               variant={"ghost"}
               className="rounded-full w-full sm:w-auto heading-secondary bg-[#E0E0E0] hover:bg-gray-300 hover:text-black"
-              disabled={isEditingReport || generateLabel.isPending || !cardId || !gradingData} // Disable if gradingData is null
+              disabled={isEditingReport || generateLabel.isPending || generateBackLabel.isPending ||
+                 !cardId || !gradingData} // Disable if gradingData is null
               onClick={handleLabelGeneration}
             >
               {generateLabel.isPending ? (
                 <>
                   <Loader2 className="animate-spin w-5 h-5 mr-2" />
-                  Generating Label...
+                  Printing...
                 </>
               ) : (
                 "Print Label"
               )}
             </Button>
 
+            {/* <Button
+              variant={"ghost"}
+              className="rounded-full w-full sm:w-40 heading-secondary bg-[#E0E0E0] hover:bg-gray-300 hover:text-black shadow-md transition-all duration-200 ease-in-out"
+              disabled={generateBackLabel.isPending || generateLabel.isPending || isGeneratingPDF || isEditingReport}
+              onClick={handleBackLabelGeneration}
+            >
+              {generateBackLabel.isPending ? (
+                <>
+                  <Loader2 className="animate-spin w-5 h-5 mr-2" />
+                  Printing...
+                </>
+              ) : (
+                "Print Back Label"
+              )}
+            </Button> */}
+
 
             <ButtonGradient
               onClick={updateStatus}
-              disabled={confirmGrade.isPending || isGeneratingPDFBackground || isEditingReport || !gradingData}
+              disabled={confirmGrade.isPending || generateLabel.isPending || generateBackLabel.isPending ||
+                 isGeneratingPDFBackground || isEditingReport || !gradingData}
               className="w-full sm:w-auto"
             >
               {confirmGrade.isPending || isGeneratingPDFBackground ? (

@@ -34,7 +34,6 @@ export default function ShippingInformation({ handleNext, handlePrevious }: Form
     fullName: submission.fullName,
     shippingAddress: submission.shippingAddress,
     phoneNumber: submission.phoneNumber,
-    email: submission.email
   });
 
   const [cardErrors, setCardErrors] = useState<{ [key: string]: { [field: string]: string } }>({});
@@ -195,16 +194,16 @@ export default function ShippingInformation({ handleNext, handlePrevious }: Form
       ok = false;
     }
 
-    if (!values.email) {
-      setError('email', 'Email is required.');
-      ok = false;
-    } else {
-      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      if (!emailRegex.test(values.email)) {
-        setError('email', 'Please enter a valid email address.');
-        ok = false;
-      }
-    }
+    // if (!values.email) {
+    //   setError('email', 'Email is required.');
+    //   ok = false;
+    // } else {
+    //   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    //   if (!emailRegex.test(values.email)) {
+    //     setError('email', 'Please enter a valid email address.');
+    //     ok = false;
+    //   }
+    // }
 
     return ok;
   };
@@ -314,7 +313,6 @@ export default function ShippingInformation({ handleNext, handlePrevious }: Form
         fullName: values.fullName,
         shippingAddress: values.shippingAddress,
         phoneNumber: values.phoneNumber,
-        email: values.email,
         numberOfCards: numberOfCards,
         estimatedCompletion: getTurnaroundTime(cards as Card[]), // Ensure this helper function handles CardData correctly
         cards: cards.map(card => ({
@@ -333,7 +331,7 @@ export default function ShippingInformation({ handleNext, handlePrevious }: Form
         fullName: values.fullName,
         shippingAddress: values.shippingAddress,
         phoneNumber: values.phoneNumber,
-        email: values.email,
+        // email: values.email,
         numberOfCards: numberOfCards,
         bulkCardValue: bulkCardValue,
         bulkDescription: bulkDescription,
@@ -346,7 +344,7 @@ export default function ShippingInformation({ handleNext, handlePrevious }: Form
         fullName: values.fullName,
         shippingAddress: values.shippingAddress,
         phoneNumber: values.phoneNumber,
-        email: values.email,
+        // email: values.email,
         numberOfCards: 0,
         bulkCardValue: undefined,
         bulkDescription: '',
@@ -461,7 +459,7 @@ export default function ShippingInformation({ handleNext, handlePrevious }: Form
             </div>
 
             {/* Email */}
-            <div className="relative" ref={errors.email ? errorRef : null}>
+            {/* <div className="relative" ref={errors.email ? errorRef : null}>
               <label className="block font-semibold mb-2">Email</label>
               <CustomInput
                 id="email"
@@ -483,7 +481,7 @@ export default function ShippingInformation({ handleNext, handlePrevious }: Form
                   <div className="w-0 h-0 border-x-8 border-t-8 border-x-transparent border-t-red-600 absolute bottom-[-8px] left-1/2 -translate-x-1/2"></div>
                 </div>
               )}
-            </div>
+            </div> */}
           </div>
 
           {/* Number of Cards Section */}
