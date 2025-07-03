@@ -39,7 +39,7 @@ export const useLogout = () => {
       showToast('Logged out successfully!', { variant: 'success' });
 
       setTimeout(() => {
-        router.push('/')
+        window.location.href = '/'; // Forces a full page reload to the home page
       }, 100)
     },
     onError: (error) => {
