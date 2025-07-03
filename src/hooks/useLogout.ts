@@ -35,10 +35,12 @@ export const useLogout = () => {
           .replace(/=.*/, `=;expires=${new Date(0).toUTCString()};path=/`);
       });
 
-      router.push('/')
       queryClient.clear()
-
       showToast('Logged out successfully!', { variant: 'success' });
+
+      setTimeout(() => {
+        router.push('/')
+      }, 100)
     },
     onError: (error) => {
       showToast('Failed to logout. Please try again.', { variant: 'error' });
