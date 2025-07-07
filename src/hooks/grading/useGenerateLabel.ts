@@ -33,9 +33,11 @@ export function useGenerateLabel() {
       const url = window.URL.createObjectURL(blob);
       const link = document.createElement('a');
       link.href = url;
-      link.target = '_blank';
-      link.rel = 'noopener noreferrer';
+      // Add the download attribute with a desired filename
+      link.download = 'front-label.pdf'; // You can make this dynamic if needed
+      document.body.appendChild(link); // Append to body to make it clickable in all browsers
       link.click();
+      document.body.removeChild(link); // Clean up the DOM
       window.URL.revokeObjectURL(url);
     },
     onError: (error) => {

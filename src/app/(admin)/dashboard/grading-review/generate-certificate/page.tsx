@@ -19,6 +19,7 @@ import { useConfirmGrade } from "@/hooks/grading/useConfirmGrade";
 import { useCardDetails } from "@/hooks/useCardDetails";
 import { useGenerateLabel } from '@/hooks/grading/useGenerateLabel'; // Adjust the path as necessary
 import { useGenerateBackLabel } from "@/hooks/grading/useGenerateBackLabel";
+import { gradingScale } from "@/lib/constants";
 
 const GenerateCertificate = () => {
   const router = useRouter();
@@ -33,7 +34,7 @@ const GenerateCertificate = () => {
   const confirmGrade = useConfirmGrade();
   const generateLabel = useGenerateLabel();
   const generateBackLabel = useGenerateBackLabel(); // Assuming you have a similar hook for back label generation
-  
+
 
   const [isConfirmDoc, setIsConfirmDoc] = useState(false);
   const [isGeneratingPDF, setIsGeneratingPDF] = useState(false);
@@ -42,7 +43,7 @@ const GenerateCertificate = () => {
 
   const [gradingData, setGradingData] = useState<GradingData | null | undefined>(null);
   const [pdfFile, setPdfFile] = useState<Blob | null>(null);
-  
+
 
   useEffect(() => {
     if (currentCard?.grade) {
@@ -70,39 +71,7 @@ const GenerateCertificate = () => {
   }, [currentCard, gradingData]);
 
 
-  const getGradeInfo = (score: number) => {
-    if (score >= 9.5) {
-      return {
-        grade: "★★★★★ Pristine",
-        tier: "Tier 1 (Premium Collector Quality)",
-        stars: "★★★★★"
-      };
-    } else if (score >= 9.0) {
-      return {
-        grade: "★★★★★ Mint",
-        tier: "Tier 1 (Premium Collector Quality)",
-        stars: "★★★★★"
-      };
-    } else if (score >= 8.0) {
-      return {
-        grade: "★★★★☆ Near Mint (NM)",
-        tier: "Tier 2 (High Collector Quality)",
-        stars: "★★★★☆"
-      };
-    } else if (score >= 7.0) {
-      return {
-        grade: "★★★☆☆ Excellent",
-        tier: "Tier 3 (Good Collector Quality)",
-        stars: "★★★☆☆"
-      };
-    } else {
-      return {
-        grade: "★★☆☆☆ Good",
-        tier: "Tier 4 (Fair Collector Quality)",
-        stars: "★★☆☆☆"
-      };
-    }
-  };
+
 
   const fetchGradingRecommendation = async () => {
     if (!currentCard || !currentCard.frontImage || !currentCard.backImage || !user?.id) {
@@ -115,7 +84,7 @@ const GenerateCertificate = () => {
         userId: user.id.toString()
       });
       console.log(data.data.card_details);
-      const gradeInfo = getGradeInfo(data.data.card_details.final_score);
+      const gradeInfo = gradingScale(data.data.card_details.final_score);
 
       setGradingData({
         ...data.data.card_details,
@@ -210,6 +179,7 @@ const GenerateCertificate = () => {
         edges: { score: gradingData.condition_breakdown?.edges?.score || 0 },
         surface: { score: gradingData.condition_breakdown?.surface?.score || 0 },
       },
+      condition: gradingData.grade?.split(" ").slice(1).join("")
     };
 
     // Call the mutate function with the constructed payload
@@ -291,7 +261,7 @@ const GenerateCertificate = () => {
               variant={"ghost"}
               className="rounded-full w-full sm:w-auto heading-secondary bg-[#E0E0E0] hover:bg-gray-300 hover:text-black"
               disabled={isEditingReport || generateBackLabel.isPending ||
-                 isGeneratingPDF || !gradingData || generateLabel.isPending}
+                isGeneratingPDF || !gradingData || generateLabel.isPending}
               onClick={handleReportGeneration}
             >
               {isGeneratingPDF ? (
@@ -308,7 +278,7 @@ const GenerateCertificate = () => {
               variant={"ghost"}
               className="rounded-full w-full sm:w-auto heading-secondary bg-[#E0E0E0] hover:bg-gray-300 hover:text-black"
               disabled={isEditingReport || generateLabel.isPending || generateBackLabel.isPending ||
-                 !cardId || !gradingData} // Disable if gradingData is null
+                !cardId || !gradingData} // Disable if gradingData is null
               onClick={handleLabelGeneration}
             >
               {generateLabel.isPending ? (
@@ -341,7 +311,7 @@ const GenerateCertificate = () => {
             <ButtonGradient
               onClick={updateStatus}
               disabled={confirmGrade.isPending || generateLabel.isPending || generateBackLabel.isPending ||
-                 isGeneratingPDFBackground || isEditingReport || !gradingData}
+                isGeneratingPDFBackground || isEditingReport || !gradingData}
               className="w-full sm:w-auto"
             >
               {confirmGrade.isPending || isGeneratingPDFBackground ? (
