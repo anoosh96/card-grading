@@ -11,8 +11,8 @@ const instructions = [
   'Use penny sleeves and top loaders for protection.',
   'Secure with bubble wrap or cardboard reinforcements.',
   'Use a padded envelope or box to prevent damage.',
-  'Include a printed copy of your submission details.',
-  'Ship to: Card Grading Center, 123 Main St, Cardville, CV 12345'
+  'Include a  printed copy of your submission details.',
+  'Ship to:\u00A0\u00A0Stephen Wood, \u00A0Precision Grading LTD,\u00A0 PO Box 353, \u00A0Chester Le Street,\u00A0 DH3 9G'
 ]
 
 

@@ -82,17 +82,17 @@ function ContactForm() {
                 </div> */}
 
                 <div className="flex items-center gap-2 md:gap-8">
-                  <div className="h-6 w-6 md:w-10 md:h-10 rounded-full bg-gray-100 flex items-center justify-center">
+                  <div className="h-6 w-6 md:w-10 md:h-10 rounded-full bg-gray-100 flex items-center justify-center shrink-0">
                     <Image alt="Mail Icon" src={"/icons/mail-black-icon.svg"} width={40} height={40} />
                   </div>
                   <span className="text-sm sm:text-md md:text-lg font-medium">accounts@precisiongrading.co.uk</span>
                 </div>
 
                 <div className="flex items-center gap-2 md:gap-8">
-                  <div className="h-6 w-6  md:w-10 md:h-10 rounded-full bg-gray-100 flex items-center justify-center">
+                  <div className="h-6 w-6  md:w-10 md:h-10 rounded-full bg-gray-100 flex items-center justify-center shrink-0">
                     <Image alt="Map Pin Icon" src={"/icons/map-pin-black-icon.svg"} width={40} height={40} />
                   </div>
-                  <span className="text-sm sm:text-md md:text-lg font-medium">Card Grading Center, 123 Main St, Cardville, CV 12345</span>
+                  <span className="text-sm sm:text-md md:text-lg font-medium">Stephen Wood, Precision Grading LTD, PO Box 353, Chester Le Street, DH3 9G</span>
                 </div>
               </div>
 

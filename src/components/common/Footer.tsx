@@ -32,7 +32,7 @@ export default function Footer({ isHideContactForm = false }: ContactFormProps) 
       <div className=" grid grid-cols-1 md:grid-cols-4 gap-8 px-10">
         <div>
           <h2 className="font-bold text-sm">LOGO</h2>
-          <p className="mt-2 text-sm">15 Barford Drive, Chester Le Street, County Durham, DH23HR</p>
+          <p className="mt-2 text-sm">Stephen Wood, Precision Grading LTD, PO Box 353, Chester Le Street, DH3 9G</p>
           <div className="flex items-center gap-4 mt-4">
             <Link href="#">
               <Image src="/icons/insta-icon.svg" alt="Instagram" width={24} height={24} />
