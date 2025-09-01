@@ -11,7 +11,7 @@ export default function GradingPage () {
     <Container>
        <GradingHeroSection />
        <GradingProcess />
-       <GradingVideoSection />
+       {/* <GradingVideoSection /> */}
        <GradingAffect />
        <GradingFaqSection/>
     </Container>

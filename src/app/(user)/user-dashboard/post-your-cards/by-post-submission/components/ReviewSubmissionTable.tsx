@@ -17,7 +17,8 @@ const ReviewSubmissionTable: React.FC<Props> = ({ submission, totalCost }) => {
   const isBulkSubmission = submission.numberOfCards && submission.numberOfCards > 10;
 
   const getPricePerCard = (numberOfCards: number) => {
-    return totalCost / numberOfCards;
+    const baseCost = totalCost - (submission.deliveryCost || 0);
+    return baseCost / numberOfCards;
   }
 
   return (
@@ -37,7 +38,7 @@ const ReviewSubmissionTable: React.FC<Props> = ({ submission, totalCost }) => {
               </div>
               {submission.cards?.map((card) => {
                 const cardValue = Number(card.cardValue) || 0;
-                const { name, pricePerCard } = getService(card.serviceId as number) as Service;
+                const service = getService(card.serviceId as number) as Service;
 
                 return (
                   <div key={card.id} className="grid grid-cols-6 gap-4 p-4 md:p-6 border-b border-gray-100 bg-white text-sm md:text-base"> {/* Adjusted grid cols and padding */}
@@ -45,8 +46,8 @@ const ReviewSubmissionTable: React.FC<Props> = ({ submission, totalCost }) => {
                     <div className="text-gray-800 truncate">{card.category || 'Category'}</div>
                     <div className="text-gray-800">{card.yearOfRelease || '2000'}</div>
                     <div className="text-gray-800">£{cardValue}</div>
-                    <div className="text-gray-800">£{pricePerCard}</div>
-                    <div className="text-gray-800 hidden md:block">{name}</div> {/* Hidden on small, shown on md+ */}
+                    <div className="text-gray-800">£{service?.pricePerCard}</div>
+                    <div className="text-gray-800 hidden md:block">{service?.name}</div> {/* Hidden on small, shown on md+ */}
                   </div>
                 );
               })}
@@ -77,8 +78,16 @@ const ReviewSubmissionTable: React.FC<Props> = ({ submission, totalCost }) => {
         !isBulkSubmission ? 'grid-cols-6' : 'grid-cols-4' /* Adjust grid-cols based on table type */
       }`}>
         {/* Adjusted col-span to match individual card columns, 6 for normal, 4 for bulk */}
+        <div className={!isBulkSubmission ? "col-span-5 text-left md:col-span-5" : "col-span-3 text-left"}>Subtotal</div>
+        <div>£{(totalCost - (submission.deliveryCost || 0)).toFixed(2)}</div>
+        {submission.deliveryCost && submission.deliveryCost > 0 && (
+          <>
+            <div className={!isBulkSubmission ? "col-span-5 text-left md:col-span-5" : "col-span-3 text-left"}>Delivery Cost</div>
+            <div>£{submission.deliveryCost.toFixed(2)}</div>
+          </>
+        )}
         <div className={!isBulkSubmission ? "col-span-5 text-left md:col-span-5" : "col-span-3 text-left"}>Total Cost</div>
-        <div>£{totalCost}</div>
+        <div>£{totalCost.toFixed(2)}</div>
         <div className={!isBulkSubmission ? "col-span-5 text-left md:col-span-5" : "col-span-3 text-left"}>Total Cards</div>
         <div>{submission.cards?.length || submission.numberOfCards || 0}</div>
       </div>

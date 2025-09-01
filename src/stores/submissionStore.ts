@@ -56,6 +56,8 @@ export interface SubmissionData {
   bulkCardValue?: number,
   bulkDescription?: string,
   trackingNumber?: string;
+  selectedDeliveryOption?: string;
+  deliveryCost?: number;
   cards: CardData[];
   services?: Service[]
   user?: User

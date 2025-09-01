@@ -14,61 +14,70 @@ import { Card, CardContent } from "./ui/card";
 const testimonials = [
   {
     id: 1,
-    image: "/assets/images/testimonial-section-person-image-2.svg",
+    image: "https://images.unsplash.com/photo-1607746882042-944635dfe10e?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
     date: "May 8, 2024",
-    title: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+    title: "Smooth process from submission to delivery",
     content:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cursus nibh mauris, nec turpis orci lectus maecenas. Suspendisse sed magna eget nibh in turpis. Consequat duis diam lacus arcu. Faucibus venenatis felis id augue sit cursus pellentesque enim arcu. Elementum felis magna pretium in tincidunt. Suspendisse sed magna eget nibh in turpis. Consequat duis diam lacus arcu.Lorem ipsum dolor sit amet, Consequat duis diam lacus arcu.Lorem ipsum dolor sit amet, Consequat duis diam lacus arcu.Lorem ipsum dolor sit amet,",
+      "First time grading! I submitted three Pokémon cards (including a 1999 Base Set Pikachu). The form was straightforward, shipping label printed in minutes, and the status updates were super clear. Got my slabs back in under two weeks—packaging was rock solid and the grades felt fair. Will definitely submit again.",
+    name: "John Smith"
   },
   {
     id: 2,
-    image: "/assets/images/testimonial-section-person-image-2.svg",
+    image: "https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
     date: "June 15, 2024",
-    title: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+    title: "Accurate grading and excellent communication",
     content:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cursus nibh mauris, nec turpis orci lectus maecenas. Suspendisse sed magna eget nibh in turpis. Consequat duis diam lacus arcu. Faucibus venenatis felis id augue sit cursus pellentesque enim arcu. Elementum felis magna pretium in tincidunt. Suspendisse sed magna eget nibh in turpis. Consequat duis diam lacus arcu.Lorem ipsum dolor sit amet, Consequat duis diam lacus arcu.Lorem ipsum dolor sit amet, Consequat duis diam lacus arcu.Lorem ipsum dolor sit amet,",
+      "I sent in a Topps baseball rookie and two basketball inserts. Support answered a couple of newbie questions about surface scratches before I shipped. Turnaround matched the estimate, and the subgrades commentary in the report helped me understand the final grade. Super happy with the transparency.",
+    name: "Sarah Lee"
   },
   {
     id: 3,
-    image: "/assets/images/testimonial-section-person-image-2.svg",
+    image: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
     date: "July 22, 2024",
-    title: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+    title: "Well-packaged return and great slabs",
     content:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cursus nibh mauris, nec turpis orci lectus maecenas. Suspendisse sed magna eget nibh in turpis. Consequat duis diam lacus arcu. Faucibus venenatis felis id augue sit cursus pellentesque enim arcu. Elementum felis magna pretium in tincidunt. Suspendisse sed magna eget nibh in turpis. Consequat duis diam lacus arcu.Lorem ipsum dolor sit amet, Consequat duis diam lacus arcu.Lorem ipsum dolor sit amet, Consequat duis diam lacus arcu.Lorem ipsum dolor sit amet,",
+      "Cards came back in clean, sturdy slabs—no rattling or scuffs. I really appreciated the tamper-evident seals and QR code link to the grading report. My Yu-Gi-Oh! Dark Magician graded higher than I expected after a careful clean. Shipping both ways felt safe and insured.",
+    name: "Michael Jordan"
   },
   {
     id: 4,
-    image: "/assets/images/testimonial-section-person-image-2.svg",
+    image: "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
     date: "June 15, 2024",
-    title: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+    title: "Helped me prep my cards the right way",
     content:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cursus nibh mauris, nec turpis orci lectus maecenas. Suspendisse sed magna eget nibh in turpis. Consequat duis diam lacus arcu. Faucibus venenatis felis id augue sit cursus pellentesque enim arcu. Elementum felis magna pretium in tincidunt. Suspendisse sed magna eget nibh in turpis. Consequat duis diam lacus arcu.Lorem ipsum dolor sit amet, Consequat duis diam lacus arcu.Lorem ipsum dolor sit amet, Consequat duis diam lacus arcu.Lorem ipsum dolor sit amet,",
+      "The pre-submission checklist was a lifesaver. I used card savers and sleeves as recommended and avoided a couple of mistakes I usually make. Sent five soccer rookies—three came back strong grades. Customer service even flagged a print line I missed in the photos. Honest and helpful.",
+    name: "Anna Martinez"
   },
   {
     id: 5,
-    image: "/assets/images/testimonial-section-person-image-2.svg",
+    image: "https://images.unsplash.com/photo-1552374196-c4e7ffc6e126?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
     date: "July 22, 2024",
-    title: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+    title: "Quick turnaround on my express order",
     content:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cursus nibh mauris, nec turpis orci lectus maecenas. Suspendisse sed magna eget nibh in turpis. Consequat duis diam lacus arcu. Faucibus venenatis felis id augue sit cursus pellentesque enim arcu. Elementum felis magna pretium in tincidunt. Suspendisse sed magna eget nibh in turpis. Consequat duis diam lacus arcu.Lorem ipsum dolor sit amet, Consequat duis diam lacus arcu.Lorem ipsum dolor sit amet, Consequat duis diam lacus arcu.Lorem ipsum dolor sit amet,",
+      "I paid for the express tier to get a vintage Jordan back before a show. They hit the timeline perfectly (7 business days door to door). The scan images in the portal were crisp and the final slab looks premium on my display. Worth the extra fee for time-sensitive cards.",
+    name: "David Wong"
   },
   {
     id: 6,
-    image: "/assets/images/testimonial-section-person-image-2.svg",
+    image: "https://images.unsplash.com/photo-1520813792240-56fc4a3765a7?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
     date: "June 15, 2024",
-    title: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+    title: "Fair grades and clear defect notes",
     content:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cursus nibh mauris, nec turpis orci lectus maecenas. Suspendisse sed magna eget nibh in turpis. Consequat duis diam lacus arcu. Faucibus venenatis felis id augue sit cursus pellentesque enim arcu. Elementum felis magna pretium in tincidunt. Suspendisse sed magna eget nibh in turpis. Consequat duis diam lacus arcu.Lorem ipsum dolor sit amet, Consequat duis diam lacus arcu.Lorem ipsum dolor sit amet, Consequat duis diam lacus arcu.Lorem ipsum dolor sit amet,",
+      "Not every card gemmed, and that’s a good thing. The grader notes called out corner softening on a chrome refractor and a tiny print dot on another—exactly what I saw under magnification. Feels consistent and fair, which builds trust. Packed returns with bubble wrap + boxed—no corner dings.",
+    name: "Jessica Brown"
   },
   {
     id: 7,
-    image: "/assets/images/testimonial-section-person-image-2.svg",
+    image: "https://images.unsplash.com/photo-1531123897727-8f129e1688ce?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
     date: "July 22, 2024",
-    title: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+    title: "Easy for bulk subs, tracking was spot on",
     content:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cursus nibh mauris, nec turpis orci lectus maecenas. Suspendisse sed magna eget nibh in turpis. Consequat duis diam lacus arcu. Faucibus venenatis felis id augue sit cursus pellentesque enim arcu. Elementum felis magna pretium in tincidunt. Suspendisse sed magna eget nibh in turpis. Consequat duis diam lacus arcu.Lorem ipsum dolor sit amet, Consequat duis diam lacus arcu.Lorem ipsum dolor sit amet, Consequat duis diam lacus arcu.Lorem ipsum dolor sit amet,",
-  },
+      "Did a bulk submission with 20 modern Pokémon and F1. The online spreadsheet import saved a ton of time. Every milestone email landed (received, grading, quality check, shipped) and the tracking updated instantly. All slabs arrived together with a summary sheet—super organized.",
+    name: "Omar Khan"
+  }
 ];
+
+
 
 const TestimonialSection = () => {
   const swiperRef = useRef<SwiperType | null>(null);
@@ -121,14 +130,14 @@ const TestimonialSection = () => {
             {testimonials.map(({ id, image, date, title, content }) => (
               <SwiperSlide key={id} className="flex justify-center !w-[745px] !min-h-[300px]">
                 <Card className="overflow-hidden p-0 shadow-md border-none rounded-xl">
-                  <div className="flex w-full gap-10">
+                  <div className="flex w-full gap-10 h-72">
                     <div className="relative max-w-full min-w-[245px]">
                       <Image src={image} alt="User Preview Image" fill className="rounded-tl-lg rounded-bl-lg object-cover w-full h-full" />
                     </div>
                     <CardContent className="p-7 flex w-auto flex-col">
                       <div className="space-y-3">
                         <time className="text-sm font-medium">{date}</time>
-                        <h2 className="text-xl md:text-2xl font-semibold tracking-tight">{title}</h2>
+                        <h2 className="text-xl md:text-2xl font-semibold tracking-tight h-18">{title}</h2>
                         <p className="text-sm">{content}</p>
                       </div>
                     </CardContent>
